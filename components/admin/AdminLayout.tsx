@@ -1,8 +1,5 @@
-"use client";
-
 import React from "react";
 import Image from "next/image";
-import PrelineScript from "../PrelineScript";
 
 const AdminLayout = async () => {
   return (
@@ -22,7 +19,7 @@ const AdminLayout = async () => {
                     src="/images/housing-in-ghana-logo.png"
                     alt="logo"
                     width={130}
-                    height={60}
+                    height={40}
                   />
                 </a>
 
@@ -426,7 +423,6 @@ lg:block lg:-translate-x-full lg:end-auto lg:bottom-0"
         </div>
       </main>
       {/* ========== END MAIN CONTENT ========== */}
-      <PrelineScript />
     </>
   );
 };

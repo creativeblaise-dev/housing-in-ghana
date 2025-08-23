@@ -29,7 +29,7 @@ const BrandStats = () => {
                 className="mx-auto flex max-w-xs flex-col gap-y-4"
               >
                 <dt className="text-base/7 text-gray-400">{stat.name}</dt>
-                <dd className="order-first text-3xl font-semibold tracking-tight text-white sm:text-5xl">
+                <dd className="order-first text-3xl font-semibold tracking-tight text-white sm:text-4xl">
                   {stat.value}
                 </dd>
               </div>
