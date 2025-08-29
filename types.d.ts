@@ -12,12 +12,19 @@ export type GalleryContent = {
   region: string;
 };
 
-export type Blog = {
-  id: number;
+export type Article = {
   title: string;
-  description: string;
-  date: Date;
-  image: string;
+  content: string;
+  featuredImageUrl: string;
+  published: boolean;
+  createdAt: Date;
+  updatedAt?: Date;
+  authorId: string;
+  categoryId?: number;
+  tags?: string[];
+  views: number;
+  likes: number;
+  commentsCount: number;
 };
 
 export type SiteNavigation = {
@@ -26,7 +33,24 @@ export type SiteNavigation = {
 };
 
 export type AuthCredentials = {
-  fullName: string;
+  name: string;
   email: string;
   password: string;
+};
+
+export type AdminSidebarMenuTypes = {
+  group: string;
+  items: {
+    name: string;
+    href: string;
+    icon?: React.ReactNode;
+  }[];
+};
+
+export type UploadResult = {
+  url: string;
+  key: string;
+  originalName: string;
+  size: number;
+  mimeType: string;
 };

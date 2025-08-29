@@ -3,8 +3,8 @@
 import React from "react";
 import AuthForm from "@/components/AuthForm";
 import { signInSchema } from "@/lib/validations";
-import { signInWithCredentials } from "@/lib/actions/auth";
 import { AuthCredentials } from "@/types";
+import { signIn } from "@/server/actions/users";
 
 const SignIn = () => (
   <AuthForm
@@ -15,7 +15,7 @@ const SignIn = () => (
       password: "",
     }}
     onSubmit={(data: Record<string, any>) =>
-      signInWithCredentials(data as Pick<AuthCredentials, "email" | "password">)
+      signIn(data as Pick<AuthCredentials, "email" | "password">)
     }
   />
 );

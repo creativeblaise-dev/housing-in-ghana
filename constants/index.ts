@@ -1,14 +1,14 @@
 import { SiteNavigation } from "@/types";
 
 export const FIELD_NAMES = {
-  fullName: "Full Name",
+  name: "Full Name",
   email: "Email",
   password: "Password",
   // businessCertificate: "Business Certificate",
 };
 
 export const FIELD_TYPES = {
-  fullName: "text",
+  name: "text",
   email: "email",
   password: "password",
 };

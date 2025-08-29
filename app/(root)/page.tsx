@@ -7,10 +7,13 @@ import MileageCard from "@/components/MileageCard";
 import MagazineCard from "@/components/MagazineCard";
 import Spotlighter from "@/components/Spotlighter";
 import Subscribe from "@/components/Subscribe";
-import { db } from "@/database/drizzle";
-import { users } from "@/database/schema";
+import { authClient } from "@/lib/auth-client";
 
 const Home = async () => {
+  // const response = await fetch("http://localhost:3000/api/user");
+  // const data = await response.json();
+  // console.log("User data from /api/user:", data);
+
   return (
     <>
       {/* coming soon */}

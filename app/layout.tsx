@@ -4,8 +4,7 @@ import { ReactNode } from "react";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "sonner";
-import { SessionProvider } from "next-auth/react";
-import { auth } from "@/auth";
+
 import { redirect } from "next/navigation";
 import PrelineScriptWrapper from "@/components/PrelineScriptWrapper";
 import Header from "@/components/Header";
@@ -30,18 +29,14 @@ export const metadata: Metadata = {
 };
 
 const RootLayout = async ({ children }: { children: ReactNode }) => {
-  const session = await auth();
-
   return (
     <html lang="en">
-      <SessionProvider session={session}>
-        <body className={`${questrialRegular.className}  antialiased`}>
-          {children}
-          <Toaster />
-          {/* <MainFooter /> */}
-          <PrelineScriptWrapper />
-        </body>
-      </SessionProvider>
+      <body className={`${questrialRegular.className}  antialiased`}>
+        {children}
+        <Toaster />
+        {/* <MainFooter /> */}
+        <PrelineScriptWrapper />
+      </body>
     </html>
   );
 };

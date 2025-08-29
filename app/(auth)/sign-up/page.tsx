@@ -2,21 +2,23 @@
 
 import React from "react";
 import AuthForm from "@/components/AuthForm";
-import { signUp } from "@/lib/actions/auth";
 import { signUpSchema } from "@/lib/validations";
 import { AuthCredentials } from "@/types";
+import { signUpUser } from "@/server/actions/users";
 
 const SignUp = () => (
   <AuthForm
     type="SIGN_UP"
     formSchema={signUpSchema}
     defaultValues={{
-      fullName: "",
+      name: "",
       email: "",
       password: "",
       // businessCertificate: "",
     }}
-    onSubmit={(data: Record<string, any>) => signUp(data as AuthCredentials)}
+    onSubmit={(data: Record<string, any>) =>
+      signUpUser(data as AuthCredentials)
+    }
   />
 );
 

@@ -1,23 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3CenterLeftIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 import { navigation } from "../constants/index";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { getInitials } from "@/lib/utils";
-import UserProfileDropdown from "./UserProfileDropdown";
-import { Session } from "next-auth";
-import { Button } from "./ui/button";
-import { IconUser } from "@tabler/icons-react";
+import { usePathname } from "next/navigation";
 
-const desktopMenuItemClasses: string =
-  "text-gray-800  transition-colors py-2 md:py-2 font-bold letter-spacing tracking-wide text-md hover:text-[#FF202B] cursor-pointer";
-
-const Header = ({ session }: { session: Session | null }) => {
+const Header = ({ userprofile }: { userprofile: ReactNode }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <header className="bg-[#ffffff] shadow-md sticky top-0 z-50 ">
@@ -34,40 +27,33 @@ const Header = ({ session }: { session: Session | null }) => {
 
           {/* Desktop Nav */}
           <nav className="hidden lg:flex space-x-8">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={
-                  item.name === "Advertise With Us"
-                    ? desktopMenuItemClasses +
-                      " bg-[#FF202B] text-white w-auto cursor-pointer border-1 rounded-lg md:px-4 hover:bg-[#232525] hover:text-white "
-                    : desktopMenuItemClasses + " hover:text-[#FF202B]"
-                }
-              >
-                {item.name}
-              </Link>
-            ))}
-            {session ? (
-              <UserProfileDropdown session={session}>
-                <Avatar>
-                  {/* <AvatarImage src="/images/favicon.png" /> */}
-                  <AvatarFallback className="bg-[#fffeb2] border border-gray-300">
-                    {getInitials(session?.user?.name || "IN")}
-                  </AvatarFallback>
-                </Avatar>
-              </UserProfileDropdown>
-            ) : (
-              <Link href="/sign-in">
-                <Button className="bg-white text-stone-700 text-md font-bold hover:bg-slate-200  cursor-pointer">
-                  Sign In
-                  <span className="text-[#FF202B]">
-                    {" "}
-                    <IconUser className="h-4 w-4" />
-                  </span>
-                </Button>
-              </Link>
-            )}
+            {navigation.map((item) => {
+              const isActive =
+                (item.href !== "/" &&
+                  pathname.includes(item.href) &&
+                  item.href.length > 1) ||
+                pathname === item.href;
+
+              const desktopMenuItemClasses: string =
+                " transition-colors py-2 md:py-2 font-bold letter-spacing tracking-wide text-md hover:text-[#FF202B] cursor-pointer";
+
+              const activeClasses = isActive ? " text-[#FF202B]" : "";
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={
+                    item.name === "Advertise With Us"
+                      ? desktopMenuItemClasses +
+                        " bg-[#FF202B] text-white w-auto cursor-pointer border-1 rounded-lg md:px-4 hover:bg-[#232525] hover:text-white "
+                      : desktopMenuItemClasses + activeClasses
+                  }
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
+            {userprofile}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -119,9 +105,6 @@ const Header = ({ session }: { session: Session | null }) => {
                 {item.name}
               </Link>
             ))}
-            {/* <UserProfileDropdown>
-              <UserAvatar />
-            </UserProfileDropdown> */}
           </div>
         </DialogPanel>
       </Dialog>

@@ -1,11 +1,17 @@
-import React, { ReactNode } from "react";
+import React from "react";
+import { ReactNode } from "react";
+import AdminHeader from "@/components/admin/AdminHeader";
+import AdminMainContent from "@/components/admin/AdminMainContent";
+import AdminSidebar from "@/components/admin/AdminSidebar";
 
-const layout = ({ children }: { children: ReactNode }) => {
+const Layout = async ({ children }: { children: ReactNode }) => {
   return (
     <>
-      <div>{children}</div>
+      <AdminHeader />
+      <AdminSidebar />
+      <AdminMainContent>{children}</AdminMainContent>
     </>
   );
 };
 
-export default layout;
+export default Layout;

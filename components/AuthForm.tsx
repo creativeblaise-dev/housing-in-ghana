@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z, { ZodType } from "zod";
@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { FIELD_NAMES } from "@/constants";
+import { Loader2 } from "lucide-react";
 
 type Props = {
   formSchema: z.ZodObject<any>;
@@ -31,6 +32,7 @@ type Props = {
 };
 
 const AuthForm = ({ type, formSchema, defaultValues, onSubmit }: Props) => {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const isSignIn = type === "SIGN_IN";
@@ -38,26 +40,29 @@ const AuthForm = ({ type, formSchema, defaultValues, onSubmit }: Props) => {
     resolver: zodResolver(formSchema),
     defaultValues,
   });
-  const isLoading = form.formState.isSubmitting;
 
   const handleSubmit = async (data: Record<string, any>) => {
-    if (isLoading) return;
+    setIsLoading(true);
     const result = await onSubmit(data);
 
-    if (result.success) {
-      // Handle successful sign-in or sign-up (e.g., redirect or show a success message)
-      toast(
-        isSignIn
-          ? "You have successfully signed in."
-          : "Your account has been created."
-      );
+    try {
+      if (result.success) {
+        // Handle successful sign-in or sign-up (e.g., redirect or show a success message)
+        toast.success(
+          isSignIn
+            ? "You have successfully signed in."
+            : "Your account has been created."
+        );
 
-      router.push("/"); // Redirect to home page or another page after successful sign-in/sign-up
-    } else {
-      toast(result.error || "An error occurred.");
+        router.push("/"); // Redirect to contributor profile page after successful sign-in/sign-up
+      } else {
+        toast.error(result.error || "An error occurred!");
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred!");
+    } finally {
+      setIsLoading(false);
     }
-
-    console.log(data);
   };
 
   return (
@@ -85,7 +90,11 @@ const AuthForm = ({ type, formSchema, defaultValues, onSubmit }: Props) => {
                     {FIELD_NAMES[field.name as keyof typeof FIELD_NAMES]}
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="" {...field} />
+                    <Input
+                      type={field.name === "password" ? "password" : "text"}
+                      placeholder={field.name === "password" ? "********" : ""}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -93,8 +102,18 @@ const AuthForm = ({ type, formSchema, defaultValues, onSubmit }: Props) => {
             />
           ))}
           <div className="flex justify-end">
-            <Button className="w-full bg-[#1c1c1c]" type="submit">
-              {isLoading ? "Submitting..." : isSignIn ? "Sign In" : "Sign Up"}
+            <Button
+              className="w-full bg-[#1c1c1c]"
+              type="submit"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <Loader2 className="animate-spin size-4 " />
+              ) : isSignIn ? (
+                "Sign In"
+              ) : (
+                "Sign Up"
+              )}
             </Button>
           </div>
         </form>

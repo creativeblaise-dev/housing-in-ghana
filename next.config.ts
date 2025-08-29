@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "ik.imagekit.io",
+        hostname: "housing-in-ghana.fra1.cdn.digitaloceanspaces.com",
         port: "",
       },
     ],

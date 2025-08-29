@@ -1,22 +1,35 @@
 import SignOutButton from "@/components/SignOutButton";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import Image from "next/image";
+import { redirect } from "next/navigation";
 
 const ContributorProfilePage = async () => {
-  const session = await auth(); // Replace with actual session fetching logic
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  console.log(session?.user?.email);
+  if (!session) {
+    redirect("/sign-in");
+  }
+
   return (
     <main className="p-10 lg:px-60 lg:py-10 bg-gray-100">
       <div className="flex items-center gap-x-3">
         <div className="shrink-0">
-          <img
+          <Image
             className="shrink-0 size-16 rounded-full"
             src="/images/girl.png"
             alt="Avatar"
+            width={64}
+            height={64}
           />
         </div>
 
         <div className="grow">
           <h1 className="text-lg font-medium text-gray-800 dark:text-neutral-200">
-            {session?.user?.name || "User"}
+            {session?.user?.name}
           </h1>
           <p className="text-sm text-gray-600 dark:text-neutral-400">
             Content Contributor
@@ -59,7 +72,7 @@ const ContributorProfilePage = async () => {
               className="text-[13px] text-gray-500 underline hover:text-gray-800 hover:decoration-2 focus:outline-hidden focus:decoration-2 dark:text-neutral-500 dark:hover:text-neutral-400"
               href="#"
             >
-              {session?.user?.email || "User"}
+              {session?.user?.email}
             </a>
           </li>
         </ul>
