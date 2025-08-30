@@ -42,6 +42,7 @@ const QuickActions = () => {
           <Link
             className="group flex gap-y-6 size-full bg-[#252524] hover:bg-stone-700 focus:outline-hidden focus:bg-gray-100 rounded-lg p-5 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
             href={action.route || "#"}
+            key={index}
           >
             {action.icon}
 
