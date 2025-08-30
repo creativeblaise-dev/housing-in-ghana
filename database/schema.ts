@@ -144,6 +144,19 @@ export const comment = pgTable("comment", {
   updatedAt: timestamp("updated_at").$defaultFn(() => new Date()),
 });
 
+// File uploads table (for tracking all uploaded files)
+export const fileUploads = pgTable("file_uploads", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  originalName: varchar("original_name", { length: 255 }).notNull(),
+  filename: varchar("filename", { length: 255 }).notNull(),
+  mimeType: varchar("mime_type", { length: 100 }).notNull(),
+  size: integer("size").notNull(),
+  url: varchar("url", { length: 500 }).notNull(),
+  uploadedBy: varchar("uploaded_by", { length: 255 }),
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 // export type InsertUser = typeof user.$inferInsert;
 // export type SelectUser = typeof user.$inferSelect;
 

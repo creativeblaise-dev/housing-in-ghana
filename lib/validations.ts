@@ -60,3 +60,17 @@ export const commentSchema = z.object({
     .min(1, "Comment content cannot be empty")
     .max(1000, "Comment content should be at most 1000 characters long"),
 });
+export const insertFileUploadSchema = z.object({
+  originalName: z.string().min(1),
+  filename: z.string().min(1),
+  mimeType: z.string().min(1),
+  size: z.number().int().min(1),
+  url: z.string().url(),
+  uploadedBy: z.string().optional(),
+  metadata: z.record(z.any()).optional(),
+});
+
+export const uploadSchema = z.object({
+  type: z.enum(["image", "document"]).optional().default("image"),
+  folder: z.string().optional().default("uploads"),
+});

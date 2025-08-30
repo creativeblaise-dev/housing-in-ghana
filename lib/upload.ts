@@ -1,4 +1,5 @@
 import { spacesClient } from "./spaces";
+// import { Upload } from "@aws-sdk/lib-storage";
 import { v4 as uuidv4 } from "uuid";
 import path from "path";
 import { UploadResult } from "@/types";
@@ -28,14 +29,16 @@ export async function uploadToSpaces(
   };
 
   try {
-    const result = await spacesClient.send(new PutObjectCommand(uploadParams));
+    await spacesClient.send(new PutObjectCommand(uploadParams));
 
     // Use CDN endpoint if available, otherwise use the direct URL
     const baseUrl =
       process.env.DO_SPACES_CDN_ENDPOINT ||
       `https://${process.env.DO_SPACES_BUCKET}.${process.env.DO_SPACES_REGION}.digitaloceanspaces.com`;
 
-    const url = `${baseUrl}/${key}`;
+    const bucket = process.env.DO_SPACES_BUCKET;
+
+    const url = `${baseUrl}/${bucket}/${key}`;
 
     return {
       url,
@@ -72,6 +75,7 @@ export function extractKeyFromUrl(url: string): string | null {
     // Remove leading slash
     return pathname.startsWith("/") ? pathname.substring(1) : pathname;
   } catch {
+    console.log("Could not extract key from url");
     return null;
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
@@ -27,7 +27,13 @@ import {
 import { Article } from "@/types";
 import { articleSchema } from "@/lib/validations";
 import { Textarea } from "@/components/ui/textarea";
-import { fi } from "zod/v4/locales";
+import FileUpload from "@/components/ui/file-upload";
+import { toast } from "sonner";
+import { ImagePreview } from "@/components/ui/image-preview";
+import { ImagePreviewWithDelete } from "@/components/ui/image-preview-with-delete";
+import { FeaturedImageData } from "@/types";
+import { Loader2 } from "lucide-react";
+import Image from "next/image";
 
 interface Props extends Partial<Article> {
   type: "CREATE_ARTICLE" | "EDIT_ARTICLE";
@@ -76,8 +82,82 @@ const ArticleForm = ({ type, ...article }: Props) => {
     },
   });
 
+  const [featuredImage, setFeaturedImage] = useState<FeaturedImageData | null>(
+    article.initialFeaturedImage || null
+  );
+
+  const [isDeletingImage, setIsDeletingImage] = useState(false);
+
   const submitArticle = async (data: z.infer<typeof articleSchema>) => {
     console.log("Article Data: ", data);
+  };
+  // Auto-generate slug from title
+  const generateSlug = (title: string) => {
+    return title
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .trim();
+  };
+
+  const handleImageUpload = (uploadedFile: any) => {
+    try {
+      const imageData: FeaturedImageData = {
+        id: uploadedFile.id,
+        url: uploadedFile.url,
+        originalName: uploadedFile.originalName,
+      };
+      setFeaturedImage(imageData);
+      form.setValue("featuredImageUrl", uploadedFile.url);
+      toast.success("Featured image has been uploaded successfully.");
+    } catch (error) {
+      toast.error("Failed to upload featured image. Please try again.");
+    }
+  };
+
+  // const handleImageRemove = () => {
+  //   setFeaturedImage("");
+  //   form.setValue("featuredImageUrl", "");
+  // };
+
+  const handleImageDelete = async () => {
+    if (!featuredImage) return;
+
+    setIsDeletingImage(true);
+
+    try {
+      console.log("🗑️ Deleting featured image:", featuredImage);
+
+      const response = await fetch(`/api/upload/${featuredImage.id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Delete failed!");
+      }
+
+      const result = await response.json();
+      console.log("✅ Featured image deleted:", result);
+
+      // Clear featured image state
+      setFeaturedImage(null);
+      form.setValue("featuredImageUrl", "");
+
+      toast.success("Featured image has been removed successfully.");
+    } catch (error) {
+      console.error("❌ Featured image delete failed:", error);
+
+      const errorMessage =
+        error instanceof Error ? error.message : "Delete failed";
+      toast.error(errorMessage);
+    } finally {
+      setIsDeletingImage(false);
+    }
+  };
+
+  const handleImageUploadError = (error: string) => {
+    toast.error(error);
   };
 
   return (
@@ -181,19 +261,87 @@ const ArticleForm = ({ type, ...article }: Props) => {
               </FormItem>
             )}
           />
-          {/* <FormField
+
+          <FormField
             control={form.control}
-            name={"imageUrl"}
+            name={"featuredImageUrl"}
             render={({ field }) => (
               <FormItem className="flex flex-col gap-1">
                 <FormLabel className="text-base font-normal text-stone-700">
-                  Cover Image
+                  Featured image
                 </FormLabel>
-                <FormControl>{''}</FormControl>
+                <FormControl>
+                  {featuredImage ? (
+                    <div className="space-y-4">
+                      <ImagePreviewWithDelete
+                        src={`${featuredImage.url}`}
+                        alt="Featured image"
+                        fileId={featuredImage.id}
+                        onRemove={handleImageDelete}
+                        showDeleteConfirm={true}
+                        className={`w-full max-w-md ${isDeletingImage ? "opacity-50 pointer-events-none" : ""}`}
+                      />
+
+                      <div className="flex items-center gap-4 text-sm text-gray-600">
+                        <div className="flex items-center gap-2">
+                          <span>{featuredImage.originalName}</span>
+                        </div>
+
+                        <div className="flex gap-2">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                              navigator.clipboard.writeText(featuredImage.url)
+                            }
+                            disabled={isDeletingImage}
+                          >
+                            Copy URL
+                          </Button>
+
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                              window.open(featuredImage.url, "_blank")
+                            }
+                            disabled={isDeletingImage}
+                          >
+                            View Full Size
+                          </Button>
+                        </div>
+                      </div>
+
+                      {isDeletingImage && (
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Removing featured image...</span>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <FileUpload
+                        onUploadComplete={handleImageUpload}
+                        onUploadError={handleImageUploadError}
+                        uploadType="image"
+                        folder="articles"
+                        acceptedTypes={["image/*"]}
+                      />
+
+                      <p className="text-sm text-gray-500">
+                        Upload a featured image for this article. Recommended
+                        size: 1200x630px
+                      </p>
+                    </div>
+                  )}
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
-          /> */}
+          />
           <FormField
             control={form.control}
             name={"content"}
