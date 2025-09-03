@@ -155,7 +155,7 @@ export function ImagePreviewWithDelete({
           type="button"
           variant="destructive"
           size="sm"
-          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
           onClick={handleRemoveClick}
           disabled={isDeleting}
         >

@@ -1,6 +1,44 @@
 import React from "react";
+import { db } from "@/database/drizzle";
+import { article as articleTable } from "@/database/schema";
+import { eq, ne } from "drizzle-orm";
+import { ArticleType } from "@/types";
+import Image from "next/image";
+import Link from "next/link";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { IconUser } from "@tabler/icons-react";
 
-const ArticleContentPage = () => {
+const ArticleContentPage = async ({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const userName = session?.user?.name;
+
+  const { slug } = await params;
+
+  const otherArticles = await db
+    .select()
+    .from(articleTable)
+    .where(ne(articleTable.slug, slug))
+    .limit(4);
+
+  const [articles] = await db
+    .select()
+    .from(articleTable)
+    .where(eq(articleTable.slug, slug))
+    .limit(1);
+
+  const article = articles as ArticleType | undefined;
+
+  // Define the separator for splitting paragraphs, e.g., double line breaks
+  const separator = "\n\n";
+
   return (
     <main>
       {/* Blog Article */}
@@ -10,9 +48,9 @@ const ArticleContentPage = () => {
           <div className="lg:col-span-2">
             <div className="py-8 lg:pe-8">
               <div className="space-y-5 lg:space-y-8">
-                <a
+                <Link
                   className="inline-flex items-center gap-x-1.5 text-sm text-gray-600 decoration-2 hover:underline focus:outline-hidden focus:underline dark:text-blue-500"
-                  href="#"
+                  href="/articles"
                 >
                   <svg
                     className="shrink-0 size-4"
@@ -29,10 +67,10 @@ const ArticleContentPage = () => {
                     <path d="m15 18-6-6 6-6" />
                   </svg>
                   Back to Articles
-                </a>
+                </Link>
 
                 <h2 className="text-3xl font-bold lg:text-5xl dark:text-white">
-                  Announcing a free plan for small teams
+                  {article?.title}
                 </h2>
 
                 <section className="flex gap-6">
@@ -41,10 +79,10 @@ const ArticleContentPage = () => {
                       className="inline-flex items-center gap-1.5 py-1 px-3 sm:py-2 sm:px-4 rounded-full text-xs sm:text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
                       href="#"
                     >
-                      Real Estate
+                      {article?.category}
                     </a>
                     <p className="text-xs sm:text-sm text-gray-800 dark:text-neutral-200">
-                      January 18, 2025
+                      {article?.createdAt.toDateString()}
                     </p>
                   </div>
                   <div className="flex flex-2 justify-end items-center gap-x-1.5">
@@ -225,28 +263,29 @@ const ArticleContentPage = () => {
                 </section>
 
                 <figure>
-                  <img
+                  <Image
                     className="w-full object-cover rounded-xl"
-                    src="https://images.unsplash.com/photo-1671726203454-488ab18f7eda?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80"
-                    alt="Blog Image"
+                    width={1200}
+                    height={600}
+                    src={article?.featuredImageUrl || ""}
+                    alt={article?.title || ""}
                   />
-                  <figcaption className="mt-3 text-sm text-center text-gray-500 dark:text-neutral-500">
+                  {/* <figcaption className="mt-3 text-sm text-center text-gray-500 dark:text-neutral-500">
                     A man and a woman looking at a cell phone.
-                  </figcaption>
+                  </figcaption> */}
                 </figure>
 
-                <p className="text-lg text-gray-800 dark:text-neutral-200">
-                  At preline, our mission has always been focused on bringing
-                  openness and transparency to the design process. We've always
-                  believed that by providing a space where designers can share
-                  ongoing work not only empowers them to make better products,
-                  it also helps them grow.
-                </p>
-
-                <p className="text-lg text-gray-800 dark:text-neutral-200">
-                  We're proud to be a part of creating a more open culture and
-                  to continue building a product that supports this vision.
-                </p>
+                {article?.content.split(separator).map((paragraph, index) => (
+                  <p
+                    key={index}
+                    className="text-lg text-gray-800 dark:text-neutral-200 leading-relaxed"
+                  >
+                    {paragraph}
+                    {index < article.content.split(separator).length - 1 && (
+                      <br />
+                    )}
+                  </p>
+                ))}
 
                 {/* <div className="text-center">
                   <div className="grid lg:grid-cols-2 gap-3">
@@ -280,28 +319,7 @@ const ArticleContentPage = () => {
                   </span>
                 </div> */}
 
-                <p className="text-lg text-gray-800 dark:text-neutral-200">
-                  As we've grown, we've seen how Preline has helped companies
-                  such as Spotify, Microsoft, Airbnb, Facebook, and Intercom
-                  bring their designers closer together to create amazing
-                  things. We've also learned that when the culture of sharing is
-                  brought in earlier, the better teams adapt and communicate
-                  with one another.
-                </p>
-
-                <p className="text-lg text-gray-800 dark:text-neutral-200">
-                  That's why we are excited to share that we now have a{" "}
-                  <a
-                    className="text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500"
-                    href="#"
-                  >
-                    free version of Preline
-                  </a>
-                  , which will allow individual designers, startups and other
-                  small teams a chance to create a culture of openness early on.
-                </p>
-
-                <blockquote className="text-center p-4 sm:px-7">
+                {/* <blockquote className="text-center p-4 sm:px-7">
                   <p className="text-xl font-medium text-gray-800 lg:text-2xl lg:leading-normal xl:text-2xl xl:leading-normal dark:text-neutral-200">
                     To say that switching to Preline has been life-changing is
                     an understatement. My business has tripled and I got my life
@@ -310,88 +328,22 @@ const ArticleContentPage = () => {
                   <p className="mt-5 text-gray-800 dark:text-neutral-200">
                     Nicole Grazioso
                   </p>
-                </blockquote>
-
-                <div className="space-y-3">
-                  <h3 className="text-2xl font-semibold dark:text-white">
-                    Bringing the culture of sharing to everyone
-                  </h3>
-
-                  <p className="text-lg text-gray-800 dark:text-neutral-200">
-                    We know the power of sharing is real, and we want to create
-                    an opportunity for everyone to try Preline and explore how
-                    transformative open communication can be. Now you can have a
-                    team of one or two designers and unlimited spectators (think
-                    PMs, management, marketing, etc.) share work and explore the
-                    design process earlier.
-                  </p>
-                </div>
-
-                <ul className="list-disc list-outside space-y-5 ps-5 text-lg text-gray-800 dark:text-neutral-200">
-                  <li className="ps-2">
-                    Preline allows us to collaborate in real time and is a
-                    really great way for leadership on the team to stay
-                    up-to-date with what everybody is working on,"{" "}
-                    <a
-                      className="text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500"
-                      href="#"
-                    >
-                      said
-                    </a>{" "}
-                    Stewart Scott-Curran, Intercom's Director of Brand Design.
-                  </li>
-                  <li className="ps-2">
-                    Preline opened a new way of sharing. It's a persistent way
-                    for everyone to see and absorb each other's work," said
-                    David Scott, Creative Director at{" "}
-                    <a
-                      className="text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500"
-                      href="#"
-                    >
-                      Eventbrite
-                    </a>
-                    .
-                  </li>
-                </ul>
-
-                <p className="text-lg text-gray-800 dark:text-neutral-200">
-                  Small teams and individual designers need a space where they
-                  can watch the design process unfold, both for themselves and
-                  for the people they work with – no matter if it's a fellow
-                  designer, product manager, developer or client. Preline allows
-                  you to invite more people into the process, creating a central
-                  place for conversation around design. As those teams grow,
-                  transparency and collaboration becomes integrated in how they
-                  communicate and work together.
-                </p>
+                </blockquote> */}
 
                 <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-y-5 lg:gap-y-0">
                   {/* Badges/Tags */}
                   <div>
-                    <a
-                      className="m-0.5 inline-flex items-center gap-1.5 py-2 px-3 rounded-full text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                      href="#"
-                    >
-                      Plan
-                    </a>
-                    <a
-                      className="m-0.5 inline-flex items-center gap-1.5 py-2 px-3 rounded-full text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                      href="#"
-                    >
-                      Web development
-                    </a>
-                    <a
-                      className="m-0.5 inline-flex items-center gap-1.5 py-2 px-3 rounded-full text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                      href="#"
-                    >
-                      Free
-                    </a>
-                    <a
-                      className="m-0.5 inline-flex items-center gap-1.5 py-2 px-3 rounded-full text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                      href="#"
-                    >
-                      Team
-                    </a>
+                    {article &&
+                      article.tags &&
+                      article.tags.map((tag, index) => (
+                        <a
+                          key={index}
+                          className="m-0.5 inline-flex items-center gap-1.5 py-2 px-3 rounded-lg text-sm bg-slate-600 text-zinc-200 hover:bg-gray-200 hover:text-stone-900 focus:outline-hidden focus:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                          href="#"
+                        >
+                          {tag}
+                        </a>
+                      ))}
                   </div>
                   {/* End Badges/Tags */}
                 </div>
@@ -413,110 +365,56 @@ const ArticleContentPage = () => {
                   />
                 </a>
 
-                <a className="group grow block focus:outline-hidden" href="">
+                <Link
+                  className="group grow block focus:outline-hidden"
+                  href="/contributor-profile"
+                >
                   <h5 className="group-hover:text-gray-600 group-focus:text-gray-600 text-sm font-semibold text-gray-800 dark:group-hover:text-neutral-400 dark:group-focus:text-neutral-400 dark:text-neutral-200">
-                    Leyla Ludic
+                    {userName}
                   </h5>
                   <p className="text-sm text-gray-500 dark:text-neutral-500">
-                    UI/UX enthusiast
+                    Housing in Ghana - Contributor
                   </p>
-                </a>
+                </Link>
 
                 <div className="grow">
                   <div className="flex justify-end">
-                    <button
-                      type="button"
+                    <Link
                       className="py-1.5 px-2.5 inline-flex items-center gap-x-2 text-xs font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                      href="/contributor-profile"
                     >
-                      <svg
-                        className="shrink-0 size-4"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                        <circle cx="9" cy="7" r="4" />
-                        <line x1="19" x2="19" y1="8" y2="14" />
-                        <line x1="22" x2="16" y1="11" y2="11" />
-                      </svg>
-                      Follow
-                    </button>
+                      <IconUser className="shrink-0 size-4" />
+                      Profile
+                    </Link>
                   </div>
                 </div>
               </div>
               {/* End Avatar Media */}
+              {otherArticles.length > 0 &&
+                otherArticles.map((article) => (
+                  <div className="space-y-6 px-4 mb-4" key={article.id}>
+                    <Link
+                      className="group flex items-center gap-x-6 focus:outline-hidden"
+                      href={`/articles/${article.slug}`}
+                    >
+                      <div className="grow">
+                        <span className="text-md font-bold text-gray-800 group-hover:text-red-600 group-focus:text-red-600 dark:text-neutral-200 dark:group-hover:text-blue-500 dark:group-focus:text-blue-500">
+                          {article.title}
+                        </span>
+                      </div>
 
-              <div className="space-y-6 px-4">
-                {/* Media */}
-                <a
-                  className="group flex items-center gap-x-6 focus:outline-hidden"
-                  href="#"
-                >
-                  <div className="grow">
-                    <span className="text-sm font-bold text-gray-800 group-hover:text-blue-600 group-focus:text-blue-600 dark:text-neutral-200 dark:group-hover:text-blue-500 dark:group-focus:text-blue-500">
-                      5 Reasons to Not start a UX Designer Career in 2022/2023
-                    </span>
+                      <div className="shrink-0 relative rounded-lg overflow-hidden size-20">
+                        <Image
+                          className="size-full absolute top-0 start-0 object-cover rounded-lg"
+                          width={80}
+                          height={80}
+                          src={article?.featuredImageUrl || ""}
+                          alt="Blog Image"
+                        />
+                      </div>
+                    </Link>
                   </div>
-
-                  <div className="shrink-0 relative rounded-lg overflow-hidden size-20">
-                    <img
-                      className="size-full absolute top-0 start-0 object-cover rounded-lg"
-                      src="https://images.unsplash.com/photo-1567016526105-22da7c13161a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&q=80"
-                      alt="Blog Image"
-                    />
-                  </div>
-                </a>
-                {/* End Media */}
-
-                {/* Media */}
-                <a
-                  className="group flex items-center gap-x-6 focus:outline-hidden"
-                  href="#"
-                >
-                  <div className="grow">
-                    <span className="text-sm font-bold text-gray-800 group-hover:text-blue-600 group-focus:text-blue-600 dark:text-neutral-200 dark:group-hover:text-blue-500 dark:group-focus:text-blue-500">
-                      If your UX Portfolio has this 20% Well Done, it Will Give
-                      You an 80% Result
-                    </span>
-                  </div>
-
-                  <div className="shrink-0 relative rounded-lg overflow-hidden size-20">
-                    <img
-                      className="size-full absolute top-0 start-0 object-cover rounded-lg"
-                      src="https://images.unsplash.com/photo-1542125387-c71274d94f0a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&q=80"
-                      alt="Blog Image"
-                    />
-                  </div>
-                </a>
-                {/* End Media */}
-
-                {/* Media */}
-                <a
-                  className="group flex items-center gap-x-6 focus:outline-hidden"
-                  href="#"
-                >
-                  <div className="grow">
-                    <span className="text-sm font-bold text-gray-800 group-hover:text-blue-600 group-focus:text-blue-600 dark:text-neutral-200 dark:group-hover:text-blue-500 dark:group-focus:text-blue-500">
-                      7 Principles of Icon Design
-                    </span>
-                  </div>
-
-                  <div className="shrink-0 relative rounded-lg overflow-hidden size-20">
-                    <img
-                      className="size-full absolute top-0 start-0 object-cover rounded-lg"
-                      src="https://images.unsplash.com/photo-1586232702178-f044c5f4d4b7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=320&q=80"
-                      alt="Blog Image"
-                    />
-                  </div>
-                </a>
-                {/* End Media */}
-              </div>
+                ))}
             </div>
           </div>
           {/* End Sidebar */}

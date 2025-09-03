@@ -3,12 +3,11 @@ import {
   text,
   timestamp,
   boolean,
+  pgEnum,
   jsonb,
   integer,
-  pgEnum,
-  serial,
-  uuid,
   varchar,
+  uuid,
 } from "drizzle-orm/pg-core";
 
 export const STATUS_ENUM = pgEnum("status", [
@@ -36,9 +35,9 @@ export const user = pgTable("user", {
   emailVerified: boolean("email_verified")
     .$defaultFn(() => false)
     .notNull(),
-  image: text("image"),
   status: STATUS_ENUM("status").notNull().default("pending"),
   role: ROLE_ENUM("role").notNull().default("contributor"),
+  image: text("image"),
   createdAt: timestamp("created_at")
     .$defaultFn(() => /* @__PURE__ */ new Date())
     .notNull(),
@@ -61,7 +60,7 @@ export const session = pgTable("session", {
 });
 
 export const account = pgTable("account", {
-  id: uuid("id").defaultRandom().primaryKey(),
+  id: text("id").primaryKey(),
   accountId: text("account_id").notNull(),
   providerId: text("provider_id").notNull(),
   userId: text("user_id")
@@ -91,60 +90,21 @@ export const verification = pgTable("verification", {
   ),
 });
 
-// Category table
-export const category = pgTable("category", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull().unique(),
-  slug: text("slug").notNull().unique(),
-  description: text("description"),
-  createdAt: timestamp("created_at").$defaultFn(() => new Date()),
-});
-
-// Tag table
-export const tag = pgTable("tag", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull().unique(),
-  slug: text("slug").notNull().unique(),
-  createdAt: timestamp("created_at").$defaultFn(() => new Date()),
-});
-
-// Article table with stats
 export const article = pgTable("article", {
-  id: text("id").primaryKey(),
+  id: uuid("id").notNull().primaryKey().defaultRandom().unique(),
   title: text("title").notNull(),
   content: jsonb("content").notNull(),
   slug: varchar("slug", { length: 255 }).unique().notNull(),
   excerpt: text("excerpt"),
+  category: text("category").notNull(),
   featuredImageUrl: text("featured_image_url"),
-  status: ARTICLE_STATUS_ENUM("article_status").notNull().default("draft"),
-  published: boolean("published").$defaultFn(() => false),
+  status: ARTICLE_STATUS_ENUM("status").notNull().default("draft"), // <-- FIXED HERE
   createdAt: timestamp("created_at").$defaultFn(() => new Date()),
   updatedAt: timestamp("updated_at").$defaultFn(() => new Date()),
-  authorId: text("author_id")
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-  categoryId: integer("category_id").references(() => category.id),
+  author: text("author").notNull(),
   tags: jsonb("tags").default("[]"), // Array of tags as JSONB
-  views: integer("views").$defaultFn(() => 0),
-  likes: integer("likes").$defaultFn(() => 0),
-  commentsCount: integer("comments_count").$defaultFn(() => 0),
 });
 
-// Comments table
-export const comment = pgTable("comment", {
-  id: serial("id").primaryKey(),
-  articleId: text("article_id")
-    .references(() => article.id, { onDelete: "cascade" })
-    .notNull(),
-  userId: text("user_id")
-    .references(() => user.id, { onDelete: "cascade" })
-    .notNull(),
-  content: text("content").notNull(),
-  createdAt: timestamp("created_at").$defaultFn(() => new Date()),
-  updatedAt: timestamp("updated_at").$defaultFn(() => new Date()),
-});
-
-// File uploads table (for tracking all uploaded files)
 export const fileUploads = pgTable("file_uploads", {
   id: uuid("id").defaultRandom().primaryKey(),
   originalName: varchar("original_name", { length: 255 }).notNull(),
@@ -156,15 +116,3 @@ export const fileUploads = pgTable("file_uploads", {
   metadata: jsonb("metadata"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
-
-// export type InsertUser = typeof user.$inferInsert;
-// export type SelectUser = typeof user.$inferSelect;
-
-// export type InsertAccount = typeof account.$inferInsert;
-// export type SelectAccount = typeof account.$inferSelect;
-
-// export type InsertVerification = typeof verification.$inferInsert;
-// export type SelectVerification = typeof verification.$inferSelect;
-
-// export type InsertArticle = typeof article.$inferInsert;
-// export type SelectArticle = typeof article.$inferSelect;

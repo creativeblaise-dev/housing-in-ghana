@@ -7,13 +7,18 @@ import MileageCard from "@/components/MileageCard";
 import MagazineCard from "@/components/MagazineCard";
 import Spotlighter from "@/components/Spotlighter";
 import Subscribe from "@/components/Subscribe";
-import { authClient } from "@/lib/auth-client";
+import ArticlesVariantCards from "@/components/ArticlesVariantCards";
+import { db } from "@/database/drizzle";
+import { article } from "@/database/schema";
+import { ArticleType } from "@/types";
+import { eq, desc } from "drizzle-orm";
 
 const Home = async () => {
-  // const response = await fetch("http://localhost:3000/api/user");
-  // const data = await response.json();
-  // console.log("User data from /api/user:", data);
-
+  const allArticles = (await db
+    .select()
+    .from(article)
+    .where(eq(article.status, "published"))
+    .orderBy(desc(article.createdAt))) as ArticleType[];
   return (
     <>
       {/* coming soon */}
@@ -29,10 +34,11 @@ const Home = async () => {
       <SpotlightPreview />
       <MileageCard />
       <HFOBanner />
-      <BlogPreview
-        header="Learn the latest, from practical advice, legal updates, investment
-          guides to design/interior features."
+      <ArticlesVariantCards
+        header="Latest Articles"
+        featureArticles={allArticles}
       />
+
       <section className="md:px-20 md:mb-20">
         <Subscribe />
       </section>

@@ -1,7 +1,6 @@
 import React, { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 const layout = async ({ children }: { children: ReactNode }) => {
   return (

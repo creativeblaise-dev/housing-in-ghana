@@ -4,20 +4,27 @@ import { authClient } from "@/lib/auth-client";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 
-const SignOutButton = () => {
+const SignOutButton = ({
+  buttonStyles,
+  title,
+  icon,
+}: {
+  buttonStyles?: string;
+  title: string;
+  icon: React.ReactNode;
+}) => {
   const router = useRouter();
 
+  const handleSignOut = async () => {
+    await authClient.signOut();
+    router.push("/sign-in");
+    // window.location.href = "/sign-in";
+  };
+
   return (
-    <form
-      action={async (): Promise<void> => {
-        await authClient.signOut();
-        router.push("/"); //   Redirect to home or login page after sign-out
-      }}
-    >
-      <Button className="mt-6 bg-[#121111] cursor-pointer hover:bg-red-500">
-        Log out
-      </Button>
-    </form>
+    <Button className={buttonStyles} onClick={handleSignOut}>
+      <span>{icon}</span> {title}
+    </Button>
   );
 };
 

@@ -15,6 +15,8 @@ export async function uploadToSpaces(
 ): Promise<UploadResult> {
   const fileExtension = path.extname(file.name);
   const fileName = `${uuidv4()}${fileExtension}`;
+  // const key = `${folder}/${fileName}`;
+
   const key = `${folder}/${fileName}`;
 
   const buffer = await file.arrayBuffer();
@@ -32,13 +34,13 @@ export async function uploadToSpaces(
     await spacesClient.send(new PutObjectCommand(uploadParams));
 
     // Use CDN endpoint if available, otherwise use the direct URL
-    const baseUrl =
-      process.env.DO_SPACES_CDN_ENDPOINT ||
-      `https://${process.env.DO_SPACES_BUCKET}.${process.env.DO_SPACES_REGION}.digitaloceanspaces.com`;
+    let url: string;
 
-    const bucket = process.env.DO_SPACES_BUCKET;
-
-    const url = `${baseUrl}/${bucket}/${key}`;
+    if (process.env.DO_SPACES_CDN_ENDPOINT) {
+      url = `${process.env.DO_SPACES_CDN_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${key}`;
+    } else {
+      url = `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${key}`;
+    }
 
     return {
       url,

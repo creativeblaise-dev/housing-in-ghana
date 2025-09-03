@@ -136,7 +136,7 @@ const FileUpload = ({
             {uploadType === "image" ? (
               <Image
                 className="w-20 h-auto text-gray-400"
-                src="/images/housing-in-ghana-logo.png"
+                src="/images/uploader-icon.png"
                 width={100}
                 height={100}
                 alt={"image upload"}

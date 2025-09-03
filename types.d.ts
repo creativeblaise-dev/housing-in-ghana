@@ -12,22 +12,18 @@ export type GalleryContent = {
   region: string;
 };
 
-export type Article = {
+export type ArticleType = {
   title: string;
   content: string;
+  slug: string;
+  author: string;
+  status: string;
   featuredImageUrl: string;
   initialFeaturedImage?: FeaturedImageData;
-  published: boolean;
   createdAt: Date;
   updatedAt?: Date;
-  authorId: string;
-  categoryId?: number;
+  category: string;
   tags?: string[];
-  views: number;
-  likes: number;
-  commentsCount: number;
-  onSubmit: (data: ArticleFormData) => Promise<void>;
-  isLoading?: boolean;
 };
 
 export type SiteNavigation = {

@@ -56,7 +56,7 @@ const AuthForm = ({ type, formSchema, defaultValues, onSubmit }: Props) => {
 
         router.push("/"); // Redirect to contributor profile page after successful sign-in/sign-up
       } else {
-        toast.error(result.error || "An error occurred!");
+        toast.warning(result.error || "User sign in failed!"); //update this logic for email verification
       }
     } catch (error) {
       toast.error("An unexpected error occurred!");

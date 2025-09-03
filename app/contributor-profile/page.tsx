@@ -3,13 +3,13 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import Image from "next/image";
 import { redirect } from "next/navigation";
+import { IconLogout } from "@tabler/icons-react";
 
 const ContributorProfilePage = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
-  console.log(session?.user?.email);
   if (!session) {
     redirect("/sign-in");
   }
@@ -77,7 +77,11 @@ const ContributorProfilePage = async () => {
           </li>
         </ul>
 
-        <SignOutButton />
+        <SignOutButton
+          buttonStyles="mt-6 bg-[#121111] cursor-pointer hover:bg-red-500"
+          title="Log out"
+          icon={<IconLogout className="h-4 w-4" />}
+        />
       </div>
     </main>
   );

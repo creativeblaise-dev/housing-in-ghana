@@ -7,15 +7,22 @@ const nextConfig: NextConfig = {
     "*.local-origin.dev",
     "http:localhost:3000",
   ],
+  experimental: {
+    turbopackPersistentCaching: true,
+  },
   images: {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "housing-in-ghana.fra1.cdn.digitaloceanspaces.com",
+        hostname: "housinginghana.ams3.cdn.digitaloceanspaces.com",
         port: "",
       },
     ],
   },
 };
 
-export default nextConfig;
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
+
+export default withBundleAnalyzer(nextConfig);

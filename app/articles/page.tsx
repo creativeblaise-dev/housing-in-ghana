@@ -24,7 +24,7 @@ const Articles = () => {
             </div>
             <div className="flex lg:top-15 lg:absolute lg:right-15 items-center">
               <Image
-                src="/images/15555.jpg"
+                src="/images/15554.jpg"
                 width={600}
                 height={600}
                 alt="magazine covers"

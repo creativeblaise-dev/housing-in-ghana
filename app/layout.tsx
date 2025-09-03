@@ -5,7 +5,6 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "sonner";
 
-import { redirect } from "next/navigation";
 import PrelineScriptWrapper from "@/components/PrelineScriptWrapper";
 import Header from "@/components/Header";
 
@@ -31,7 +30,9 @@ export const metadata: Metadata = {
 const RootLayout = async ({ children }: { children: ReactNode }) => {
   return (
     <html lang="en">
-      <body className={`${questrialRegular.className}  antialiased`}>
+      <body
+        className={`${questrialRegular.className}  antialiased text-space tracking-normal `}
+      >
         {children}
         <Toaster />
         {/* <MainFooter /> */}

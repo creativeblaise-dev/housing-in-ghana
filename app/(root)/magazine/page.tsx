@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import LayoutGridFeature from "@/components/LayoutGridFeature";
 import EditionCarousel from "@/components/EditionCarousel";
 import Subscribe from "@/components/Subscribe";
+import Link from "next/link";
 
 type LayoutImages = {
   id: number;
@@ -85,9 +86,11 @@ const Magazine = () => {
               strategies, and much more.
             </p>
             <div className="mt-8">
-              <Button className="bg-[#FF202B] text-white text-md font-bold hover:text-black hover:bg-[#e6d30a] py-5 md:p-5 font uppercase w-auto cursor-pointer border-1 border-[#ececec]">
-                Get The Lastest Edition
-              </Button>
+              <Link href="/magazine/edition/03">
+                <Button className="bg-[#FF202B] text-white text-md font-bold hover:text-black hover:bg-[#e6d30a] py-5 md:p-5 font uppercase w-auto cursor-pointer border-1 border-[#ececec]">
+                  Get The Lastest Edition
+                </Button>
+              </Link>
             </div>
           </div>
           <div className="md:flex-2">
@@ -99,13 +102,6 @@ const Magazine = () => {
                 alt="magazine edition"
                 className="rotate-3"
               />
-              {/* <Image
-              src="/images/editions-hig-magazine.png"
-              height={1000}
-              width={1000}
-              alt="magazine page"
-              className=""
-            /> */}
             </div>
           </div>
         </div>

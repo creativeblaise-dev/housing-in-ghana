@@ -2,28 +2,33 @@ import React from "react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
-import { article } from "@/database/schema";
 import { ArticleType } from "@/types";
-import { db } from "@/database/drizzle";
-import { desc, eq } from "drizzle-orm";
 
-const BlogPreview = async ({ header }: { header: string }) => {
-  const allArticles = (await db
-    .select()
-    .from(article)
-    .where(eq(article.status, "published"))
-    .orderBy(desc(article.createdAt))) as ArticleType[];
-
+const FeaturedArticles = async ({
+  header,
+  featureArticles,
+  description,
+}: {
+  header: string;
+  featureArticles: ArticleType[];
+  description: string;
+}) => {
   return (
     <section className="px-10 lg:px-20 pb-10 lg:py-10 bg-[#fefee2]">
-      <div className="flex flex-row  md:w-2/3 ">
-        <h1 className="text-4xl font-bold text-[#141516] mb-4 pt-0">
+      <div className="flex flex-row gap-4  ">
+        <h1 className="flex flex-1 text-4xl font-bold  text-[#141516] pt-0">
           {header}
         </h1>
+        <p className="text-md text-stone-900 mt-4 flex flex-2 justify-end">
+          Our feature articles deliver insights you can trust—from expert
+          interviews and market analysis to lifestyle, design, and cultural
+          highlights. Each edition goes beyond real estate to inspire readers
+          with fresh perspectives on living and investing in Ghana.
+        </p>
       </div>
       <div className="grid lg:grid-cols-4 grid-cols-1 lg:grid-row gap-4 py-4">
-        {allArticles &&
-          allArticles.map(
+        {featureArticles &&
+          featureArticles.map(
             (
               { title, createdAt, featuredImageUrl, slug }: ArticleType,
               index
@@ -58,4 +63,4 @@ const BlogPreview = async ({ header }: { header: string }) => {
   );
 };
 
-export default BlogPreview;
+export default FeaturedArticles;

@@ -43,15 +43,16 @@ export async function POST(request: NextRequest) {
       .insert(fileUploads)
       .values({
         originalName: uploadResult.originalName,
-        filename: uploadResult.key.split("/").pop()!,
+        filename: uploadResult.key.split("/").pop()!, // Just filename: "abc123.jpg"
         mimeType: uploadResult.mimeType,
         size: uploadResult.size,
         url: uploadResult.url,
-        uploadedBy: "system", // Replace with actual user ID from session
+        uploadedBy: "system",
         metadata: {
-          folder: validatedData.folder,
-          type: validatedData.type,
-          key: uploadResult.key,
+          folder: folder,
+          fullKey: uploadResult.key, // Store complete key: "housinginghana/articles/abc123.jpg"
+          type: "image",
+          bucketStructure: "nested", // Mark this for future reference
         },
       })
       .returning();
