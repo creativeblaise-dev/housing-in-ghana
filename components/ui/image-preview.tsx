@@ -10,6 +10,7 @@ import { ImagePreviewProps } from "@/types";
 export function ImagePreview({
   src,
   alt,
+  fileId,
   onRemove,
   className,
 }: ImagePreviewProps) {
@@ -26,7 +27,7 @@ export function ImagePreview({
           variant="destructive"
           size="sm"
           className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-          onClick={onRemove}
+          onClick={() => onRemove(fileId)}
         >
           <X className="w-4 h-4" />
         </Button>

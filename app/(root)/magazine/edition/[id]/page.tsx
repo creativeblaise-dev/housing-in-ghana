@@ -5,18 +5,27 @@ import Link from "next/link";
 import { IconArrowRight } from "@tabler/icons-react";
 import FeaturedArticles from "@/components/FeaturedArticles";
 import { db } from "@/database/drizzle";
-import { article } from "@/database/schema";
-import { ArticleType } from "@/types";
+import { magazineEditions } from "@/database/schema";
+import { MagazineEdition } from "@/types";
 import { eq, desc } from "drizzle-orm";
 import Subscribe from "@/components/Subscribe";
 import ArticlesVariantCards from "@/components/ArticlesVariantCards";
 
-const page = async () => {
-  const allArticles = (await db
+const page = async ({
+  params,
+}: {
+  params: { id: string }; // id will be a string, convert to number
+}) => {
+  const { id } = await params;
+
+  const edition = await db
     .select()
-    .from(article)
-    .where(eq(article.status, "published"))
-    .orderBy(desc(article.createdAt))) as ArticleType[];
+    .from(magazineEditions)
+    .where(eq(magazineEditions.editionNumber, Number(id)))
+    .limit(1);
+
+  const magazine = edition as MagazineEdition[];
+  const backgroundCoverImage = magazine[0].backgroundImage;
 
   return (
     <main className="">
@@ -40,7 +49,12 @@ const page = async () => {
               aria-hidden="true"
               className="absolute top-0 left-1/2 -z-10 -translate-x-1/2 blur-xs  xl:-top-20"
             >
-              <div className="aspect-1155/678 w-288.75 bg-linear-to-tr from-[#ffffff] to-[#ff3b3b] opacity-90 bg-[url(/images/IMG_1229.jpg)]" />
+              <div
+                className={
+                  magazine[0] &&
+                  `aspect-1155/678 w-288.75 bg-linear-to-tr from-[#ffffff] to-[#ff3b3b] opacity-90 bg-[url(${backgroundCoverImage})] bg-cover bg-center`
+                }
+              />
             </div>
           </div>
         </div>
@@ -48,29 +62,28 @@ const page = async () => {
           <div className="mb-4">
             <h1 className="text-4xl font-bold text-[#141516] mb-4 pt-4 text-balance">
               Housing In Ghana Magazine - <br />
-              Edition <span className="text-[#FF202B]">#01</span>
+              Edition{" "}
+              <span className="text-[#FF202B]">{`#0${magazine[0].editionNumber}`}</span>
             </h1>
             <p>
-              Edition Release Date: <span className="italic">May, 2023</span>
+              Edition Release Date:{" "}
+              <span className="italic">{magazine[0].releasedAt}</span>
             </p>
           </div>
           <h2 className="text-2xl font-bold text-[#141516] mb-2">
-            Building the Foundation
+            {magazine[0].title}
           </h2>
-          <p className="text-md text-stone-800 mt-4">
-            Our debut edition set the tone for exploring Ghana’s vibrant real
-            estate landscape. It featured insightful articles on housing trends,
-            expert perspectives on property investment, and highlighted some of
-            Ghana’s most attractive residential communities. This edition
-            established the magazine as a trusted resource for industry
-            knowledge, brand exposure, and lifestyle inspiration.
-          </p>
+          <p className="text-md text-stone-800 mt-4">{magazine[0].summary}</p>
           <div className="flex gap-3 mt-8">
-            <Button className="bg-stone-800 cursor-pointer">Read Online</Button>
+            <Link href={magazine[0].readOnlineButtonLink} target="_blank">
+              <Button className="bg-stone-800 cursor-pointer">
+                Read Online
+              </Button>
+            </Link>
             <Button className="bg-stone-600 cursor-pointer">
               Download PDF
             </Button>
-            <Link href="/contact-us">
+            <Link href="/contact-us" target="_blank">
               <Button className="bg-stone-400 cursor-pointer">
                 Get a Printed Copy
               </Button>
@@ -82,7 +95,7 @@ const page = async () => {
         <div className="flex-2 bg-white ">
           <div className=" lg:hidden flex justify-center h-60 w-full  sm:top-0 sm:h-screen">
             <Image
-              src="/images/HIG MAG-interior.jpg"
+              src={magazine[0].backgroundImage}
               alt="editorial background image"
               width={600}
               height={400}
@@ -94,14 +107,7 @@ const page = async () => {
               Editorial Note
             </h1>
             <p className="text-md text-stone-800 mt-4">
-              On behalf of our editorial team, I would like to express utmost
-              gratitude to our contributors, sponsors, authors, anonymous
-              reviewers and of course, our readers without whom this piece of
-              work is but pieces of paper tucked together without a spine. A lot
-              has gone on in the real estate industry in the past ten years and
-              yet we wonder how much of this information is available to the
-              average Ghanaian or visitors who tour the country from time to
-              time.{" "}
+              {magazine[0].editorialNote}
             </p>
             <p className="text-md text-stone-800 mt-4">
               The Housing in Ghana Magazine comes to solve that problem by
@@ -113,7 +119,7 @@ const page = async () => {
             <p className="text-sm font-bold text-slate-700 mt-4">
               Want to Read More? Get the edition{" "}
               <span>
-                <Link href="#">
+                <Link href={magazine[0].readOnlineButtonLink} target="_blank">
                   <IconArrowRight className="inline-block size-8 " />
                 </Link>
               </span>
@@ -122,19 +128,21 @@ const page = async () => {
         </div>
         <div className="lg:relative flex-2 items-center  bg-[#FF202B]">
           <Image
-            src="/images/HIG MAG-interior.jpg"
+            src={magazine[0].backgroundImage}
             alt="editorial background image"
             layout="fill"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover hidden lg:block"
           />
         </div>
       </section>
       <section>
-        <ArticlesVariantCards
+        {/* <ArticlesVariantCards
           header="Featured Articles"
           featureArticles={allArticles}
-        />
+        /> */}
       </section>
+
       <section className="md:px-20 md:mb-10">
         <Subscribe />
       </section>

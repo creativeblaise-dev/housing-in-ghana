@@ -22,6 +22,7 @@ const Header = ({ userprofile }: { userprofile: ReactNode }) => {
               alt="logo"
               width={130}
               height={60}
+              className="w-auto h-auto"
             />
           </div>
 

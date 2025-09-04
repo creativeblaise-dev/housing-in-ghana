@@ -1,8 +1,9 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
-import { LayoutGrid } from "./ui/layout-grid";
 
-const LayoutGridFeature = ({ images }) => {
+import { LayoutGrid } from "./ui/layout-grid";
+import { LayoutImages } from "@/types";
+
+const LayoutGridFeature = ({ images }: { images: LayoutImages[] }) => {
   return (
     <div className=" w-full ">
       <LayoutGrid cards={images} />

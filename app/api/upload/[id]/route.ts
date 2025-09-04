@@ -107,7 +107,7 @@ export async function DELETE(
       console.log("This action is performed after the timeout!");
     };
 
-    setTimeout(actionAfterDelay, 5000); // Executes actionAfterDelay after 5000 milliseconds (5 seconds)
+    setTimeout(actionAfterDelay, 3000); // Executes actionAfterDelay after 5000 milliseconds (5 seconds)
 
     return NextResponse.json({
       success: true,

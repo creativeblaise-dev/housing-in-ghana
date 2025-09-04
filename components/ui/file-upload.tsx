@@ -135,10 +135,10 @@ const FileUpload = ({
           <div className="flex flex-col items-center space-y-4">
             {uploadType === "image" ? (
               <Image
-                className="w-20 h-auto text-gray-400"
+                className="w-10 h-auto text-gray-400"
                 src="/images/uploader-icon.png"
-                width={100}
-                height={100}
+                width={60}
+                height={60}
                 alt={"image upload"}
               />
             ) : (

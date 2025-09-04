@@ -7,13 +7,10 @@ import LayoutGridFeature from "@/components/LayoutGridFeature";
 import EditionCarousel from "@/components/EditionCarousel";
 import Subscribe from "@/components/Subscribe";
 import Link from "next/link";
-
-type LayoutImages = {
-  id: number;
-  content?: string;
-  className: string;
-  thumbnail: string;
-};
+import { LayoutImages } from "@/types";
+import { db } from "@/database/drizzle";
+import { magazineEditions } from "@/database/schema";
+import { desc } from "drizzle-orm";
 
 const cards: LayoutImages[] = [
   {
@@ -26,7 +23,7 @@ const cards: LayoutImages[] = [
     id: 2,
     content: "",
     className: "col-span-1",
-    thumbnail: "/images/IMG_4328_2.jpg",
+    thumbnail: "/images/IMG_0897.jpg",
   },
   {
     id: 3,
@@ -48,7 +45,12 @@ const cards: LayoutImages[] = [
   },
 ];
 
-const Magazine = () => {
+const Magazine = async () => {
+  const editions = await db
+    .select()
+    .from(magazineEditions)
+    .orderBy(desc(magazineEditions.releasedAt));
+
   return (
     <main>
       <div className="relative flex pt-10 w-full overflow-hidden bg-[url('/images/modern-home.jpg')] bg-center [background-size:cover] antialiased md:items-center md:justify-center px-10 md:px-20 pb-10 md:py-15 ">
@@ -106,22 +108,7 @@ const Magazine = () => {
           </div>
         </div>
       </div>
-      <section className="py-4">
-        <div className="flex flex-col justify-center pt-10">
-          <h1 className="text-4xl text-center font-bold text-[#141516]  pt-4 text-balance">
-            From cozy cafés to bustling offices, people everywhere are diving
-            into Housing <span className="text-[#FF202B]">In Ghana </span>
-            Magazine.
-          </h1>
-          <p className="text-center text-md  text-stone-800 mt-4 text-balance">
-            Join the growing community discovering insights, inspiration, <br />
-            and opportunities in every issue."
-          </p>
-        </div>
-        <div className="px-20">
-          <LayoutGridFeature images={cards} />
-        </div>
-      </section>
+
       <section className="flex flex-col px-10 gap-4 md:px-20 pb-10 md:py-10  lg:flex-row">
         <div className="md:flex-1/2">
           <h1 className="text-4xl  font-bold text-[#141516]  pt-4 text-balance mb-4">
@@ -144,7 +131,23 @@ const Magazine = () => {
           </p>
         </div>
         <div className="md:flex-1/2">
-          <EditionCarousel />
+          <EditionCarousel magazine={editions} />
+        </div>
+      </section>
+      <section className="py-4">
+        <div className="flex flex-col justify-center">
+          <h1 className="text-4xl text-center font-bold text-[#141516]  pt-4 text-balance">
+            From cozy cafés to bustling offices, people everywhere are diving
+            into Housing <span className="text-[#FF202B]">In Ghana </span>
+            Magazine.
+          </h1>
+          <p className="text-center text-md  text-stone-800 mt-4 text-balance">
+            Join the growing community discovering insights, inspiration, <br />
+            and opportunities in every edition."
+          </p>
+        </div>
+        <div className="px-20">
+          <LayoutGridFeature images={cards} />
         </div>
       </section>
       <section className="md:px-20 md:mb-20">

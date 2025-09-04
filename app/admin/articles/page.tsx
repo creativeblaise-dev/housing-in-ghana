@@ -6,6 +6,7 @@ import ArticlesList from "@/components/ArticlesList";
 const AdminPageArticles = () => {
   return (
     <main>
+      <h1 className="text-4xl font-bold">Manage Articles</h1>
       <ArticlesList />
     </main>
   );

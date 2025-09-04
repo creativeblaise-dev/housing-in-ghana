@@ -1,4 +1,3 @@
-import React from "react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import ThreeDCard from "./ThreeDCard";
@@ -14,7 +13,7 @@ const MagazineCard = () => {
       <div className=" md:flex-3 ">
         <h1 className="text-4xl font-bold text-[#141516] mb-4 pt-4">
           Housing <span className="text-[#FF202B]">In Ghana</span> Magazine -
-          Real Estate Insights Delivered.
+          Real Estate Insights Delivered
         </h1>
         <p className="text-md">
           Stay informed with Housing In Ghana Magazine—your biannual guide to

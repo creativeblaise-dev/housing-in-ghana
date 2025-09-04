@@ -7,8 +7,7 @@ const WhyHIG = () => {
     <section className="flex gap-10 flex-col md:flex-row px-10 md:px-20 pb-10 md:py-20  bg-[#ffffff]">
       <div className=" md:flex-2 ">
         <h1 className="text-4xl font-bold text-[#141516] mb-4 pt-4">
-          What we offer at Housing
-          <span className="text-[#FF202B]"> In Ghana</span>
+          Delivering Value in Real Estate & Beyond
         </h1>
         <p className="text-md">
           Housing In Ghana specializes in nurturing Ghana’s evolving real estate

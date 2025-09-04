@@ -1,0 +1,1 @@
+ALTER TABLE "magazine_editions" ALTER COLUMN "released_at" SET DATA TYPE varchar(100);

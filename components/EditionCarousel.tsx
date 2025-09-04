@@ -1,38 +1,12 @@
 "use client";
 
 import DefaultCarousel from "@/components/ui/default-carousel";
+import { MagazineEdition } from "@/types";
 
-type EditionCovers = {
-  title: string;
-  button: string;
-  src: string;
-  url: string;
-};
-
-const EditionCarousel = () => {
-  const slideData: EditionCovers[] = [
-    {
-      title: "Housing In Ghana Magazine Edition 1",
-      button: "See Edition #1",
-      src: "/images/1st-Edition.webp",
-      url: "#",
-    },
-    {
-      title: "Housing In Ghana Magazine Edition 2",
-      button: "See Edition #2",
-      src: "/images/2nd_Edition.webp",
-      url: "#",
-    },
-    {
-      title: "Housing In Ghana Magazine Edition 3",
-      button: "See Edition #3",
-      src: "/images/3rd-EditionHIGMag.png",
-      url: "#",
-    },
-  ];
+const EditionCarousel = ({ magazine }: { magazine: MagazineEdition[] }) => {
   return (
     <div className="relative overflow-hidden w-full h-full md:pb-20">
-      <DefaultCarousel slides={slideData} positionIndex={2} />
+      <DefaultCarousel slides={magazine} positionIndex={0} />
     </div>
   );
 };

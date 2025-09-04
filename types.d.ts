@@ -24,6 +24,7 @@ export type ArticleType = {
   updatedAt?: Date;
   category: string;
   tags?: string[];
+  magazineEditionId: string;
 };
 
 export type SiteNavigation = {
@@ -83,8 +84,10 @@ export type MultiFileUploadProps = {
 export type ImagePreviewProps = {
   src: string;
   alt: string;
-  onRemove?: () => void;
+  onRemove?: (fileId?: string) => void;
+  onRemoveError?: (error: string) => void;
   className?: string;
+  fileId?: string; // Database ID for the uploaded file
 };
 
 export type ImagePreviewWithDeleteProps = {
@@ -99,6 +102,30 @@ export type ImagePreviewWithDeleteProps = {
 };
 
 export type FeaturedImageData = {
+  id: string;
+  url: string;
+  originalName: string;
+};
+
+export type LayoutImages = {
+  id: number;
+  content: JSX.Element | React.ReactNode | string;
+  className: string;
+  thumbnail: string;
+};
+
+export type MagazineEdition = {
+  title: string;
+  editionNumber: number;
+  summary: string;
+  backgroundImage: string;
+  releasedAt: string;
+  coverImage: string;
+  editorialNote: string;
+  readOnlineButtonLink: string;
+};
+
+export type MagazineEditionCover = {
   id: string;
   url: string;
   originalName: string;

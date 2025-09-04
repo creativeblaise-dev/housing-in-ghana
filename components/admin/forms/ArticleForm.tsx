@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
@@ -31,6 +31,7 @@ import FileUpload from "@/components/ui/file-upload";
 import { toast } from "sonner";
 import { ImagePreviewWithDelete } from "@/components/ui/image-preview-with-delete";
 import { FeaturedImageData } from "@/types";
+import { MagazineEdition } from "@/types";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { createArticle } from "@/lib/actions/admin/article";
@@ -50,16 +51,39 @@ const ArticleForm = ({ type, ...article }: Props) => {
       title: "",
       category: "",
       slug: "",
+      magazineEditionId: "not-featured", // ensure this is always a string
       createdAt: new Date(),
       updatedAt: new Date(),
       content: "",
       featuredImageUrl: "",
+      author: "",
+      status: "draft",
+      tags: [],
+      excerpt: "",
     },
   });
 
   const [featuredImage, setFeaturedImage] = useState<FeaturedImageData | null>(
     article.initialFeaturedImage || null
   );
+
+  const [magazineEditions, setMagazineEditions] = useState<MagazineEdition[]>(
+    []
+  );
+
+  // Fetch magazine editions for the select field
+  useEffect(() => {
+    const fetchEditions = async () => {
+      try {
+        const res = await fetch("/api/magazine");
+        const data = await res.json();
+        setMagazineEditions(data);
+      } catch (error) {
+        toast.error("Failed to load magazine editions.");
+      }
+    };
+    fetchEditions();
+  }, []);
 
   const [isDeletingImage, setIsDeletingImage] = useState(false);
 
@@ -131,6 +155,7 @@ const ArticleForm = ({ type, ...article }: Props) => {
     const now = new Date();
     const result = await createArticle({
       ...data,
+      magazineEditionId: data.magazineEditionId ?? "not featured",
       status: data.status,
       createdAt: data.createdAt ?? now,
       updatedAt: data.updatedAt ?? now,
@@ -379,6 +404,41 @@ const ArticleForm = ({ type, ...article }: Props) => {
                   required
                   {...field}
                 />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name={"magazineEditionId"}
+          render={({ field }) => (
+            <FormItem className="flex flex-col gap-1">
+              <FormLabel className="text-base font-normal text-stone-700">
+                Featured Magazine Edition
+              </FormLabel>
+              <FormControl>
+                <Select
+                  value={form.watch("magazineEditionId")}
+                  onValueChange={(value) =>
+                    form.setValue("magazineEditionId", value)
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a magazine edition" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="not-featured">Not Featured</SelectItem>
+                    {magazineEditions.map((edition) => (
+                      <SelectItem
+                        key={edition.editionNumber}
+                        value={edition.editionNumber.toString()}
+                      >
+                        {edition.title}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </FormControl>
               <FormMessage />
             </FormItem>

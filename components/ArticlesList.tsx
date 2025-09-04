@@ -16,7 +16,7 @@ const ArticlesList = async () => {
   return (
     <main>
       {/* Table Section */}
-      <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-6 mx-auto">
+      <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-0 lg:py-6 mx-auto">
         {/* Card */}
         <div className="flex flex-col">
           <div className="overflow-y-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">

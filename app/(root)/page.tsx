@@ -12,6 +12,7 @@ import { db } from "@/database/drizzle";
 import { article } from "@/database/schema";
 import { ArticleType } from "@/types";
 import { eq, desc } from "drizzle-orm";
+import InfiniteCards from "@/components/InfiniteCards";
 
 const Home = async () => {
   const allArticles = (await db
@@ -32,13 +33,26 @@ const Home = async () => {
       <MagazineCard />
       <Spotlighter />
       <SpotlightPreview />
+      <section>
+        <div className="sm:w-1/2 xl:w-2/3 mx-auto text-center pt-10">
+          <h1 className="text-4xl font-bold text-[#141516] mb-4 pt-4">
+            A Platform Companies Trust
+          </h1>
+          <p className="text-md">
+            Recognized across the industry, Housing{" "}
+            <span className="text-[#FF202B]"> In Ghana</span> is the trusted
+            choice for companies seeking credibility, visibility, and meaningful
+            engagement in Ghana’s housing and real estate space.
+          </p>
+        </div>
+        <InfiniteCards />
+      </section>
       <MileageCard />
       <HFOBanner />
       <ArticlesVariantCards
         header="Latest Articles"
         featureArticles={allArticles}
       />
-
       <section className="md:px-20 md:mb-20">
         <Subscribe />
       </section>

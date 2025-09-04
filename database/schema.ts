@@ -1,3 +1,4 @@
+import { z } from "better-auth";
 import {
   pgTable,
   text,
@@ -102,7 +103,11 @@ export const article = pgTable("article", {
   createdAt: timestamp("created_at").$defaultFn(() => new Date()),
   updatedAt: timestamp("updated_at").$defaultFn(() => new Date()),
   author: text("author").notNull(),
-  tags: jsonb("tags").default("[]"), // Array of tags as JSONB
+  tags: jsonb("tags").default("[]"),
+  magazineEditionId: uuid("magazine_edition_id").references(
+    () => magazineEditions.id,
+    { onDelete: "set null" }
+  ),
 });
 
 export const fileUploads = pgTable("file_uploads", {
@@ -115,4 +120,27 @@ export const fileUploads = pgTable("file_uploads", {
   uploadedBy: varchar("uploaded_by", { length: 255 }),
   metadata: jsonb("metadata"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Magazine Editions Table
+export const magazineEditions = pgTable("magazine_editions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  editionNumber: integer("edition_number").notNull().unique(),
+  title: varchar("title", { length: 255 }).notNull(),
+  summary: text("summary").notNull(),
+  editorialNote: text("editorial_note").notNull(),
+  coverImage: text("cover_image").notNull(),
+  backgroundImage: text("background_image").notNull(),
+  releasedAt: varchar("released_at", { length: 100 }).notNull(),
+  readOnlineButtonLink: text("read_online_button_link").notNull(),
+});
+
+// Junction table for many-to-many relationship between articles and magazine editions
+export const articleMagazineEdition = pgTable("article_magazine_edition", {
+  articleId: uuid("article_id")
+    .notNull()
+    .references(() => article.id, { onDelete: "cascade" }),
+  magazineEditionId: uuid("magazine_edition_id")
+    .notNull()
+    .references(() => magazineEditions.id, { onDelete: "cascade" }),
 });

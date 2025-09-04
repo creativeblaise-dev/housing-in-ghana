@@ -1,0 +1,1 @@
+ALTER TABLE "article" ALTER COLUMN "magazine_edition_id" DROP DEFAULT;

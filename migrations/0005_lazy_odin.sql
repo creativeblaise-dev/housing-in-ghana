@@ -1,0 +1,1 @@
+ALTER TABLE "magazine_editions" RENAME COLUMN "released_year" TO "released_at";

@@ -1,20 +1,14 @@
 "use client";
-import React, { JSX, useState } from "react";
+import React, { useState } from "react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
+import { LayoutImages } from "@/types";
 
-type Card = {
-  id: number;
-  content: JSX.Element | React.ReactNode | string;
-  className: string;
-  thumbnail: string;
-};
+export const LayoutGrid = ({ cards }: { cards: LayoutImages[] }) => {
+  const [selected, setSelected] = useState<LayoutImages | null>(null);
+  const [lastSelected, setLastSelected] = useState<LayoutImages | null>(null);
 
-export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
-  const [selected, setSelected] = useState<Card | null>(null);
-  const [lastSelected, setLastSelected] = useState<Card | null>(null);
-
-  const handleClick = (card: Card) => {
+  const handleClick = (card: LayoutImages) => {
     setLastSelected(selected);
     setSelected(card);
   };
@@ -36,8 +30,8 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
               selected?.id === card.id
                 ? "rounded-lg cursor-pointer absolute inset-0 h-1/2 w-full md:w-1/2 m-auto z-50 flex justify-center items-center flex-wrap flex-col"
                 : lastSelected?.id === card.id
-                ? "z-40 bg-white rounded-xl h-full w-full"
-                : "bg-white rounded-xl h-full w-full"
+                  ? "z-40 bg-white rounded-xl h-full w-full"
+                  : "bg-white rounded-xl h-full w-full"
             )}
             layoutId={`card-${card.id}`}
           >
@@ -58,7 +52,7 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
   );
 };
 
-const ImageComponent = ({ card }: { card: Card }) => {
+const ImageComponent = ({ card }: { card: LayoutImages }) => {
   return (
     <motion.img
       layoutId={`image-${card.id}-image`}
@@ -73,7 +67,7 @@ const ImageComponent = ({ card }: { card: Card }) => {
   );
 };
 
-const SelectedCard = ({ selected }: { selected: Card | null }) => {
+const SelectedCard = ({ selected }: { selected: LayoutImages | null }) => {
   return (
     <div className="bg-transparent h-full w-full flex flex-col justify-end rounded-lg shadow-2xl relative z-[60]">
       <motion.div

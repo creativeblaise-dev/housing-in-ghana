@@ -7,9 +7,6 @@ const nextConfig: NextConfig = {
     "*.local-origin.dev",
     "http:localhost:3000",
   ],
-  experimental: {
-    turbopackPersistentCaching: true,
-  },
   images: {
     remotePatterns: [
       {
