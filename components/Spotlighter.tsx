@@ -18,8 +18,8 @@ const Spotlighter = () => {
       />
       <div className="relative z-10 mx-auto w-full max-w-7xl p-4 pt-20 md:pt-0">
         <h1 className="bg-opacity-50 bg-gradient-to-b from-neutral-50 to-neutral-400 bg-clip-text text-center text-4xl font-bold text-transparent mb-4 pt-4">
-          Our Proven Performance in Ghana’s Real Estate Space <br /> Trusted
-          Reach. Measurable Growth.
+          Our Proven Performance in Ghana’s Real Estate Space. <br /> Trusted
+          Reach - Measurable Growth.
         </h1>
         <BrandStats />
       </div>

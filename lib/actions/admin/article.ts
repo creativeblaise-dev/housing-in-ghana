@@ -6,14 +6,22 @@ import { ArticleType } from "@/types";
 
 export const createArticle = async (params: ArticleType) => {
   try {
+    const {
+      initialFeaturedImage, // remove properties not in schema
+      magazineEditionNumber,
+      ...restParams
+    } = params;
+
     const newArticle = await db
       .insert(article)
       .values({
-        ...params,
+        ...restParams,
         status:
           params.status === "published" || params.status === "archived"
             ? params.status
             : "draft",
+        magazineEditionNumber:
+          magazineEditionNumber === null ? null : magazineEditionNumber, // ensure string or null
       })
       .returning();
 

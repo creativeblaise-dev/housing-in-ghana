@@ -2,8 +2,23 @@ import React from "react";
 import Image from "next/image";
 import BlogPreview from "@/components/BlogPreview";
 import Subscribe from "@/components/Subscribe";
+import { ArticleType } from "@/types";
+import { HydrationBoundary } from "@tanstack/react-query";
+import { QueryClient, dehydrate } from "@tanstack/react-query";
 
-const Articles = () => {
+const getArticles = async () => {
+  const response = await fetch("/api/articles");
+  return response.json() as Promise<ArticleType[]>;
+};
+
+const Articles = async () => {
+  const queryClient = new QueryClient();
+
+  // Prefetch on server
+  await queryClient.prefetchQuery({
+    queryKey: ["articles"],
+    queryFn: getArticles,
+  });
   return (
     <main>
       <div className="relative isolate overflow-hidden bg-stone-900 py-8 sm:py-24 px-10 lg:px-20 pb-10 lg:py-20 ">
@@ -47,7 +62,9 @@ const Articles = () => {
         </div>
       </div>
       <div>
-        <BlogPreview header="Latest Articles" />
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <BlogPreview header="Latest Articles" />
+        </HydrationBoundary>
       </div>
       <section className="md:px-20 md:mb-20">
         <Subscribe />

@@ -25,7 +25,7 @@ export const HoverEffect = ({
       )}
     >
       {items.map((item, idx) => (
-        <div className="relative group  block p-2 h-full w-full">
+        <div className="relative group  block p-2 h-full w-full" key={idx}>
           <AnimatePresence>
             {hoveredIndex === idx && (
               <motion.span

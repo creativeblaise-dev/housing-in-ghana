@@ -8,6 +8,7 @@ import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { IconUser } from "@tabler/icons-react";
+import { capitalizeSentences } from "@/lib/utils";
 
 const ArticleContentPage = async ({
   params,
@@ -70,7 +71,7 @@ const ArticleContentPage = async ({
                 </Link>
 
                 <h2 className="text-3xl font-bold lg:text-5xl dark:text-white">
-                  {article?.title}
+                  {article && capitalizeSentences(article?.title.toLowerCase())}
                 </h2>
 
                 <section className="flex gap-6">
@@ -278,7 +279,7 @@ const ArticleContentPage = async ({
                 {article?.content.split(separator).map((paragraph, index) => (
                   <p
                     key={index}
-                    className="text-lg text-gray-800 dark:text-neutral-200 leading-relaxed"
+                    className="text-md text-gray-900  leading-relaxed"
                   >
                     {paragraph}
                     {index < article.content.split(separator).length - 1 && (
@@ -390,31 +391,35 @@ const ArticleContentPage = async ({
                 </div>
               </div>
               {/* End Avatar Media */}
-              {otherArticles.length > 0 &&
-                otherArticles.map((article) => (
-                  <div className="space-y-6 px-4 mb-4" key={article.id}>
-                    <Link
-                      className="group flex items-center gap-x-6 focus:outline-hidden"
-                      href={`/articles/${article.slug}`}
+              <div className="px-2">
+                {otherArticles.length > 0 &&
+                  otherArticles.map((article) => (
+                    <div
+                      className="space-y-4 px-2 py-2 mb-4 bg-[#fbffd3] rounded-lg"
+                      key={article.id}
                     >
-                      <div className="grow">
-                        <span className="text-md font-bold text-gray-800 group-hover:text-red-600 group-focus:text-red-600 dark:text-neutral-200 dark:group-hover:text-blue-500 dark:group-focus:text-blue-500">
-                          {article.title}
-                        </span>
-                      </div>
-
-                      <div className="shrink-0 relative rounded-lg overflow-hidden size-20">
-                        <Image
-                          className="size-full absolute top-0 start-0 object-cover rounded-lg"
-                          width={80}
-                          height={80}
-                          src={article?.featuredImageUrl || ""}
-                          alt="Blog Image"
-                        />
-                      </div>
-                    </Link>
-                  </div>
-                ))}
+                      <Link
+                        className="group flex items-center gap-x-6 focus:outline-hidden"
+                        href={`/articles/${article.slug}`}
+                      >
+                        <div className="shrink-0 relative rounded-lg overflow-hidden size-20">
+                          <Image
+                            className="size-full absolute top-0 start-0 object-cover rounded-lg"
+                            width={80}
+                            height={80}
+                            src={article?.featuredImageUrl || ""}
+                            alt="Blog Image"
+                          />
+                        </div>
+                        <div className="grow">
+                          <span className="text-md font-bold text-gray-800 group-hover:text-red-600 group-focus:text-red-600 dark:text-neutral-200 dark:group-hover:text-blue-500 dark:group-focus:text-blue-500">
+                            {article.title}
+                          </span>
+                        </div>
+                      </Link>
+                    </div>
+                  ))}
+              </div>
             </div>
           </div>
           {/* End Sidebar */}

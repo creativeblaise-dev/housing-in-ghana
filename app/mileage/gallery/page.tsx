@@ -1,9 +1,27 @@
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { IconArrowRight } from "@tabler/icons-react";
+import MileagePostList from "@/components/MileagePostList";
+import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+} from "@tanstack/react-query";
+import { MileagePost } from "@/types";
 
-const Gallery = () => {
+const getMileagePosts = async () => {
+  const response = await fetch("/api/mileage");
+  return response.json() as Promise<MileagePost[]>;
+};
+
+const Gallery = async () => {
+  const queryClient = new QueryClient();
+
+  // Prefetch on server
+  await queryClient.prefetchQuery({
+    queryKey: ["mileage"],
+    queryFn: getMileagePosts,
+  });
+
   return (
     <>
       <div className="relative isolate overflow-hidden bg-amber-900 py-8 sm:py-24 px-10 lg:px-20 pb-10 lg:py-20 ">
@@ -45,7 +63,7 @@ const Gallery = () => {
           />
         </div>
       </div>
-      <section className="py-4">
+      <section className="py-4 bg-[#fcf5d6]">
         <div className="flex flex-col justify-center ">
           <h1 className="text-4xl text-center font-bold text-[#141516]  pt-4 text-balance">
             Mileage is designed to connect two worlds <br /> — the beauty of
@@ -58,128 +76,9 @@ const Gallery = () => {
             every image shared inspires both travel and trust.
           </p>
         </div>
-      </section>
-      <section className="grid grid-cols-1 gap-4 mt-10 lg:mt-0 lg:grid-cols-3 px-10 lg:px-20 pb-10 lg:py-10 ">
-        <div className=" flex gap-6 bg-[#fcf8e1] rounded-lg shadow-lg">
-          <div className="relative flex-2 lg:flex-3">
-            <Image
-              src="/images/mileage-preview/IMG_9581_2.jpg"
-              fill={true}
-              alt=""
-              className="rounded-l-lg"
-            />
-          </div>
-          <div className=" flex-3 lg:flex-3 py-3">
-            <h1 className="font-bold text-md pt-3">Aburi Gardens</h1>
-            <p className="text-md font-medium mb-4">Eastern Region</p>
-            <Link href="#" className="text-sm">
-              <div className="flex gap-2 items-center">
-                View Photos
-                <IconArrowRight stroke={1} />
-              </div>
-            </Link>
-          </div>
-        </div>
-        <div className=" flex gap-6 bg-[#fcf8e1] rounded-lg shadow-lg">
-          <div className="relative flex-2 lg:flex-3 ">
-            <Image
-              src="/images/IMG_5615.jpg"
-              fill={true}
-              alt=""
-              className="rounded-l-lg "
-            />
-          </div>
-          <div className=" flex-3 lg:flex-3 py-3">
-            <h1 className="font-bold text-md pt-3">Ridge Condos</h1>
-            <p className="text-md font-medium mb-4">Ashanti Region</p>
-            <Link href="#" className="text-sm">
-              <div className="flex gap-2 items-center">
-                View Photos
-                <IconArrowRight stroke={1} />
-              </div>
-            </Link>
-          </div>
-        </div>
-        <div className=" flex gap-6 bg-[#fcf8e1] rounded-lg shadow-lg">
-          <div className="relative flex-2 lg:flex-3">
-            <Image
-              src="/images/mileage-preview/2N6A5473_2.jpg"
-              fill={true}
-              alt=""
-              className="rounded-l-lg "
-            />
-          </div>
-          <div className=" flex-3 lg:flex-3 py-3">
-            <h1 className="font-bold text-md pt-3">Platinum Blue Island</h1>
-            <p className="text-md font-medium mb-4">Volta Region</p>
-            <Link href="#" className="text-sm">
-              <div className="flex gap-2 items-center">
-                View Photos
-                <IconArrowRight stroke={1} />
-              </div>
-            </Link>
-          </div>
-        </div>
-        <div className=" flex gap-6 bg-[#fcf8e1] rounded-lg shadow-lg">
-          <div className="relative flex-2 lg:flex-3">
-            <Image
-              src="/images/mileage-preview/IMG_9581_2.jpg"
-              fill={true}
-              alt=""
-              className="rounded-l-lg"
-            />
-          </div>
-          <div className=" flex-3 lg:flex-3 py-3">
-            <h1 className="font-bold text-md pt-3">Aburi Gardens</h1>
-            <p className="text-md font-medium mb-4">Eastern Region</p>
-            <Link href="#" className="text-sm">
-              <div className="flex gap-2 items-center ">
-                View Photos
-                <IconArrowRight stroke={1} />
-              </div>
-            </Link>
-          </div>
-        </div>
-        <div className=" flex gap-6 bg-[#fcf8e1] rounded-lg shadow-lg">
-          <div className="relative flex-2 lg:flex-3 ">
-            <Image
-              src="/images/IMG_5615.jpg"
-              fill={true}
-              alt=""
-              className="rounded-l-lg "
-            />
-          </div>
-          <div className=" flex-3 lg:flex-3 py-3">
-            <h1 className="font-bold text-md pt-3">Ridge Condos</h1>
-            <p className="text-md font-medium mb-4">Ashanti Region</p>
-            <Link href="#" className="text-sm">
-              <div className="flex gap-2 items-center">
-                View Photos
-                <IconArrowRight stroke={1} />
-              </div>
-            </Link>
-          </div>
-        </div>
-        <div className=" flex gap-6 bg-[#fcf8e1] rounded-lg shadow-lg">
-          <div className="relative flex-2 lg:flex-3">
-            <Image
-              src="/images/mileage-preview/2N6A5473_2.jpg"
-              fill={true}
-              alt=""
-              className="rounded-l-lg "
-            />
-          </div>
-          <div className=" flex-3 lg:flex-3 py-3">
-            <h1 className="font-bold text-md pt-3">Platinum Blue Island</h1>
-            <p className="text-md font-medium mb-4">Volta Region</p>
-            <Link href="#" className="text-sm">
-              <div className="flex gap-2 items-center">
-                View Photos
-                <IconArrowRight stroke={1} />
-              </div>
-            </Link>
-          </div>
-        </div>
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <MileagePostList />
+        </HydrationBoundary>
       </section>
     </>
   );

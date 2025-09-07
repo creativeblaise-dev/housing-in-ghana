@@ -11,7 +11,7 @@ import InfoCards from "@/components/InfoCards";
 
 type LayoutImages = {
   id: number;
-  content?: string;
+  content: string;
   className: string;
   thumbnail: string;
 };

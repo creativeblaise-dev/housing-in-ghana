@@ -6,7 +6,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 
 import PrelineScriptWrapper from "@/components/PrelineScriptWrapper";
-
+import QueryProvider from "@/components/QueryProvider";
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
 //   subsets: ["latin"],
@@ -32,7 +32,7 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
       <body
         className={`${questrialRegular.className}  antialiased text-space tracking-normal `}
       >
-        {children}
+        <QueryProvider>{children}</QueryProvider>
         <Toaster />
         {/* <MainFooter /> */}
         <PrelineScriptWrapper />

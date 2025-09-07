@@ -1,5 +1,4 @@
 import IntroContent from "@/components/IntroContent";
-import BlogPreview from "@/components/BlogPreview";
 import WhyHIG from "@/components/WhyHIG";
 import HFOBanner from "@/components/HFOBanner";
 import SpotlightPreview from "@/components/SpotlightPreview";
@@ -8,18 +7,27 @@ import MagazineCard from "@/components/MagazineCard";
 import Spotlighter from "@/components/Spotlighter";
 import Subscribe from "@/components/Subscribe";
 import ArticlesVariantCards from "@/components/ArticlesVariantCards";
-import { db } from "@/database/drizzle";
-import { article } from "@/database/schema";
+import { HydrationBoundary } from "@tanstack/react-query";
+import { QueryClient, dehydrate } from "@tanstack/react-query";
+import Image from "next/image";
 import { ArticleType } from "@/types";
 import { eq, desc } from "drizzle-orm";
 import InfiniteCards from "@/components/InfiniteCards";
 
+const getArticles = async () => {
+  const response = await fetch("/api/articles");
+  return response.json() as Promise<ArticleType[]>;
+};
+
 const Home = async () => {
-  const allArticles = (await db
-    .select()
-    .from(article)
-    .where(eq(article.status, "published"))
-    .orderBy(desc(article.createdAt))) as ArticleType[];
+  const queryClient = new QueryClient();
+
+  // Prefetch on server
+  await queryClient.prefetchQuery({
+    queryKey: ["articles"],
+    queryFn: getArticles,
+  });
+
   return (
     <>
       {/* coming soon */}
@@ -49,10 +57,9 @@ const Home = async () => {
       </section>
       <MileageCard />
       <HFOBanner />
-      <ArticlesVariantCards
-        header="Latest Articles"
-        featureArticles={allArticles}
-      />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <ArticlesVariantCards header="Latest Articles" />
+      </HydrationBoundary>
       <section className="md:px-20 md:mb-20">
         <Subscribe />
       </section>

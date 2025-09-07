@@ -12,6 +12,39 @@ export const signInSchema = z.object({
   password: z.string().min(8),
 });
 
+export const insertFileUploadSchema = z.object({
+  originalName: z.string().min(1),
+  filename: z.string().min(1),
+  mimeType: z.string().min(1),
+  size: z.number().int().min(1),
+  url: z.string().url(),
+  uploadedBy: z.string().optional(),
+  metadata: z.record(z.any()).optional(),
+});
+
+export const magazineEditionSchema = z.object({
+  editionNumber: z
+    .number()
+    .int()
+    .min(1)
+    .max(4)
+    .positive("Edition number must be a positive integer"),
+  title: z
+    .string()
+    .min(1, "Title is required")
+    .max(255, "Title must be less than 255 characters"),
+  summary: z.string().min(1, "Summary is required"),
+  editorialNote: z.string().min(1, "Editorial note is required"),
+  coverImage: z.string().min(1, "Cover image is required"),
+  backgroundImage: z.string().min(1, "Background image is required"),
+  releasedAt: z
+    .string()
+    .refine((val) => !isNaN(Date.parse(val)), { message: "Invalid date" }),
+  readOnlineButtonLink: z
+    .string()
+    .url("Read online button link must be a valid URL"),
+});
+
 export const articleSchema = z.object({
   title: z
     .string()
@@ -33,43 +66,25 @@ export const articleSchema = z.object({
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
   content: z.string().min(20, "Content should be at least 20 characters long"),
-  magazineEditionId: z.string().or(z.literal("not-featured")),
+  magazineEditionNumber: magazineEditionSchema.shape.editionNumber.optional(),
   featuredImageUrl: z.string().url("Image must be a valid URL").nonempty(),
-  tags: z.array(z.string()).min(1).optional(),
+  tags: z.array(z.string()).min(1),
 });
 
-export const insertFileUploadSchema = z.object({
-  originalName: z.string().min(1),
-  filename: z.string().min(1),
-  mimeType: z.string().min(1),
-  size: z.number().int().min(1),
-  url: z.string().url(),
-  uploadedBy: z.string().optional(),
-  metadata: z.record(z.any()).optional(),
+// Mileage Post Schemas
+export const createMileagePostSchema = z.object({
+  region: z
+    .string()
+    .min(1, "Region is required")
+    .max(255, "Region must be less than 255 characters"),
+  placeName: z
+    .string()
+    .min(1, "Place name is required")
+    .max(255, "Place name must be less than 255 characters"),
+  description: z.string().optional(),
 });
 
 export const uploadSchema = z.object({
   type: z.enum(["image", "document"]).optional().default("image"),
   folder: z.string().optional().default("uploads"),
-});
-
-export const magazineEditionSchema = z.object({
-  editionNumber: z
-    .number()
-    .int()
-    .positive("Edition number must be a positive integer"),
-  title: z
-    .string()
-    .min(1, "Title is required")
-    .max(255, "Title must be less than 255 characters"),
-  summary: z.string().min(1, "Summary is required"),
-  editorialNote: z.string().min(1, "Editorial note is required"),
-  coverImage: z.string().min(1, "Cover image is required"),
-  backgroundImage: z.string().min(1, "Background image is required"),
-  releasedAt: z
-    .string()
-    .refine((val) => !isNaN(Date.parse(val)), { message: "Invalid date" }),
-  readOnlineButtonLink: z
-    .string()
-    .url("Read online button link must be a valid URL"),
 });

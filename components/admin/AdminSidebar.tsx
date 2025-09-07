@@ -38,14 +38,9 @@ const adminSidebarMenu: AdminSidebarMenuTypes[] = [
         icon: <IconNews className="h-4 w-4" />,
       },
       {
-        name: "Mileage Content Hub",
-        href: "/admin/mileage-content-hub",
+        name: "Mileage Gallery Hub",
+        href: "/admin/mileage",
         icon: <IconBus className="h-4 w-4 " />,
-      },
-      {
-        name: "Gallery",
-        href: "/admin/gallery",
-        icon: <IconPhoto className="h-4 w-4" />,
       },
     ],
   },

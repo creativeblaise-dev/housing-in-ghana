@@ -6,6 +6,7 @@ import { desc } from "drizzle-orm";
 import { ArticleType } from "@/types";
 import Image from "next/image";
 import { IconCircleCheckFilled, IconCircleXFilled } from "@tabler/icons-react";
+import { capitalizeSentences } from "@/lib/utils";
 
 const ArticlesList = async () => {
   const allArticles = (await db
@@ -171,7 +172,9 @@ const ArticlesList = async () => {
                                   />
                                   <div className="grow">
                                     <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
-                                      {article.title}
+                                      {capitalizeSentences(
+                                        article.title.toLowerCase()
+                                      )}
                                     </span>
                                     {/* <span className="block text-sm text-gray-500 dark:text-neutral-500">
                                 christina@site.com

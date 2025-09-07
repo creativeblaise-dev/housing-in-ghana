@@ -10,12 +10,13 @@ const MileageCard = () => {
           Our Mileage - Where the Brand Travels
         </h1>
         <p>
-          From bustling city centers to serene resort towns, Housing In Ghana
-          travels far and wide. Our magazine and brand presence reach hotels,
-          gas stations, bookshops, shopping malls, and real estate events across
-          the country. Every edition extends our footprint—connecting readers,
-          homeowners, and industry leaders where it matters most. With every
-          mile, we build more than awareness—we build trust.
+          From bustling city centers to serene resort towns, Housing{" "}
+          <span className="text-[#FF202B]"> In Ghana</span> travels far and
+          wide. Our magazine and brand presence reach hotels, gas stations,
+          bookshops, shopping malls, and real estate events across the country.
+          Every edition extends our footprint—connecting readers, homeowners,
+          and industry leaders where it matters most. With every mile, we build
+          more than awareness—we build trust.
         </p>
       </div>
       <MileageCarousel />

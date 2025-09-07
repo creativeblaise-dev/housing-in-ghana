@@ -51,7 +51,6 @@ const ArticleForm = ({ type, ...article }: Props) => {
       title: "",
       category: "",
       slug: "",
-      magazineEditionId: "not-featured", // ensure this is always a string
       createdAt: new Date(),
       updatedAt: new Date(),
       content: "",
@@ -155,7 +154,7 @@ const ArticleForm = ({ type, ...article }: Props) => {
     const now = new Date();
     const result = await createArticle({
       ...data,
-      magazineEditionId: data.magazineEditionId ?? "not featured",
+      magazineEditionNumber: data.magazineEditionNumber || null,
       status: data.status,
       createdAt: data.createdAt ?? now,
       updatedAt: data.updatedAt ?? now,
@@ -411,7 +410,7 @@ const ArticleForm = ({ type, ...article }: Props) => {
         />
         <FormField
           control={form.control}
-          name={"magazineEditionId"}
+          name={"magazineEditionNumber"}
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-stone-700">
@@ -419,22 +418,25 @@ const ArticleForm = ({ type, ...article }: Props) => {
               </FormLabel>
               <FormControl>
                 <Select
-                  value={form.watch("magazineEditionId")}
+                  value={
+                    form.watch("magazineEditionNumber")?.toString() ??
+                    "Not Featured"
+                  }
                   onValueChange={(value) =>
-                    form.setValue("magazineEditionId", value)
+                    form.setValue("magazineEditionNumber", Number(value))
                   }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select a magazine edition" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="not-featured">Not Featured</SelectItem>
+                    <SelectItem value="Not Featured">Not Featured</SelectItem>
                     {magazineEditions.map((edition) => (
                       <SelectItem
                         key={edition.editionNumber}
                         value={edition.editionNumber.toString()}
                       >
-                        {edition.title}
+                        {edition.editionNumber}
                       </SelectItem>
                     ))}
                   </SelectContent>

@@ -3,15 +3,14 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
 import { ArticleType } from "@/types";
+import { capitalizeSentences } from "@/lib/utils";
 
 const FeaturedArticles = async ({
   header,
   featureArticles,
-  description,
 }: {
   header: string;
   featureArticles: ArticleType[];
-  description: string;
 }) => {
   return (
     <section className="px-10 lg:px-20 pb-10 lg:py-10 bg-[#fefee2]">
@@ -50,7 +49,8 @@ const FeaturedArticles = async ({
                         {createdAt.toDateString()}
                       </small>
                       <CardTitle className="text-lg font-bold text-[#1f2020] text-balance">
-                        {title}
+                        {featureArticles &&
+                          capitalizeSentences(title.toLowerCase())}
                       </CardTitle>
                     </CardHeader>
                   </Link>

@@ -24,7 +24,42 @@ export type ArticleType = {
   updatedAt?: Date;
   category: string;
   tags?: string[];
-  magazineEditionId: string;
+  magazineEditionNumber: MagazineEdition["editionNumber"] | null;
+};
+
+export type MagazineEdition = {
+  title: string;
+  editionNumber: number;
+  summary: string;
+  backgroundImage: string;
+  releasedAt: string;
+  coverImage: string;
+  editorialNote: string;
+  readOnlineButtonLink: string;
+};
+
+export type MileageFormData = {
+  region: string;
+  placeName: string;
+  description?: string;
+};
+
+export type MileagePost = {
+  id: string;
+  region: string;
+  placeName: string;
+  description?: string;
+  photos: string[];
+};
+
+export type MagazineEditionCover = {
+  id: string;
+  url: string;
+  originalName: string;
+};
+
+export type SingleGalleryProps = {
+  id: MileagePost["id"];
 };
 
 export type SiteNavigation = {
@@ -78,6 +113,8 @@ export type MultiFileUploadProps = {
   onUploadError?: (error: string) => void;
   maxFiles?: number;
   acceptedTypes?: string[];
+  uploadType?: "image";
+  folder?: string;
   className?: string;
 };
 
@@ -112,21 +149,4 @@ export type LayoutImages = {
   content: JSX.Element | React.ReactNode | string;
   className: string;
   thumbnail: string;
-};
-
-export type MagazineEdition = {
-  title: string;
-  editionNumber: number;
-  summary: string;
-  backgroundImage: string;
-  releasedAt: string;
-  coverImage: string;
-  editorialNote: string;
-  readOnlineButtonLink: string;
-};
-
-export type MagazineEditionCover = {
-  id: string;
-  url: string;
-  originalName: string;
 };

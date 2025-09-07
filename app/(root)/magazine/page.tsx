@@ -49,7 +49,7 @@ const Magazine = async () => {
   const editions = await db
     .select()
     .from(magazineEditions)
-    .orderBy(desc(magazineEditions.releasedAt));
+    .orderBy(magazineEditions.releasedAt);
 
   return (
     <main>

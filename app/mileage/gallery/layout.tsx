@@ -1,12 +1,9 @@
+"use client";
+
 import React, { ReactNode } from "react";
-import PrelineScriptWrapper from "@/components/PrelineScriptWrapper";
+
 const layout = ({ children }: { children: ReactNode }) => {
-  return (
-    <div>
-      {children}
-      <PrelineScriptWrapper />
-    </div>
-  );
+  return <div>{children}</div>;
 };
 
 export default layout;

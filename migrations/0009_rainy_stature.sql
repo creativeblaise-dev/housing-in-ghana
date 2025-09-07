@@ -1,0 +1,1 @@
+ALTER TABLE "mileage_posts" ALTER COLUMN "photos" SET DEFAULT '[]';

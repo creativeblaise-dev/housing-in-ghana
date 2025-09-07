@@ -36,7 +36,7 @@ const page = async ({
               <div className=" mx-auto grid justify-center items-center max-w-2xl  lg:max-w-none ">
                 <div className="max-w-xl lg:max-w-lg text-center ">
                   <Image
-                    src="/images/1st-Edition.webp"
+                    src={magazine[0].coverImage}
                     alt="Edition Cover"
                     width={300}
                     height={600}
@@ -50,10 +50,8 @@ const page = async ({
               className="absolute top-0 left-1/2 -z-10 -translate-x-1/2 blur-xs  xl:-top-20"
             >
               <div
-                className={
-                  magazine[0] &&
-                  `aspect-1155/678 w-288.75 bg-linear-to-tr from-[#ffffff] to-[#ff3b3b] opacity-90 bg-[url(${backgroundCoverImage})] bg-cover bg-center`
-                }
+                style={{ backgroundImage: `url(${backgroundCoverImage})` }}
+                className={`aspect-1155/678 w-288.75 bg-linear-to-tr from-[#ffffff] to-[#ff3b3b] opacity-90 bg-cover bg-top`}
               />
             </div>
           </div>

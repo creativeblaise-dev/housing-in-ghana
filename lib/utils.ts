@@ -12,3 +12,15 @@ export const getInitials = (name: string) =>
     .join("")
     .toUpperCase()
     .slice(0, 2);
+
+export const capitalizeSentences = (sentence: string) => {
+  if (sentence.length === 0) {
+    return "";
+  }
+  return sentence
+    .split(" ")
+    .map((word) => {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(" ");
+};

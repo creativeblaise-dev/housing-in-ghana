@@ -1,4 +1,3 @@
-import { z } from "better-auth";
 import {
   pgTable,
   text,
@@ -104,8 +103,8 @@ export const article = pgTable("article", {
   updatedAt: timestamp("updated_at").$defaultFn(() => new Date()),
   author: text("author").notNull(),
   tags: jsonb("tags").default("[]"),
-  magazineEditionId: uuid("magazine_edition_id").references(
-    () => magazineEditions.id,
+  magazineEditionNumber: integer("magazine_edition_number").references(
+    () => magazineEditions.editionNumber,
     { onDelete: "set null" }
   ),
 });
@@ -143,4 +142,14 @@ export const articleMagazineEdition = pgTable("article_magazine_edition", {
   magazineEditionId: uuid("magazine_edition_id")
     .notNull()
     .references(() => magazineEditions.id, { onDelete: "cascade" }),
+});
+
+export const mileagePosts = pgTable("mileage_posts", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  region: varchar("region", { length: 255 }).notNull(),
+  placeName: varchar("place_name", { length: 255 }).notNull(),
+  description: text("description"),
+  photos: jsonb("photos").notNull().default("[]"), // Array of photo objects
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

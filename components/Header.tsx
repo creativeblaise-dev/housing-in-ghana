@@ -46,7 +46,7 @@ const Header = ({ userprofile }: { userprofile: ReactNode }) => {
                   className={
                     item.name === "Advertise With Us"
                       ? desktopMenuItemClasses +
-                        " bg-[#FF202B] text-white w-auto cursor-pointer border-1 rounded-lg md:px-4 hover:bg-[#232525] hover:text-white "
+                        " bg-[#FF202B] text-white w-auto cursor-pointer border-1 rounded-full md:px-4 hover:bg-[#232525] hover:text-white "
                       : desktopMenuItemClasses + activeClasses
                   }
                 >

@@ -9,13 +9,15 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { MultiFileUploadProps } from "@/types";
 
-export function MultiFileUpload({
+const MultiFileUpload = ({
   onUploadComplete,
   onUploadError,
-  maxFiles = 10,
+  maxFiles = 30,
   acceptedTypes = ["image/*"],
   className,
-}: MultiFileUploadProps) {
+  folder = "",
+  uploadType = "image",
+}: MultiFileUploadProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -37,6 +39,9 @@ export function MultiFileUpload({
 
     try {
       const formData = new FormData();
+      formData.append("type", uploadType);
+      formData.append("folder", folder);
+
       selectedFiles.forEach((file) => {
         formData.append("files", file);
       });
@@ -125,10 +130,16 @@ export function MultiFileUpload({
               {selectedFiles.map((file, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between p-2 bg-gray-50 rounded"
+                  className="flex items-center justify-between p-2 bg-gray-100 rounded"
                 >
                   <div className="flex items-center space-x-2">
-                    <Image className="w-4 h-4" src={""} alt={""} />
+                    <Image
+                      className="w-10 h-10"
+                      src={URL.createObjectURL(file)}
+                      alt={index.toString()}
+                      width={40}
+                      height={40}
+                    />
                     <span className="text-sm">{file.name}</span>
                     <span className="text-xs text-gray-500">
                       ({Math.round(file.size / 1024)}KB)
@@ -165,4 +176,6 @@ export function MultiFileUpload({
       </CardContent>
     </Card>
   );
-}
+};
+
+export default MultiFileUpload;
