@@ -22,7 +22,7 @@ export async function DELETE(
       .limit(1);
 
     if (!fileRecord) {
-      console.log("❌ File not found in database:", id);
+      console.log("❌ File not found in database table:", id);
       return NextResponse.json({ error: "File not found" }, { status: 404 });
     }
 

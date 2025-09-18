@@ -34,6 +34,7 @@ import { FeaturedImageData } from "@/types";
 import { MagazineEdition } from "@/types";
 import { Loader2 } from "lucide-react";
 import { createArticle, updateArticle } from "@/server/actions/article";
+import editFeaturedImage from "@/server/actions/featured-image";
 import {
   SimpleEditor,
   SimpleEditorRef,
@@ -121,38 +122,56 @@ const ArticleForm = ({ type, ...article }: Props) => {
       toast.error("No image ID found for deletion.");
       return;
     }
+
     setIsDeletingImage(true);
 
     try {
-      console.log("🗑️ Deleting featured image:", featuredImage);
+      if (type === "EDIT_ARTICLE") {
+        // For edit mode, use the server action to remove from article, database, and DO Spaces
+        console.log("🗑️ Removing featured image from article:", article?.id);
 
-      const response = await fetch(`/api/upload/${featuredImage.id}`, {
-        method: "DELETE",
-      });
+        const result = await editFeaturedImage({ articleId: article?.id });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Delete failed!");
+        if (!result?.success) {
+          throw new Error(result?.message || "Failed to remove featured image");
+        }
+
+        console.log("✅ Featured image removed from article:", result);
+        toast.success("Featured image has been removed successfully.");
+      } else {
+        // For create mode, the ImagePreviewWithDelete component handles the actual deletion
+        // We just need to clear the UI state here
+        console.log("🗑️ CREATE mode: ImagePreviewWithDelete component will handle file deletion");
+        console.log("🗑️ Clearing UI state for featured image:", {
+          id: featuredImage.id,
+          url: featuredImage.url,
+          originalName: featuredImage.originalName
+        });
+
+        // Don't make API call here - let ImagePreviewWithDelete handle it
+        // Just clear the UI state
       }
 
-      const result = await response.json();
-      console.log("✅ Featured image deleted:", result);
-
-      // Clear featured image state
+      // Clear featured image state and form value for successful operations
       setFeaturedImage(null);
       form.setValue("featuredImageUrl", "");
 
-      toast.success("Featured image has been removed successfully.");
     } catch (error) {
       console.error("❌ Featured image delete failed:", error);
 
-      const errorMessage =
-        error instanceof Error ? error.message : "Delete failed";
-      toast.error(errorMessage);
+      // For EDIT mode, show error toast
+      if (type === "EDIT_ARTICLE") {
+        const errorMessage =
+          error instanceof Error ? error.message : "Delete failed";
+        toast.error(errorMessage);
+      }
+      // For CREATE mode, don't show error toast - let ImagePreviewWithDelete handle it
     } finally {
       setIsDeletingImage(false);
     }
   };
+
+
 
   const handleImageUploadError = (error: string) => {
     toast.error(error);
@@ -407,7 +426,6 @@ const ArticleForm = ({ type, ...article }: Props) => {
                       showDeleteConfirm={true}
                       className={`w-full max-w-md ${isDeletingImage ? "opacity-50 pointer-events-none" : ""}`}
                     />
-
                     <div className="flex items-center gap-4 text-sm text-gray-600">
                       <div className="flex items-center gap-2">
                         <span>{featuredImage.originalName}</span>

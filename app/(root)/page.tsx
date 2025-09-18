@@ -9,9 +9,7 @@ import Subscribe from "@/components/Subscribe";
 import ArticlesVariantCards from "@/components/ArticlesVariantCards";
 import { HydrationBoundary } from "@tanstack/react-query";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
-import Image from "next/image";
 import { ArticleType } from "@/types";
-import { eq, desc } from "drizzle-orm";
 import InfiniteCards from "@/components/InfiniteCards";
 
 const getArticles = async () => {

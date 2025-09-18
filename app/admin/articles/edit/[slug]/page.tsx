@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ArticleForm from "@/components/admin/forms/ArticleForm";
 import { db } from "@/database/drizzle";
-import { article } from "@/database/schema";
+import { article, fileUploads } from "@/database/schema";
 import { eq } from "drizzle-orm";
 import { JSONContent } from "@tiptap/react";
 
@@ -16,12 +16,28 @@ const page = async ({ params }: { params: Promise<{ slug: string }> }) => {
     .where(eq(article.slug, slug))
     .limit(1);
 
+  // Get featured image data if it exists
+  let featuredImageData = null;
+  if (existingArticle?.featuredImageUrl) {
+    const [fileRecord] = await db
+      .select()
+      .from(fileUploads)
+      .where(eq(fileUploads.url, existingArticle.featuredImageUrl))
+      .limit(1);
+
+    if (fileRecord) {
+      featuredImageData = {
+        id: fileRecord.id,
+        url: fileRecord.url,
+        originalName: fileRecord.originalName,
+      };
+    }
+  }
+
   // Convert to plain object
   const plainArticle = existingArticle
     ? JSON.parse(JSON.stringify(existingArticle))
     : null;
-  console.log(existingArticle);
-  console.log(plainArticle);
 
   return (
     <main>
@@ -60,11 +76,7 @@ const page = async ({ params }: { params: Promise<{ slug: string }> }) => {
               magazineEditionNumber:
                 plainArticle?.magazineEditionNumber ?? undefined,
             }}
-            initialFeaturedImage={{
-              id: plainArticle.featuredImageId,
-              url: plainArticle.featuredImageUrl,
-              originalName: plainArticle.featuredImageOriginalName,
-            }}
+            initialFeaturedImage={featuredImageData}
           />
         </div>
         <div className="flex-1"></div>
