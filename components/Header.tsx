@@ -17,13 +17,15 @@ const Header = ({ userprofile }: { userprofile: ReactNode }) => {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-4">
           <div className="flex items-center">
-            <Image
-              src="/images/housing-in-ghana-logo.png"
-              alt="logo"
-              width={130}
-              height={60}
-              className="w-auto h-auto"
-            />
+            <Link href="/">
+              <Image
+                src="/images/housing-in-ghana-logo.png"
+                alt="logo"
+                width={130}
+                height={60}
+                className="w-auto h-auto"
+              />
+            </Link>
           </div>
 
           {/* Desktop Nav */}

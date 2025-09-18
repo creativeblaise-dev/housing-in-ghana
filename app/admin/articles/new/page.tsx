@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ArticleForm from "@/components/admin/forms/ArticleForm";
-
+import Editor from "@/components/Editor";
 const page = () => {
   return (
     <main>

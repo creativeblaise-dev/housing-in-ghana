@@ -4,6 +4,9 @@
 @import "preline/variants.css";
 @source "../node_modules/preline/dist/*.js";
 
+@import "../styles/_variables.scss";
+@import "../styles/_keyframe-animations.scss";
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -135,6 +138,16 @@
 @layer utilities {
   .gradient-vertical {
     background: linear-gradient(180deg, #12141d 0%, #12151f 100%);
+  }
+  .list-inside {
+    list-style-position: outside;
+  }
+
+  #article-content h2 {
+    @apply text-lg font-semibold mt-6 mb-2;
+  }
+  #article-content p {
+    @apply text-base leading-7 mt-3 mb-3;
   }
 }
 

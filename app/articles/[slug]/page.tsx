@@ -9,6 +9,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { IconUser } from "@tabler/icons-react";
 import { capitalizeSentences } from "@/lib/utils";
+import { RichTextRenderer } from "@/components/RichTextRenderer"; // Updated import
 
 const ArticleContentPage = async ({
   params,
@@ -35,7 +36,7 @@ const ArticleContentPage = async ({
     .where(eq(articleTable.slug, slug))
     .limit(1);
 
-  const article = articles as ArticleType | undefined;
+  const article = articles as ArticleType;
 
   // Define the separator for splitting paragraphs, e.g., double line breaks
   const separator = "\n\n";
@@ -85,6 +86,9 @@ const ArticleContentPage = async ({
                     <p className="text-xs sm:text-sm text-gray-800 dark:text-neutral-200">
                       {article?.createdAt.toDateString()}
                     </p>
+                    <p className="text-xs sm:text-sm text-gray-800 dark:text-neutral-200">
+                      Last Updated At: {article?.updatedAt.toDateString()}
+                    </p>
                   </div>
                   <div className="flex flex-2 justify-end items-center gap-x-1.5">
                     {/* Button */}
@@ -107,7 +111,7 @@ const ArticleContentPage = async ({
                         >
                           <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
                         </svg>
-                        875
+                        {0}
                         <span
                           className="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded-md shadow-2xs dark:bg-black"
                           role="tooltip"
@@ -140,12 +144,12 @@ const ArticleContentPage = async ({
                         >
                           <path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z" />
                         </svg>
-                        16
+                        {20}
                         <span
                           className="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded-md shadow-2xs dark:bg-black"
                           role="tooltip"
                         >
-                          Comment
+                          Views
                         </span>
                       </button>
                     </div>
@@ -271,65 +275,14 @@ const ArticleContentPage = async ({
                     src={article?.featuredImageUrl || ""}
                     alt={article?.title || ""}
                   />
-                  {/* <figcaption className="mt-3 text-sm text-center text-gray-500 dark:text-neutral-500">
-                    A man and a woman looking at a cell phone.
-                  </figcaption> */}
                 </figure>
 
-                {article?.content.split(separator).map((paragraph, index) => (
-                  <p
-                    key={index}
-                    className="text-md text-gray-900  leading-relaxed"
-                  >
-                    {paragraph}
-                    {index < article.content.split(separator).length - 1 && (
-                      <br />
-                    )}
-                  </p>
-                ))}
-
-                {/* <div className="text-center">
-                  <div className="grid lg:grid-cols-2 gap-3">
-                    <div className="grid grid-cols-2 lg:grid-cols-1 gap-3">
-                      <figure className="relative w-full h-60">
-                        <img
-                          className="size-full absolute top-0 start-0 object-cover rounded-xl"
-                          src="https://images.unsplash.com/photo-1670272505340-d906d8d77d03?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80"
-                          alt="Blog Image"
-                        />
-                      </figure>
-                      <figure className="relative w-full h-60">
-                        <img
-                          className="size-full absolute top-0 start-0 object-cover rounded-xl"
-                          src="https://images.unsplash.com/photo-1671726203638-83742a2721a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80"
-                          alt="Blog Image"
-                        />
-                      </figure>
-                    </div>
-                    <figure className="relative w-full h-72 sm:h-96 lg:h-full">
-                      <img
-                        className="size-full absolute top-0 start-0 object-cover rounded-xl"
-                        src="https://images.unsplash.com/photo-1671726203394-491c8b574a0a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80"
-                        alt="Blog Image"
-                      />
-                    </figure>
-                  </div>
-
-                  <span className="mt-3 block text-sm text-center text-gray-500 dark:text-neutral-500">
-                    Working process
-                  </span>
-                </div> */}
-
-                {/* <blockquote className="text-center p-4 sm:px-7">
-                  <p className="text-xl font-medium text-gray-800 lg:text-2xl lg:leading-normal xl:text-2xl xl:leading-normal dark:text-neutral-200">
-                    To say that switching to Preline has been life-changing is
-                    an understatement. My business has tripled and I got my life
-                    back.
-                  </p>
-                  <p className="mt-5 text-gray-800 dark:text-neutral-200">
-                    Nicole Grazioso
-                  </p>
-                </blockquote> */}
+                <p className="text-lg italic font-bold text-gray-900 leading-relaxed">
+                  {article?.excerpt}
+                </p>
+                <div id="article-content" className="prose">
+                  <RichTextRenderer content={article?.content || []} />
+                </div>
 
                 <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-y-5 lg:gap-y-0">
                   {/* Badges/Tags */}
@@ -395,7 +348,7 @@ const ArticleContentPage = async ({
                 {otherArticles.length > 0 &&
                   otherArticles.map((article) => (
                     <div
-                      className="space-y-4 px-2 py-2 mb-4 bg-[#fbffd3] rounded-lg"
+                      className="space-y-4 px-2 py-2 mb-4 bg-[#ffffff] rounded-lg shadow-lg"
                       key={article.id}
                     >
                       <Link
@@ -412,8 +365,8 @@ const ArticleContentPage = async ({
                           />
                         </div>
                         <div className="grow">
-                          <span className="text-md font-bold text-gray-800 group-hover:text-red-600 group-focus:text-red-600 dark:text-neutral-200 dark:group-hover:text-blue-500 dark:group-focus:text-blue-500">
-                            {article.title}
+                          <span className="text-md font-bold text-gray-800 group-hover:text-red-600 group-focus:text-red-600 dark:text-neutral-200 dark:group-hover:text-blue-500 dark:group-focus:text-blue-500 leading-tight">
+                            {capitalizeSentences(article?.title.toLowerCase())}
                           </span>
                         </div>
                       </Link>

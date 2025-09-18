@@ -33,6 +33,7 @@ export const magazineEditionSchema = z.object({
     .string()
     .min(1, "Title is required")
     .max(255, "Title must be less than 255 characters"),
+  editionAlias: z.string(),
   summary: z.string().min(1, "Summary is required"),
   editorialNote: z.string().min(1, "Editorial note is required"),
   coverImage: z.string().min(1, "Cover image is required"),
@@ -61,12 +62,14 @@ export const articleSchema = z.object({
     .min(1, "Category is required")
     .max(50, "Category should be at most 50 characters long"),
   slug: z.string().trim().min(2, "Slug should be at least 2 characters long"),
-  excerpt: z.string().max(255).optional(),
+  excerpt: z
+    .string()
+    .min(100, "Excerpt should be at least 100 characters long"),
   status: z.string().min(1, "Article status is required"),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
-  content: z.string().min(20, "Content should be at least 20 characters long"),
-  magazineEditionNumber: magazineEditionSchema.shape.editionNumber.optional(),
+  content: z.array(z.any()),
+  magazineEditionAlias: magazineEditionSchema.shape.editionAlias.optional(),
   featuredImageUrl: z.string().url("Image must be a valid URL").nonempty(),
   tags: z.array(z.string()).min(1),
 });
@@ -77,10 +80,7 @@ export const createMileagePostSchema = z.object({
     .string()
     .min(1, "Region is required")
     .max(255, "Region must be less than 255 characters"),
-  placeName: z
-    .string()
-    .min(1, "Place name is required")
-    .max(255, "Place name must be less than 255 characters"),
+  placeName: z.string().min(1, "Place name is required"),
   description: z.string().optional(),
 });
 

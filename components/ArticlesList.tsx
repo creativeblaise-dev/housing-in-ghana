@@ -1,18 +1,26 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
-import { db } from "@/database/drizzle";
-import { article } from "@/database/schema";
-import { desc } from "drizzle-orm";
 import { ArticleType } from "@/types";
 import Image from "next/image";
 import { IconCircleCheckFilled, IconCircleXFilled } from "@tabler/icons-react";
 import { capitalizeSentences } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 
-const ArticlesList = async () => {
-  const allArticles = (await db
-    .select()
-    .from(article)
-    .orderBy(desc(article.createdAt))) as ArticleType[];
+const ArticlesList = () => {
+  const {
+    data: allArticles,
+    isFetching,
+    isError,
+  } = useQuery({
+    queryKey: ["articles"],
+    queryFn: () => fetch("/api/articles").then((res) => res.json()),
+    // Data is already available from server prefetch
+  });
+
+  if (isFetching) return <div>Loading...</div>;
+  if (isError) return <div>Error loading posts</div>;
 
   return (
     <main>
@@ -135,7 +143,8 @@ const ArticlesList = async () => {
                   </thead>
 
                   <tbody className="divide-y divide-gray-200 dark:divide-neutral-700">
-                    {allArticles.map((article) => {
+                    {allArticles.map((article: ArticleType) => {
+                      const publishedDate = new Date(article.createdAt);
                       return (
                         <tr key={article.slug}>
                           <td className="size-px whitespace-nowrap">
@@ -240,18 +249,18 @@ const ArticlesList = async () => {
                           <td className="size-px whitespace-nowrap">
                             <div className="px-6 py-3">
                               <span className="text-sm text-gray-500 dark:text-neutral-500">
-                                {article.createdAt.toDateString()}
+                                {publishedDate.toDateString()}
                               </span>
                             </div>
                           </td>
                           <td className="size-px whitespace-nowrap">
                             <div className="px-6 py-1.5">
-                              <a
+                              <Link
                                 className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500"
-                                href="#"
+                                href={`/admin/articles/edit/${article.slug}`}
                               >
                                 Edit
-                              </a>
+                              </Link>
                             </div>
                           </td>
                         </tr>

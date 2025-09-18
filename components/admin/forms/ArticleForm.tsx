@@ -33,32 +33,38 @@ import { ImagePreviewWithDelete } from "@/components/ui/image-preview-with-delet
 import { FeaturedImageData } from "@/types";
 import { MagazineEdition } from "@/types";
 import { Loader2 } from "lucide-react";
-import Image from "next/image";
-import { createArticle } from "@/lib/actions/admin/article";
+import { createArticle, updateArticle } from "@/server/actions/article";
+import {
+  SimpleEditor,
+  SimpleEditorRef,
+} from "@/components/tiptap-templates/simple/simple-editor";
+import { JSONContent } from "@tiptap/react";
 
 interface Props extends Partial<ArticleType> {
   type: "CREATE_ARTICLE" | "EDIT_ARTICLE";
 }
 
+type ArticleFormValues = z.infer<typeof articleSchema>;
+
 const ArticleForm = ({ type, ...article }: Props) => {
   const router = useRouter();
-
-  type ArticleFormValues = z.infer<typeof articleSchema>;
+  const editorRef = React.useRef<SimpleEditorRef>(null);
 
   const form = useForm<ArticleFormValues>({
     resolver: zodResolver(articleSchema),
     defaultValues: {
-      title: "",
-      category: "",
-      slug: "",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      content: "",
-      featuredImageUrl: "",
-      author: "",
-      status: "draft",
-      tags: [],
-      excerpt: "",
+      title: article?.title || "",
+      category: article?.category || "",
+      slug: article?.slug || "",
+      createdAt: article?.createdAt || new Date(),
+      updatedAt: article?.updatedAt || new Date(),
+      content: article?.content || [],
+      featuredImageUrl: article?.featuredImageUrl || "",
+      author: article?.author || "",
+      status: article?.status || "draft",
+      tags: article?.tags || [],
+      excerpt: article?.excerpt || "",
+      magazineEditionAlias: article?.magazineEditionAlias,
     },
   });
 
@@ -111,8 +117,10 @@ const ArticleForm = ({ type, ...article }: Props) => {
   };
 
   const handleImageDelete = async () => {
-    if (!featuredImage) return;
-
+    if (!featuredImage?.id) {
+      toast.error("No image ID found for deletion.");
+      return;
+    }
     setIsDeletingImage(true);
 
     try {
@@ -150,24 +158,76 @@ const ArticleForm = ({ type, ...article }: Props) => {
     toast.error(error);
   };
 
-  const submitArticle = async (data: z.infer<typeof articleSchema>) => {
-    const now = new Date();
-    const result = await createArticle({
-      ...data,
-      magazineEditionNumber: data.magazineEditionNumber || null,
-      status: data.status,
-      createdAt: data.createdAt ?? now,
-      updatedAt: data.updatedAt ?? now,
+  // Handle editor content changes
+  const handleContentChange = (content: JSONContent[]) => {
+    console.log("Editor content changed:", content);
+    console.log("Content length:", content.length);
+    form.setValue("content", content, {
+      shouldValidate: true,
+      shouldDirty: true,
     });
+  };
 
-    if (result.success) {
-      toast.success("Article created successfully!");
-      form.reset();
-      router.push(`/admin/articles`);
-    } else {
-      toast.error(result.message || "Failed to create article.");
+  const submitArticle = async (data: z.infer<typeof articleSchema>) => {
+    try {
+      // Get the latest content directly from the editor before submitting
+      const latestContent = editorRef.current?.getContent() || [];
+      console.log("Latest content from editor:", latestContent);
+
+      // Update the data with the latest editor content
+      const submitData = {
+        ...data,
+        content: latestContent,
+      };
+
+      console.log("Submit data with editor content:", submitData);
+
+      const now = new Date();
+
+      if (type === "EDIT_ARTICLE") {
+        const result = await updateArticle(article.slug ?? "", {
+          ...submitData,
+          magazineEditionAlias: submitData.magazineEditionAlias,
+          createdAt: submitData.createdAt ?? new Date(),
+          updatedAt: submitData.updatedAt ?? new Date(),
+        });
+
+        if (result.success) {
+          console.log("Updating article:", article?.slug, result.data);
+          toast.success("Article updated successfully!");
+          form.reset();
+          router.push(`/admin/articles`);
+        } else {
+          toast.error("Failed to update article.");
+        }
+      } else {
+        const result = await createArticle({
+          ...submitData,
+          excerpt: submitData.excerpt || "",
+          magazineEditionAlias:
+            submitData.magazineEditionAlias || "Not Featured",
+          status: submitData.status,
+          createdAt: submitData.createdAt ?? now,
+          updatedAt: submitData.updatedAt ?? now,
+        });
+
+        if (result.success) {
+          toast.success("Article created successfully!");
+          form.reset();
+          router.push(`/admin/articles`);
+        } else {
+          toast.error(result.message || "Failed to create article.");
+        }
+      }
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      toast.error("Message: " + errorMessage);
     }
   };
+
+  console.log("Form validation errors:", form.formState.errors);
+  console.log("Form values:", form.getValues());
 
   return (
     <Form {...form}>
@@ -202,15 +262,38 @@ const ArticleForm = ({ type, ...article }: Props) => {
                   {...field}
                 />
               </FormControl>
-
               <Button
-                className=" bg-[#1c1c1c] w-50 mt-4 cursor-pointer"
+                type="button"
+                className="bg-[#1c1c1c] w-50 mt-4 cursor-pointer"
                 onClick={() => {
-                  form.setValue("slug", generateSlug(field.value));
+                  const title = form.getValues("title");
+                  const generatedSlug = generateSlug(title);
+                  form.setValue("slug", generatedSlug);
                 }}
               >
                 Generate article slug
               </Button>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name={"excerpt"}
+          render={({ field }) => (
+            <FormItem className="flex flex-col gap-1">
+              <FormLabel className="text-base font-normal text-stone-700">
+                Excerpt
+              </FormLabel>
+              <FormControl>
+                <Textarea
+                  rows={4}
+                  className="max-h-[100px] min-h-[100px] resize-y"
+                  placeholder="Type your excerpt..."
+                  required
+                  {...field}
+                />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -387,6 +470,7 @@ const ArticleForm = ({ type, ...article }: Props) => {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name={"content"}
@@ -395,22 +479,19 @@ const ArticleForm = ({ type, ...article }: Props) => {
               <FormLabel className="text-base font-normal text-stone-700">
                 Content
               </FormLabel>
-              <FormControl>
-                <Textarea
-                  rows={10}
-                  className="max-h-[400px] min-h-[200px] resize-y"
-                  placeholder="Type your article content..."
-                  required
-                  {...field}
-                />
-              </FormControl>
+              <SimpleEditor
+                ref={editorRef}
+                content={field.value as JSONContent[]}
+                onChange={handleContentChange}
+              />
               <FormMessage />
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
-          name={"magazineEditionNumber"}
+          name={"magazineEditionAlias"}
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-stone-700">
@@ -418,25 +499,21 @@ const ArticleForm = ({ type, ...article }: Props) => {
               </FormLabel>
               <FormControl>
                 <Select
-                  value={
-                    form.watch("magazineEditionNumber")?.toString() ??
-                    "Not Featured"
-                  }
+                  value={form.watch("magazineEditionAlias")}
                   onValueChange={(value) =>
-                    form.setValue("magazineEditionNumber", Number(value))
+                    form.setValue("magazineEditionAlias", value)
                   }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select a magazine edition" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Not Featured">Not Featured</SelectItem>
                     {magazineEditions.map((edition) => (
                       <SelectItem
-                        key={edition.editionNumber}
-                        value={edition.editionNumber.toString()}
+                        key={edition.editionAlias}
+                        value={edition.editionAlias}
                       >
-                        {edition.editionNumber}
+                        {edition.editionAlias}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -480,7 +557,7 @@ const ArticleForm = ({ type, ...article }: Props) => {
           className="w-1/2 bg-[#1c1c1c] ml-auto cursor-pointer"
           type="submit"
         >
-          Submit Article
+          {type === "EDIT_ARTICLE" ? "Update Article" : "Create Article"}
         </Button>
       </form>
     </Form>

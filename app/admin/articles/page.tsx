@@ -1,13 +1,31 @@
 import React from "react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import ArticlesList from "@/components/ArticlesList";
+import { ArticleType } from "@/types";
+import {
+  QueryClient,
+  HydrationBoundary,
+  dehydrate,
+} from "@tanstack/react-query";
 
-const AdminPageArticles = () => {
+const getArticles = async () => {
+  const response = await fetch("/api/articles");
+  return response.json() as Promise<ArticleType[]>;
+};
+
+const AdminPageArticles = async () => {
+  const queryClient = new QueryClient();
+
+  // Prefetch on server
+  await queryClient.prefetchQuery({
+    queryKey: ["articles"],
+    queryFn: getArticles,
+  });
   return (
     <main>
       <h1 className="text-4xl font-bold">Manage Articles</h1>
-      <ArticlesList />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <ArticlesList />
+      </HydrationBoundary>
     </main>
   );
 };

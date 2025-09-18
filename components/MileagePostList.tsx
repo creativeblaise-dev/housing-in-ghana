@@ -6,6 +6,7 @@ import { MileagePost } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { IconArrowRight } from "@tabler/icons-react";
+import Loader from "@/components/Loader";
 
 const MileagePostList = () => {
   const {
@@ -18,7 +19,7 @@ const MileagePostList = () => {
     // Data is already available from server prefetch
   });
 
-  if (isFetching) return <div>Loading...</div>;
+  if (isFetching) return <Loader />;
   if (isError) return <div>Error loading posts</div>;
 
   return (

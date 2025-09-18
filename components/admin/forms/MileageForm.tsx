@@ -30,7 +30,7 @@ import { Loader2, MapPin, X, Calendar, Route } from "lucide-react";
 import { FeaturedImageData, MileageFormData } from "@/types";
 import { createMileagePostSchema } from "@/lib/validations";
 import MultiFileUpload from "@/components/ui/multi-file-upload";
-import { createMileagePost } from "@/lib/actions/admin/mileage";
+import { createMileagePost } from "@/server/actions/mileage";
 
 type Props = {
   type: "CREATE_MILEAGE_POST" | "EDIT_MILEAGE_POST";
@@ -94,11 +94,15 @@ const MileageForm = ({ type, post }: Props) => {
   // Handle photo deletion
   const handlePhotoDelete = async (photoId: string) => {
     setIsDeletingPhoto(photoId);
+    console.log("Deleting photo with ID:", photoId);
 
     try {
       const response = await fetch(`/api/upload/${photoId}`, {
         method: "DELETE",
       });
+
+      console.log("Delete response status:", response.status);
+      console.log("Delete response:", response);
 
       if (!response.ok) {
         const errorData = await response.json();

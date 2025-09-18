@@ -32,8 +32,11 @@ const BlogPreview = ({ header }: { header: string }) => {
         </h1>
       </div>
       <div className="grid lg:grid-cols-4 grid-cols-1 lg:grid-row gap-4 py-4">
-        {allArticles.map(
-          ({ title, createdAt, featuredImageUrl, slug }: ArticleType) => {
+        {allArticles
+          .filter(
+            (foundArticle: ArticleType) => foundArticle.status === "published"
+          )
+          .map(({ title, createdAt, featuredImageUrl, slug }: ArticleType) => {
             const createdAtDate = new Date(createdAt);
 
             return (
@@ -67,8 +70,7 @@ const BlogPreview = ({ header }: { header: string }) => {
                 </CardFooter>
               </Card>
             );
-          }
-        )}
+          })}
       </div>
     </section>
   );

@@ -1,3 +1,5 @@
+import { JSONContent } from "@tiptap/react";
+
 declare global {
   interface Window {
     noUiSlider: any; // Or specify a more precise type if available from noUiSlider's typings
@@ -13,23 +15,26 @@ export type GalleryContent = {
 };
 
 export type ArticleType = {
+  id?: string;
   title: string;
-  content: string;
+  content: JSONContent[];
   slug: string;
   author: string;
   status: string;
+  excerpt: string;
   featuredImageUrl: string;
   initialFeaturedImage?: FeaturedImageData;
   createdAt: Date;
-  updatedAt?: Date;
+  updatedAt: Date;
   category: string;
   tags?: string[];
-  magazineEditionNumber: MagazineEdition["editionNumber"] | null;
+  magazineEditionAlias?: string;
 };
 
 export type MagazineEdition = {
   title: string;
   editionNumber: number;
+  editionAlias: string;
   summary: string;
   backgroundImage: string;
   releasedAt: string;

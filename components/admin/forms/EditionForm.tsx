@@ -29,17 +29,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createEdition } from "@/lib/actions/admin/edition";
+import { createEdition } from "@/server/actions/edition";
 import { Loader2 } from "lucide-react";
 import FileUpload from "@/components/ui/file-upload";
 import { Textarea } from "@/components/ui/textarea";
+import { magazineEditions } from "@/database/schema";
 
 interface Props {
   type: "CREATE_EDITION" | "EDIT_EDITION";
   edition?: Partial<MagazineEdition>;
 }
 
-const EditionForm = ({ type, edition }: Props) => {
+const EditionForm = ({ edition }: Props) => {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof magazineEditionSchema>>({
@@ -53,11 +54,16 @@ const EditionForm = ({ type, edition }: Props) => {
       editorialNote: edition?.editorialNote || "",
       releasedAt: edition?.releasedAt || new Date().toISOString().split("T")[0],
       readOnlineButtonLink: edition?.readOnlineButtonLink || "",
+      editionAlias: edition?.editionAlias,
     },
   });
 
   const [isDeletingImage, setIsDeletingImage] = useState(false);
   const [isDeletingBgImage, setIsDeletingBgImage] = useState(false);
+
+  const [magazineEditionAlias, setEditionAlias] = useState(
+    "Select Edition Alias"
+  );
 
   const [coverImage, setCoverImage] = useState<FeaturedImageData | null>(
     edition?.coverImage
@@ -194,11 +200,13 @@ const EditionForm = ({ type, edition }: Props) => {
       const result = await createEdition({
         ...data,
         coverImage: coverImage?.url || "",
+        editionNumber: data.editionNumber,
         backgroundImage: backgroundImage?.url || "",
         readOnlineButtonLink: data.readOnlineButtonLink || "",
         summary: data.summary || "",
         editorialNote: data.editorialNote || "",
         releasedAt: data.releasedAt || new Date().toISOString(),
+        editionAlias: data.editionAlias || "",
       });
 
       if (result?.success) {
@@ -207,7 +215,6 @@ const EditionForm = ({ type, edition }: Props) => {
         setCoverImage(null);
         setBackgroundImage(null);
         console.log("🚀 Edition created:", result.data);
-        router.push(`/magazine`);
       } else {
         console.error("❌ Edition creation failed:", result);
         toast.error(result?.error || "Failed to create edition.");
@@ -238,10 +245,14 @@ const EditionForm = ({ type, edition }: Props) => {
                     type="number"
                     placeholder="Enter edition number"
                     {...field}
-                    onChange={(e) =>
-                      field.onChange(Number(e.target.value) || 0)
-                    }
-                    value={field.value.toString()}
+                    onChange={(e) => {
+                      field.onChange(
+                        (e.target as HTMLInputElement).valueAsNumber
+                      );
+                      setEditionAlias(
+                        `Edition 0${(e.target as HTMLInputElement).valueAsNumber}`
+                      );
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
@@ -480,7 +491,7 @@ const EditionForm = ({ type, edition }: Props) => {
             render={({ field }) => (
               <FormItem className="flex flex-col gap-1">
                 <FormLabel className="text-base font-normal text-stone-700">
-                  Editorial Note (Optional)
+                  Editorial Note
                 </FormLabel>
                 <FormControl>
                   <Textarea
@@ -495,20 +506,46 @@ const EditionForm = ({ type, edition }: Props) => {
             )}
           />
 
-          {/* Read Online Button Link */}
           <FormField
             control={form.control}
             name="readOnlineButtonLink"
             render={({ field }) => (
               <FormItem className="flex flex-col gap-1">
                 <FormLabel className="text-base font-normal text-stone-700">
-                  Read Online Button Link
+                  Edition PDF Url
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="https://example.com/read-online"
-                    {...field}
-                  />
+                  <Input placeholder="Enter edition PDF URL" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="editionAlias"
+            render={({ field }) => (
+              <FormItem className=" flex flex-col gap-1 ">
+                <FormLabel className="text-base font-normal text-stone-700">
+                  Featured Magazine Edition
+                </FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select edition alias" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {
+                        <SelectItem
+                          key={magazineEditionAlias}
+                          value={magazineEditionAlias}
+                        >
+                          {magazineEditionAlias}
+                        </SelectItem>
+                      }
+                    </SelectContent>
+                  </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -8,7 +8,6 @@ export async function GET() {
     const articles = await db
       .select()
       .from(article)
-      .where(eq(article.status, "published"))
       .orderBy(desc(article.createdAt));
 
     return NextResponse.json(articles);

@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from "@/database/drizzle";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { fileUploads } from "@/database/schema";
 import { deleteFromSpaces, extractKeyFromUrl } from "@/lib/upload";
 import { spacesClient } from "@/lib/spaces";
@@ -100,14 +100,8 @@ export async function DELETE(
       // Don't fail the entire operation - continue with database cleanup
     }
 
-    const actionAfterDelay = async () => {
-      //Delete from database
-      await db.delete(fileUploads).where(eq(fileUploads.id, id));
-      console.log("✅ Successfully deleted from database");
-      console.log("This action is performed after the timeout!");
-    };
-
-    setTimeout(actionAfterDelay, 3000); // Executes actionAfterDelay after 5000 milliseconds (5 seconds)
+    await db.delete(fileUploads).where(eq(fileUploads.id, id));
+    console.log("✅ Successfully deleted from database");
 
     return NextResponse.json({
       success: true,

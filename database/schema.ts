@@ -93,7 +93,7 @@ export const verification = pgTable("verification", {
 export const article = pgTable("article", {
   id: uuid("id").notNull().primaryKey().defaultRandom().unique(),
   title: text("title").notNull(),
-  content: jsonb("content").notNull(),
+  content: jsonb("content").notNull().default("[]"),
   slug: varchar("slug", { length: 255 }).unique().notNull(),
   excerpt: text("excerpt"),
   category: text("category").notNull(),
@@ -103,8 +103,8 @@ export const article = pgTable("article", {
   updatedAt: timestamp("updated_at").$defaultFn(() => new Date()),
   author: text("author").notNull(),
   tags: jsonb("tags").default("[]"),
-  magazineEditionNumber: integer("magazine_edition_number").references(
-    () => magazineEditions.editionNumber,
+  magazineEditionAlias: varchar("magazine_edition_alias").references(
+    () => magazineEditions.editionAlias,
     { onDelete: "set null" }
   ),
 });
@@ -125,6 +125,7 @@ export const fileUploads = pgTable("file_uploads", {
 export const magazineEditions = pgTable("magazine_editions", {
   id: uuid("id").primaryKey().defaultRandom(),
   editionNumber: integer("edition_number").notNull().unique(),
+  editionAlias: varchar("edition_alias", { length: 25 }).notNull(),
   title: varchar("title", { length: 255 }).notNull(),
   summary: text("summary").notNull(),
   editorialNote: text("editorial_note").notNull(),
@@ -139,9 +140,9 @@ export const articleMagazineEdition = pgTable("article_magazine_edition", {
   articleId: uuid("article_id")
     .notNull()
     .references(() => article.id, { onDelete: "cascade" }),
-  magazineEditionId: uuid("magazine_edition_id")
+  magazineEditionAlias: varchar("magazine_edition_alias", { length: 25 })
     .notNull()
-    .references(() => magazineEditions.id, { onDelete: "cascade" }),
+    .references(() => magazineEditions.editionAlias, { onDelete: "cascade" }),
 });
 
 export const mileagePosts = pgTable("mileage_posts", {
