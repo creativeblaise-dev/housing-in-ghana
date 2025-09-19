@@ -38,9 +38,6 @@ const ArticleContentPage = async ({
 
   const article = articles as ArticleType;
 
-  // Define the separator for splitting paragraphs, e.g., double line breaks
-  const separator = "\n\n";
-
   return (
     <main>
       {/* Blog Article */}

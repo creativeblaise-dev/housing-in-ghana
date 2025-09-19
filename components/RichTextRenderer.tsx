@@ -2,19 +2,6 @@
 import React from "react";
 import { JSONContent } from "@tiptap/react";
 
-type Mark = { type: "bold" | "italic" | "underline" | "link"; href?: string };
-
-// type ContentNode = {
-//   text?: string;
-//   type: string;
-//   marks?: Mark[];
-//   content?: ContentNode[];
-//   attrs?: {
-//     href?: string;
-//     ordered?: boolean;
-//   };
-// };
-
 export function renderNode(node: JSONContent, index: number): React.ReactNode {
   // Handle plain text with marks
   if (node.type === "text" && node.text) {
@@ -130,11 +117,20 @@ export function renderNode(node: JSONContent, index: number): React.ReactNode {
 
   // Images
   if (node.type === "image") {
+    const src = node.attrs?.src;
+    const alt = node.attrs?.alt || "";
+
+    // Don't render image if no src is provided
+    if (!src) {
+      console.warn("Image node missing src attribute:", node);
+      return null;
+    }
+
     return (
       <img
         key={index}
-        src={node.attrs?.src}
-        alt={node.attrs?.alt || ""}
+        src={src}
+        alt={alt}
         className="max-w-full h-auto rounded-lg my-4"
       />
     );

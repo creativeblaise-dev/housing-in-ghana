@@ -246,7 +246,10 @@ export const SimpleEditor = React.forwardRef<SimpleEditorRef, EditorProps>(
           const json = editor.getJSON();
           console.log("Editor JSON:", json);
           console.log("Editor content:", json.content);
-          onChange(json.content || []);
+          // Serialize the content to ensure it's properly formatted for Next.js
+          const serializedContent = JSON.parse(JSON.stringify(json.content || []));
+          console.log("Serialized content:", serializedContent);
+          onChange(serializedContent);
         }
       },
     });
@@ -256,7 +259,8 @@ export const SimpleEditor = React.forwardRef<SimpleEditorRef, EditorProps>(
       getContent: () => {
         if (!editor) return [];
         const json = editor.getJSON();
-        return json.content || [];
+        // Serialize the content to ensure it's properly formatted for Next.js
+        return JSON.parse(JSON.stringify(json.content || []));
       },
       getEditor: () => editor,
     }));
@@ -297,8 +301,8 @@ export const SimpleEditor = React.forwardRef<SimpleEditorRef, EditorProps>(
             style={{
               ...(isMobile
                 ? {
-                    bottom: `calc(100% - ${height - rect.y}px)`,
-                  }
+                  bottom: `calc(100% - ${height - rect.y}px)`,
+                }
                 : {}),
             }}
           >
