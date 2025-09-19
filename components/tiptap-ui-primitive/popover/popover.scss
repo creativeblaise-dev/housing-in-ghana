@@ -14,7 +14,7 @@
     --------- POPOVER STYLING SETTINGS -----------
     -------------------------------------------- */
 .tiptap-popover {
-  z-index: 50;
+  z-index: 9999; /* Increased z-index to match dropdown menus */
   outline: none;
   transform-origin: var(--radix-popover-content-transform-origin);
   max-height: var(--radix-popover-content-available-height);

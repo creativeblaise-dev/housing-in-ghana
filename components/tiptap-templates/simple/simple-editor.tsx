@@ -92,10 +92,10 @@ const MainToolbarContent = ({
       <ToolbarSeparator />
 
       <ToolbarGroup>
-        <HeadingDropdownMenu levels={[1, 2, 3, 4]} portal={isMobile} />
+        <HeadingDropdownMenu levels={[1, 2, 3, 4]} portal={true} />
         <ListDropdownMenu
           types={["bulletList", "orderedList", "taskList"]}
-          portal={isMobile}
+          portal={true}
         />
         <BlockquoteButton />
         <CodeBlockButton />
@@ -293,10 +293,10 @@ export const SimpleEditor = React.forwardRef<SimpleEditorRef, EditorProps>(
     }, [isMobile, mobileView]);
 
     return (
-      <div className="">
+      <div className="relative overflow-visible">
         <EditorContext.Provider value={{ editor }}>
           <Toolbar
-            className="bg-white/90 w-full flex backdrop-blur-sm border-b border-gray-200 dark:bg-gray-800/90 dark:border-gray-700 shadow-sm rounded-t-xl"
+            className="bg-white/90 w-full flex backdrop-blur-sm border-b border-gray-200 dark:bg-gray-800/90 dark:border-gray-700 shadow-sm rounded-t-xl overflow-visible"
             ref={toolbarRef}
             style={{
               ...(isMobile

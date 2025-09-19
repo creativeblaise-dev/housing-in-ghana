@@ -80,3 +80,33 @@ body,
     padding: 1rem 1.5rem 30vh;
   }
 }
+
+/* Fix for dropdown positioning in editor */
+.simple-editor-wrapper,
+.simple-editor-content {
+  overflow: visible !important;
+}
+
+/* Ensure toolbar dropdowns don't get clipped */
+.tiptap-toolbar {
+  overflow: visible !important;
+
+  /* Override any container overflow settings */
+  .tiptap-toolbar-group {
+    overflow: visible !important;
+  }
+}
+
+/* Ensure form containers don't clip dropdowns */
+form {
+  overflow: visible !important;
+
+  .space-y-8 {
+    overflow: visible !important;
+  }
+}
+
+/* Ensure all parent containers allow dropdown overflow */
+.flex.flex-col.gap-1 {
+  overflow: visible !important;
+}
