@@ -1,105 +1,175 @@
-"use server";
+"use client";
 
 import Link from "next/link";
-import React from "react";
-import { authClient } from "@/lib/auth-client";
-import { headers } from "next/headers";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import React, { useEffect, useState, useRef } from "react";
+import { Avatar, AvatarFallback } from "./ui/avatar";
 import { getInitials } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { IconSettings, IconUser } from "@tabler/icons-react";
-import { db } from "@/database/drizzle";
-import { eq, is } from "drizzle-orm";
-import { user as userTable } from "@/database/schema";
 
-const UserProfileDropdown = async () => {
-  const session = await authClient.getSession({
-    fetchOptions: {
-      headers: await headers(),
-    },
-  });
+type User = {
+  id: string;
+  name: string;
+  email: string;
+};
 
-  if (!session) {
-    return null;
-  }
+const UserProfileDropdown = () => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const sessionUser = session?.data?.user;
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        // Fetch user session
+        const sessionResponse = await fetch("/api/auth/session");
+        if (!sessionResponse.ok) {
+          setIsLoading(false);
+          return;
+        }
 
-  let isAdmin = false;
-  if (sessionUser) {
-    isAdmin = await db
-      .select({ isAdmin: userTable.role })
-      .from(userTable)
-      .where(eq(userTable.id, sessionUser.id))
-      .limit(1)
-      .then((res) => res[0]?.isAdmin === "admin");
+        const sessionData = await sessionResponse.json();
+        const userData = sessionData?.user;
+
+        if (userData) {
+          setUser(userData);
+
+          // Fetch user role
+          const roleResponse = await fetch(`/api/user/${userData.id}/role`);
+          if (roleResponse.ok) {
+            const roleData = await roleResponse.json();
+            setIsAdmin(roleData.isAdmin);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  // Handle dropdown toggle
+  const handleDropdownToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isDropdownOpen]);
+
+  // Close dropdown on escape key
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener("keydown", handleEscapeKey);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleEscapeKey);
+    };
+  }, [isDropdownOpen]);
+
+  if (isLoading) {
+    return (
+      <div className="h-8 w-8 animate-pulse bg-gray-200 rounded-full"></div>
+    );
   }
 
   return (
-    <div className="h-8 ">
-      {/* Account Dropdown */}
-      {sessionUser ? (
-        <div className=" hs-dropdown inline-flex [--strategy:absolute] [--auto-close:inside] [--placement:bottom-right] relative text-start">
+    <div className="h-8">
+      {user ? (
+        <div ref={dropdownRef} className="relative inline-flex text-start">
           <button
-            id="hs-dnad"
             type="button"
-            className="cursor-pointer p-0.5 inline-flex shrink-0 items-center gap-x-3 text-start rounded-full hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200"
+            className="cursor-pointer p-0.5 inline-flex shrink-0 items-center gap-x-3 text-start rounded-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200 transition-colors"
             aria-haspopup="menu"
-            aria-expanded="false"
-            aria-label="Dropdown"
+            aria-expanded={isDropdownOpen}
+            aria-label="User Profile Dropdown"
+            onClick={handleDropdownToggle}
           >
             <Avatar>
-              {/* <AvatarImage src="/images/favicon.png" /> */}
               <AvatarFallback className="bg-[#fffeb2] border border-gray-300">
-                {getInitials(sessionUser?.name || "IN")}
+                {getInitials(user.name || "IN")}
               </AvatarFallback>
             </Avatar>
           </button>
 
-          {/* Account Dropdown */}
-          <div
-            className="hs-dropdown-menu hs-dropdown-open:opacity-100 w-60 transition-[opacity,margin] duration opacity-0 hidden z-20 bg-white border border-gray-200 rounded-xl shadow-xl"
-            role="menu"
-            aria-orientation="vertical"
-            aria-labelledby="hs-dnad"
-          >
-            <div className="py-2 px-3.5">
-              <span className="font-medium text-gray-800">
-                {sessionUser?.name}
-              </span>
-              <p className="text-sm text-gray-500">{sessionUser?.email}</p>
+          {/* Dropdown Menu */}
+          {isDropdownOpen && (
+            <div
+              className="absolute top-full right-0 mt-2 w-60 z-50 bg-white border border-gray-200 rounded-xl shadow-xl animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 duration-200"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="user-profile-button"
+            >
+              {/* User Info */}
+              <div className="py-2 px-3.5 border-b border-gray-100">
+                <span className="font-medium text-gray-800 block truncate">
+                  {user.name}
+                </span>
+                <p className="text-sm text-gray-500 truncate">{user.email}</p>
+              </div>
+
+              {/* Menu Items */}
+              <div className="p-1">
+                <Link
+                  className="flex items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-600 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition-colors w-full"
+                  href={isAdmin ? "/admin" : "/contributor-profile"}
+                  onClick={() => setIsDropdownOpen(false)}
+                >
+                  <IconUser className="h-4 w-4 flex-shrink-0" />
+                  <span>{isAdmin ? "Admin Dashboard" : "Profile"}</span>
+                </Link>
+                <Link
+                  className="flex items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-600 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition-colors w-full"
+                  href="/account-settings"
+                  onClick={() => setIsDropdownOpen(false)}
+                >
+                  <IconSettings className="h-4 w-4 flex-shrink-0" />
+                  <span>Account Settings</span>
+                </Link>
+              </div>
             </div>
-            <div className="p-1 border-t border-gray-200">
-              <Link
-                className="flex items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-100"
-                href={isAdmin ? "/admin" : "/contributor-profile"}
-              >
-                <IconUser className="h-4 w-4" />{" "}
-                <span>{isAdmin ? "Admin Dashboard" : "Profile"}</span>
-              </Link>
-              <Link
-                className="flex items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-100"
-                href="#"
-              >
-                <IconSettings className="h-4 w-4" />{" "}
-                <span>Account Management</span>
-              </Link>
-            </div>
-          </div>
-          {/* End Account Dropdown */}
+          )}
         </div>
       ) : (
         <Link href="/sign-in">
-          <Button className="bg-white text-stone-700 text-md font-bold hover:bg-slate-200  cursor-pointer">
+          <Button className="bg-white text-stone-700 text-md font-bold hover:bg-slate-200 cursor-pointer">
             Sign In
             <span className="text-[#FF202B]">
-              {" "}
               <IconUser className="h-4 w-4" />
             </span>
           </Button>
         </Link>
       )}
-      {/* End Account Dropdown */}
     </div>
   );
 };

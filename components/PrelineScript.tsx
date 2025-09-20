@@ -28,21 +28,32 @@ export default function PrelineScript() {
 
   useEffect(() => {
     const initPreline = async () => {
-      await loadPreline();
+      try {
+        await loadPreline();
+        
+        // Wait a bit longer for DOM to be ready
+        setTimeout(() => {
+          if (window.HSStaticMethods) {
+            window.HSStaticMethods.autoInit();
+          }
+        }, 200);
+      } catch (error) {
+        console.error("Failed to load Preline:", error);
+      }
     };
 
     initPreline();
   }, []);
 
   useEffect(() => {
-    setTimeout(() => {
-      if (
-        window.HSStaticMethods &&
-        typeof window.HSStaticMethods.autoInit === "function"
-      ) {
+    // Reinitialize on route changes
+    const reinitTimeout = setTimeout(() => {
+      if (window.HSStaticMethods) {
         window.HSStaticMethods.autoInit();
       }
-    }, 100);
+    }, 300);
+
+    return () => clearTimeout(reinitTimeout);
   }, [path]);
 
   return null;

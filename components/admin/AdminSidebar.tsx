@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import {
@@ -9,9 +11,8 @@ import {
   IconPhoto,
 } from "@tabler/icons-react";
 import { AdminSidebarMenuTypes } from "@/types";
-import { Button } from "@react-email/components";
 import SignOutButton from "../SignOutButton";
-import UserProfileDropdown from "../UserProfileDropdown";
+import { usePreline } from "@/hooks/use-preline";
 
 const adminSidebarMenu: AdminSidebarMenuTypes[] = [
   {
@@ -67,6 +68,9 @@ const adminSidebarMenu: AdminSidebarMenuTypes[] = [
 ];
 
 const AdminSidebar = () => {
+  // Initialize Preline components
+  usePreline();
+
   return (
     <div
       id="hs-pro-sidebar"
