@@ -6,9 +6,7 @@ import AdminSidebar from "@/components/admin/AdminSidebar";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { db } from "@/database/drizzle";
-import { user } from "@/database/schema";
-import { eq } from "drizzle-orm";
+import config from "@/lib/config";
 
 const Layout = async ({ children }: { children: ReactNode }) => {
   const session = await auth.api.getSession({
@@ -21,12 +19,10 @@ const Layout = async ({ children }: { children: ReactNode }) => {
     redirect("/sign-in");
   }
 
-  const isAdmin = await db
-    .select({ isAdmin: user.role })
-    .from(user)
-    .where(eq(user.id, session.user.id))
-    .limit(1)
-    .then((res) => res[0]?.isAdmin === "admin");
+  const isAdmin = await fetch(`${config.env.betterAuthURL}/api/user/${session.user.id}/role`)
+    .then(res => res.json())
+    .then(data => data.isAdmin)
+    .catch(() => false);
 
   if (!isAdmin) {
     redirect("/");

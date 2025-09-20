@@ -8,9 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { getInitials } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { IconSettings, IconUser } from "@tabler/icons-react";
-import { db } from "@/database/drizzle";
-import { eq, is } from "drizzle-orm";
-import { user as userTable } from "@/database/schema";
+import config from "@/lib/config";
 
 const UserProfileDropdown = async () => {
   const session = await authClient.getSession({
@@ -27,12 +25,10 @@ const UserProfileDropdown = async () => {
 
   let isAdmin = false;
   if (sessionUser) {
-    isAdmin = await db
-      .select({ isAdmin: userTable.role })
-      .from(userTable)
-      .where(eq(userTable.id, sessionUser.id))
-      .limit(1)
-      .then((res) => res[0]?.isAdmin === "admin");
+    isAdmin = await fetch(`${config.env.betterAuthURL}/api/user/${sessionUser.id}/role`)
+      .then(res => res.json())
+      .then(data => data.isAdmin)
+      .catch(() => false);
   }
 
   return (
