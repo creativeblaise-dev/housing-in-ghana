@@ -43,10 +43,10 @@ const SimpleCarousel = ({ slug }: { slug: string }) => {
 
   return (
     <section className="bg-[#fffdeb]">
-      <div className="relative isolate overflow-hidden bg-[#313232] py-4 sm:py-24 px-5 lg:px-20 pb-10 lg:py-10 ">
+      <div className="relative isolate overflow-hidden bg-[#313232] py-4 sm:py-24  lg:px-20 lg:py-10 -mt-24 pt-28 pb-12 px-10 ">
         <div className="mx-auto max-w-7xl">
           <div className=" mx-auto grid justify-center items-center max-w-2xl  gap-x-8 gap-y-16 lg:max-w-none ">
-            <div className="max-w-xl lg:max-w-lg text-center ">
+            <div className="max-w-xl lg:max-w-lg text-center lg:pt-20">
               <h4 className="text-2xl font-semibold tracking-tight text-amber-200 mb-2">
                 Mileage Gallery
               </h4>

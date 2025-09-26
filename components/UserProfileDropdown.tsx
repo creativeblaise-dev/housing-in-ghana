@@ -162,7 +162,7 @@ const UserProfileDropdown = () => {
         </div>
       ) : (
         <Link href="/sign-in">
-          <Button className="bg-white text-stone-700 text-md font-bold hover:bg-slate-200 cursor-pointer">
+          <Button className="bg-transparent shadow-none text-stone-700 text-sm font-bold  cursor-pointer">
             Sign In
             <span className="text-[#FF202B]">
               <IconUser className="h-4 w-4" />

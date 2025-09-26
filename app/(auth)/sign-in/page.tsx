@@ -14,9 +14,6 @@ const SignIn = () => (
       email: "",
       password: "",
     }}
-    onSubmit={(data: Record<string, any>) =>
-      signIn(data as Pick<AuthCredentials, "email" | "password">)
-    }
   />
 );
 

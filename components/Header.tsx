@@ -13,9 +13,10 @@ const Header = ({ userprofile }: { userprofile: ReactNode }) => {
   const pathname = usePathname();
 
   return (
-    <header className="bg-[#ffffff] shadow-md sticky top-0 z-50 ">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between py-4">
+    <header className="bg-transparent backdrop-blur-md sticky top-0 z-50">
+      <div className="  bg-[url(/images/hig-line.png)] bg-cover h-1.5 bg-no-repeat  "></div>
+      <div className="mx-4 max-w-7xl px-4 sm:px-6 lg:px-8 shadow-md bg-[#ffffff]/90 my-2 rounded-full">
+        <div className="flex items-center justify-between py-2 mx-2">
           <div className="flex items-center">
             <Link href="/">
               <Image
@@ -29,7 +30,7 @@ const Header = ({ userprofile }: { userprofile: ReactNode }) => {
           </div>
 
           {/* Desktop Nav */}
-          <nav className="hidden lg:flex space-x-8">
+          <nav className="hidden lg:flex space-x-8 lg:items-center lg:justify-center lg:space-y-0">
             {navigation.map((item) => {
               const isActive =
                 (item.href !== "/" &&
@@ -38,7 +39,7 @@ const Header = ({ userprofile }: { userprofile: ReactNode }) => {
                 pathname === item.href;
 
               const desktopMenuItemClasses: string =
-                " transition-colors py-2 md:py-2 font-bold letter-spacing tracking-wide text-md hover:text-[#FF202B] cursor-pointer";
+                " transition-colors py-2 md:py-2 font-bold tracking-wide text-sm hover:text-[#FF202B] cursor-pointer";
 
               const activeClasses = isActive ? " text-[#FF202B]" : "";
               return (
@@ -48,7 +49,7 @@ const Header = ({ userprofile }: { userprofile: ReactNode }) => {
                   className={
                     item.name === "Advertise With Us"
                       ? desktopMenuItemClasses +
-                        " bg-[#FF202B] text-white w-auto cursor-pointer border-1 rounded-full md:px-4 hover:bg-[#232525] hover:text-white "
+                        " bg-[#FF202B] text-white w-auto cursor-pointer border-b-2 border-[#232525] rounded-full md:px-4 hover:bg-[#232525] hover:text-white "
                       : desktopMenuItemClasses + activeClasses
                   }
                 >
@@ -70,7 +71,6 @@ const Header = ({ userprofile }: { userprofile: ReactNode }) => {
           </div>
         </div>
       </div>
-      <div className="bg-[url(/images/hig-line.png)] bg-cover h-1.5 bg-no-repeat  "></div>
 
       {/* Mobile Menu Dialog */}
       <Dialog

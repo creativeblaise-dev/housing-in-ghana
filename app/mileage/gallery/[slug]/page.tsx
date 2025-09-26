@@ -5,7 +5,6 @@ import {
   dehydrate,
   HydrationBoundary,
 } from "@tanstack/react-query";
-import SingleMileageGallery from "@/components/SingleMileageGallery";
 
 import SimpleCarousel from "@/components/SimpleCarousel";
 

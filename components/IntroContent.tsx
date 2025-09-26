@@ -13,7 +13,7 @@ const IntroContent = () => {
           buyers, renters, investors—nationwide.
         </p>
         <div className="flex gap-3 ">
-          <Button className="bg-[#FF202B] text-white text-md  py-7 md:p-7 font uppercase w-auto cursor-pointer border-1 border-[#FF202B]">
+          <Button className="bg-[#FF202B] border-b-4 border-[#232525] rounded-full text-white text-md  py-7 md:p-7 font uppercase w-auto cursor-pointer">
             Get The Lastest Edition
           </Button>
           {/* <Button className="bg-[#222020] text-white text-md py-7 md:p-7  hover:text-white uppercase cursor-pointer border-1 border-[#F6BB2A]">

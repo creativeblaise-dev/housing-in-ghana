@@ -4,11 +4,9 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
-
 import { Path, useForm } from "react-hook-form";
 import Link from "next/link";
 import { toast } from "sonner";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -21,11 +19,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { FIELD_NAMES } from "@/constants";
 import { Loader2 } from "lucide-react";
+import { authClient } from "@/lib/auth-client"; // Import your better-auth client
 
 type Props = {
   formSchema: z.ZodObject<any>;
   defaultValues: Record<string, any>;
-  onSubmit: (
+  onSubmit?: (
     data: Record<string, any>
   ) => Promise<{ success: boolean; error?: string }>;
   type: "SIGN_UP" | "SIGN_IN";
@@ -43,23 +42,95 @@ const AuthForm = ({ type, formSchema, defaultValues, onSubmit }: Props) => {
 
   const handleSubmit = async (data: Record<string, any>) => {
     setIsLoading(true);
-    const result = await onSubmit(data);
+
+    // Show immediate feedback
+    const loadingToast = toast.loading(
+      isSignIn ? "Signing you in..." : "Creating your account..."
+    );
 
     try {
-      if (result.success) {
-        // Handle successful sign-in or sign-up (e.g., redirect or show a success message)
+      let result;
+
+      if (isSignIn) {
+        // Use better-auth signIn method
+        const { data: authData, error } = await authClient.signIn.email({
+          email: data.email,
+          password: data.password,
+        });
+
+        if (error) {
+          result = { success: false, error: error.message };
+        } else {
+          result = { success: true };
+
+          // Better-auth usually handles session automatically
+          // Force a router refresh to update auth state immediately
+          router.refresh();
+
+          toast.success("Successfully signed in! Redirecting...", {
+            id: loadingToast,
+          });
+
+          // Use replace for better UX and immediate redirect
+          router.replace("/");
+          return;
+        }
+      } else {
+        // Use better-auth signUp method
+        const { data: authData, error } = await authClient.signUp.email({
+          name: data.name,
+          email: data.email,
+          password: data.password,
+        });
+
+        if (error) {
+          result = { success: false, error: error.message };
+        } else {
+          result = { success: true };
+
+          toast.success("Account created successfully! Redirecting...", {
+            id: loadingToast,
+          });
+
+          // Auto sign-in after successful sign-up with better-auth
+          const { error: signInError } = await authClient.signIn.email({
+            email: data.email,
+            password: data.password,
+          });
+
+          if (!signInError) {
+            router.refresh();
+            router.replace("/");
+            return;
+          }
+        }
+      }
+
+      // Handle custom onSubmit if provided (fallback)
+      if (onSubmit && !result?.success) {
+        result = await onSubmit(data);
+      }
+
+      if (result?.success) {
         toast.success(
           isSignIn
-            ? "You have successfully signed in."
-            : "Your account has been created."
+            ? "Successfully signed in! Redirecting..."
+            : "Account created successfully! Redirecting...",
+          { id: loadingToast }
         );
 
-        router.push("/"); // Redirect to contributor profile page after successful sign-in/sign-up
+        router.refresh();
+        router.replace("/");
       } else {
-        toast.warning(result.error || "User sign in failed!"); //update this logic for email verification
+        toast.error(result?.error || "Authentication failed!", {
+          id: loadingToast,
+        });
       }
     } catch (error) {
-      toast.error("An unexpected error occurred!");
+      console.error("Auth error:", error);
+      toast.error("An unexpected error occurred!", {
+        id: loadingToast,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -94,6 +165,8 @@ const AuthForm = ({ type, formSchema, defaultValues, onSubmit }: Props) => {
                       type={field.name === "password" ? "password" : "text"}
                       placeholder={field.name === "password" ? "********" : ""}
                       {...field}
+                      disabled={isLoading}
+                      className="transition-all duration-200 focus:ring-2 focus:ring-blue-500"
                     />
                   </FormControl>
                   <FormMessage />
@@ -103,12 +176,15 @@ const AuthForm = ({ type, formSchema, defaultValues, onSubmit }: Props) => {
           ))}
           <div className="flex justify-end">
             <Button
-              className="w-full bg-[#1c1c1c]"
+              className="w-full bg-[#1c1c1c] hover:bg-[#2c2c2c] transition-colors duration-200"
               type="submit"
               disabled={isLoading}
             >
               {isLoading ? (
-                <Loader2 className="animate-spin size-4 " />
+                <>
+                  <Loader2 className="animate-spin size-4 mr-2" />
+                  {isSignIn ? "Signing In..." : "Creating Account..."}
+                </>
               ) : isSignIn ? (
                 "Sign In"
               ) : (
@@ -123,7 +199,7 @@ const AuthForm = ({ type, formSchema, defaultValues, onSubmit }: Props) => {
         {isSignIn ? "Don't have an account?" : "Already have an account?"}
         <Link
           href={isSignIn ? "/sign-up" : "/sign-in"}
-          className="text-red-600 font-bold"
+          className="text-red-600 font-bold hover:text-red-700 transition-colors duration-200"
         >
           {isSignIn ? " Sign up " : " Sign in "}
         </Link>

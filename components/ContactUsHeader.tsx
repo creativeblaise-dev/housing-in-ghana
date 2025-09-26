@@ -6,7 +6,10 @@ import { ImagesSlider } from "./ui/images-slider";
 const ContactUsHeader = () => {
   const images = ["/images/3220.jpg"];
   return (
-    <ImagesSlider className="h-[23rem]" images={images}>
+    <ImagesSlider
+      className="h-[23rem] -mt-24 pt-28 pb-12 px-10"
+      images={images}
+    >
       <motion.div
         initial={{
           opacity: 0,

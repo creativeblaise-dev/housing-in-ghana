@@ -24,8 +24,8 @@ const Gallery = async () => {
 
   return (
     <>
-      <div className="relative isolate overflow-hidden bg-amber-900 py-8 sm:py-24 px-10 lg:px-20 pb-10 lg:py-20 ">
-        <div className="mx-auto max-w-7xl">
+      <div className="relative isolate overflow-hidden bg-amber-900 py-8 sm:py-24  lg:px-20 lg:py-20 -mt-24 pt-28 pb-12 px-10 ">
+        <div className="mx-auto max-w-7xl lg:pt-20">
           <div className=" mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-2">
             <div className="max-w-xl lg:max-w-lg">
               <h2 className="text-5xl font-semibold tracking-tight text-white ">
@@ -39,7 +39,7 @@ const Gallery = async () => {
                 with us.
               </p>
             </div>
-            <div className="flex lg:top-2 lg:absolute lg:right-10 items-center">
+            <div className="flex lg:top-20 lg:absolute lg:right-10 items-center">
               <Image
                 src="/images/m-collage.png"
                 width={600}

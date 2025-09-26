@@ -53,7 +53,7 @@ const Magazine = async () => {
 
   return (
     <main>
-      <div className="relative flex pt-10 w-full overflow-hidden bg-[url('/images/modern-home.jpg')] bg-center [background-size:cover] antialiased md:items-center md:justify-center px-10 md:px-20 pb-10 md:py-15 ">
+      <div className="relative flex w-full overflow-hidden bg-[url('/images/modern-home.jpg')] bg-center [background-size:cover] antialiased md:items-center md:justify-center -mt-24 pt-28 pb-12 px-10 md:px-20 md:py-15 ">
         <div
           className={cn(
             "pointer-events-none absolute inset-0 bg-[#111111d9]  select-none"
@@ -64,7 +64,7 @@ const Magazine = async () => {
           className="-top-40 left-0 md:-top-20 md:left-10"
           fill="white"
         />
-        <div className="relative  z-10 flex gap-5 flex-col md:flex-row  mx-auto w-full max-w-7xl  ">
+        <div className="relative  z-10 flex gap-5 flex-col md:flex-row  mx-auto w-full max-w-7xl lg:pt-20 ">
           <div className="md:flex-3">
             <h1 className="bg-opacity-50 bg-gradient-to-b from-white to-neutral-400 bg-clip-text text-left text-5xl font-bold text-transparent mb-4 pt-4">
               Dive into the pages of <br /> Housing
@@ -89,7 +89,7 @@ const Magazine = async () => {
             </p>
             <div className="mt-8">
               <Link href="/magazine/edition/03">
-                <Button className="bg-[#FF202B] text-white text-md font-bold hover:text-black hover:bg-[#e6d30a] py-5 md:p-5 font uppercase w-auto cursor-pointer border-1 border-[#ececec]">
+                <Button className="bg-[#FF202B] rounded-full text-white text-md font-bold hover:text-black hover:bg-[#e6d30a] py-5 md:p-5 font uppercase w-auto cursor-pointer border-1 border-[#ececec]">
                   Get The Lastest Edition
                 </Button>
               </Link>

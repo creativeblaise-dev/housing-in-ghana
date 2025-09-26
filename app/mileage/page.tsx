@@ -51,7 +51,7 @@ const cards: LayoutImages[] = [
 
 const Mileage = () => {
   return (
-    <main className="flex min-h-screen flex-1 flex-col  xs:px-1 ">
+    <main className="flex min-h-screen flex-1 flex-col xs:px-1 ">
       <MileageHeroDispaly />
       <section className="flex gap-10 flex-col md:flex-row px-10 md:px-20 pb-10 lg:py-10  bg-[#ffffff]">
         <div className=" md:flex-3">
@@ -106,8 +106,8 @@ const Mileage = () => {
             housing market.
           </p>
           <div className="flex mt-6">
-            <Link href="/advertise-with-us">
-              <Button className="bg-[#232525] text-white text-md  hover:text-white hover:bg-[#FF202B] py-5 md:p-5 font uppercase w-auto cursor-pointer border-1 border-[#F6BB2A]">
+            <Link href="/advertise">
+              <Button className="bg-[#343434] rounded-full text-white text-md  hover:text-white hover:bg-[#FF202B] py-5 md:p-5 font  w-auto cursor-pointer border-b-2  border-[#FF202B]">
                 Get Started
               </Button>
             </Link>

@@ -16,9 +16,6 @@ const SignUp = () => (
       password: "",
       // businessCertificate: "",
     }}
-    onSubmit={(data: Record<string, any>) =>
-      signUpUser(data as AuthCredentials)
-    }
   />
 );
 

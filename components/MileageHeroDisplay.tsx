@@ -10,7 +10,10 @@ const MileageHeroDispaly = () => {
     "/images/mileage-preview/IMG_4293-HDR_2.jpg",
   ];
   return (
-    <ImagesSlider className="h-[25rem]" images={images}>
+    <ImagesSlider
+      className="h-[35rem] -mt-24 pt-28 pb-12 px-10"
+      images={images}
+    >
       <motion.div
         initial={{
           opacity: 0,
@@ -23,7 +26,7 @@ const MileageHeroDispaly = () => {
         transition={{
           duration: 0.6,
         }}
-        className="z-50 flex flex-col justify-center lg:px-20 items-center"
+        className="z-50 flex flex-col justify-center lg:px-20 items-center "
       >
         <motion.h1 className="font-bold text-5xl lg:text-5xl text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 py-4">
           Mileage – Extending Your Reach <br /> Across Ghana

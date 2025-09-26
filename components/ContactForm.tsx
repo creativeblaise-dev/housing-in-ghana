@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 const ContactForm = () => {
   return (
-    <Card className="w-full max-w-sm lg:absolute lg:top-100">
+    <Card className="w-full max-w-sm lg:absolute lg:top-80">
       <CardHeader>
         <CardTitle>Send a message</CardTitle>
         <CardDescription>

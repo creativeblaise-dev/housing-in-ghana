@@ -69,3 +69,15 @@ export const updateArticle = async (slug: string, params: ArticleType) => {
     };
   }
 };
+
+export const deleteArticle = async (id: string) => {
+  try {
+    await db.delete(article).where(eq(article.id, id));
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      message: "An error occurred while deleting article.",
+    };
+  }
+};

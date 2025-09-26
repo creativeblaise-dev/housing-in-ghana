@@ -8,7 +8,7 @@ const Contact = () => {
       <section>
         <ContactUsHeader />
       </section>
-      <section className="flex flex-col lg:flex-row gap-4 px-10 lg:px-50 pb-20 lg:py-10 bg-stone-100 lg:h-120 ">
+      <section className="flex flex-col lg:flex-row gap-4 px-10 lg:px-50 pb-20 lg:py-10 bg-zinc-200 lg:h-120 ">
         <div className="lg:flex-2">
           <h1 className="text-4xl font-bold text-[#141516]  pt-4 text-balance">
             Let's get talking

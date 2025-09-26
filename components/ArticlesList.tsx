@@ -1,341 +1,420 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
-import { ArticleType } from "@/types";
+import React, { useMemo, useState } from "react";
+import {
+  useReactTable,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  flexRender,
+  createColumnHelper,
+  ColumnDef,
+} from "@tanstack/react-table";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
-import { IconCircleCheckFilled, IconCircleXFilled } from "@tabler/icons-react";
-import { capitalizeSentences } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
+import {
+  IconEdit,
+  IconEye,
+  IconTrash,
+  IconChevronLeft,
+  IconChevronRight,
+  IconChevronsLeft,
+  IconChevronsRight,
+  IconSearch,
+  IconSortAscending,
+  IconSortDescending,
+} from "@tabler/icons-react";
+import { ArticleType } from "@/types";
+import { capitalizeSentences, formatDate } from "@/lib/utils";
+import Loader from "@/components/Loader";
+import DeleteArticleDialog from "./DeleteArticleDialog";
+import { deleteArticle } from "@/server/actions/article";
+
+const columnHelper = createColumnHelper<ArticleType>();
 
 const ArticlesList = () => {
+  const [globalFilter, setGlobalFilter] = useState("");
+  const [deleteDialog, setDeleteDialog] = useState<{
+    isOpen: boolean;
+    article: ArticleType | null;
+  }>({
+    isOpen: false,
+    article: null,
+  });
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const queryClient = useQueryClient();
+
+  // Fetch articles data
   const {
-    data: allArticles,
-    isFetching,
+    data: articles = [],
+    isLoading,
     isError,
+    error,
   } = useQuery({
-    queryKey: ["articles"],
+    queryKey: ["admin-articles"],
     queryFn: () => fetch("/api/articles").then((res) => res.json()),
-    // Data is already available from server prefetch
   });
 
-  if (isFetching) return <div>Loading...</div>;
-  if (isError) return <div>Error loading posts</div>;
+  // Handle delete action
+  const handleDeleteClick = (article: ArticleType) => {
+    setDeleteDialog({
+      isOpen: true,
+      article,
+    });
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteDialog.article) return;
+
+    setIsDeleting(true);
+    try {
+      const articleId = deleteDialog.article.id;
+
+      if (!articleId) {
+        toast.error("Invalid article ID");
+        setIsDeleting(false);
+        return;
+      }
+
+      const result = await deleteArticle(articleId);
+
+      if (result.success) {
+        toast.success("Article deleted successfully");
+        // Invalidate and refetch articles
+        queryClient.invalidateQueries({ queryKey: ["admin-articles"] });
+        setDeleteDialog({ isOpen: false, article: null });
+      } else {
+        toast.error(result.message || "Failed to delete article");
+      }
+    } catch (error) {
+      console.error("Error deleting article:", error);
+      toast.error("An unexpected error occurred");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteDialog({ isOpen: false, article: null });
+  };
+
+  // Define columns
+  const columns = useMemo<ColumnDef<ArticleType, any>[]>(
+    () => [
+      columnHelper.accessor("featuredImageUrl", {
+        header: "Image",
+        cell: (info) => (
+          <div className="w-16 h-12 relative rounded-md overflow-hidden">
+            {info.getValue() ? (
+              <Image
+                src={info.getValue()}
+                alt="Article thumbnail"
+                fill
+                className="object-cover"
+                sizes="64px"
+              />
+            ) : (
+              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                <span className="text-xs text-gray-400">No image</span>
+              </div>
+            )}
+          </div>
+        ),
+        enableSorting: false,
+        enableGlobalFilter: false,
+      }),
+      columnHelper.accessor("title", {
+        header: "Title",
+        cell: (info) => (
+          <div className="max-w-xs">
+            <p className="font-medium text-sm text-gray-900 truncate">
+              {capitalizeSentences(info.getValue().toLowerCase())}
+            </p>
+          </div>
+        ),
+      }),
+      columnHelper.accessor("category", {
+        header: "Category",
+        cell: (info) => (
+          <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+            {info.getValue()}
+          </Badge>
+        ),
+      }),
+      columnHelper.accessor("status", {
+        header: "Status",
+        cell: (info) => {
+          const status = info.getValue();
+          return (
+            <Badge
+              variant={status === "published" ? "default" : "secondary"}
+              className={
+                status === "published"
+                  ? "bg-green-100 text-green-800"
+                  : "bg-yellow-100 text-yellow-800"
+              }
+            >
+              {capitalizeSentences(status)}
+            </Badge>
+          );
+        },
+      }),
+      columnHelper.accessor("createdAt", {
+        header: "Created",
+        cell: (info) => (
+          <span className="text-sm text-gray-600">
+            {formatDate(new Date(info.getValue()))}
+          </span>
+        ),
+      }),
+      columnHelper.accessor("updatedAt", {
+        header: "Updated",
+        cell: (info) => (
+          <span className="text-sm text-gray-600">
+            {formatDate(new Date(info.getValue()))}
+          </span>
+        ),
+      }),
+      columnHelper.display({
+        id: "actions",
+        header: "Actions",
+        cell: (info) => {
+          const article = info.row.original;
+          return (
+            <div className="flex items-center gap-2">
+              <Link href={`/articles/${article.slug}`} target="_blank">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0 hover:bg-blue-100"
+                >
+                  <IconEye className="h-4 w-4 text-blue-600" />
+                </Button>
+              </Link>
+              <Link href={`/admin/articles/edit/${article.slug}`}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0 hover:bg-green-100"
+                >
+                  <IconEdit className="h-4 w-4 text-green-600" />
+                </Button>
+              </Link>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 w-8 p-0 hover:bg-red-100"
+                onClick={() => handleDeleteClick(article)}
+              >
+                <IconTrash className="h-4 w-4 text-red-600" />
+              </Button>
+            </div>
+          );
+        },
+        enableSorting: false,
+        enableGlobalFilter: false,
+      }),
+    ],
+    []
+  );
+
+  // Initialize table
+  const table = useReactTable({
+    data: articles,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    globalFilterFn: "includesString",
+    state: {
+      globalFilter,
+    },
+    onGlobalFilterChange: setGlobalFilter,
+    initialState: {
+      pagination: {
+        pageSize: 10, // Already set to 10 articles per page
+      },
+    },
+  });
+
+  if (isLoading) return <Loader />;
+  if (isError) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-red-600">Error loading articles: {error?.message}</p>
+      </div>
+    );
+  }
+
+  const currentPage = table.getState().pagination.pageIndex + 1;
+  const totalPages = table.getPageCount();
+  const pageSize = table.getState().pagination.pageSize;
+  const startRow = table.getState().pagination.pageIndex * pageSize + 1;
+  const endRow = Math.min(
+    (table.getState().pagination.pageIndex + 1) * pageSize,
+    table.getFilteredRowModel().rows.length
+  );
+  const totalRows = table.getFilteredRowModel().rows.length;
 
   return (
-    <main>
-      {/* Table Section */}
-      <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-0 lg:py-6 mx-auto">
-        {/* Card */}
-        <div className="flex flex-col">
-          <div className="overflow-y-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
-            <div className="min-w-full inline-block align-middle">
-              <div className="bg-white border border-gray-200 rounded-xl shadow-2xs overflow-hidden dark:bg-neutral-800 dark:border-neutral-700">
-                {/* Header */}
-                <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
-                  <div>
-                    <h2 className="text-xl font-semibold text-gray-800 dark:text-neutral-200">
-                      Articles
-                    </h2>
-                    <p className="text-sm text-gray-600 dark:text-neutral-400">
-                      Add articles, edit and more.
-                    </p>
-                  </div>
-
-                  <div>
-                    <div className="inline-flex gap-x-2">
-                      <a
-                        className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
-                        href="#"
-                      >
-                        View all
-                      </a>
-
-                      <Link
-                        className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                        href="/admin/articles/new"
-                      >
-                        <svg
-                          className="shrink-0 size-4"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M5 12h14" />
-                          <path d="M12 5v14" />
-                        </svg>
-                        Post Article
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-                {/* End Header */}
-
-                {/* Table */}
-                <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
-                  <thead className="bg-gray-50 dark:bg-neutral-800">
-                    <tr>
-                      <th scope="col" className="ps-6 py-3 text-start">
-                        <label
-                          htmlFor="hs-at-with-checkboxes-main"
-                          className="flex"
-                        >
-                          <input
-                            type="checkbox"
-                            className="shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                            id="hs-at-with-checkboxes-main"
-                          />
-                          <span className="sr-only">Checkbox</span>
-                        </label>
-                      </th>
-
-                      <th
-                        scope="col"
-                        className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start"
-                      >
-                        <div className="flex items-center gap-x-2">
-                          <span className="text-xs pl-10 font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                            Title
-                          </span>
-                        </div>
-                      </th>
-
-                      <th scope="col" className="px-6 py-3 text-start">
-                        <div className="flex items-center gap-x-2">
-                          <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                            Category
-                          </span>
-                        </div>
-                      </th>
-
-                      <th scope="col" className="px-6 py-3 text-start">
-                        <div className="flex items-center gap-x-2">
-                          <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                            Status
-                          </span>
-                        </div>
-                      </th>
-
-                      <th scope="col" className="px-6 py-3 text-start">
-                        <div className="flex items-center gap-x-2">
-                          <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                            Tags
-                          </span>
-                        </div>
-                      </th>
-
-                      <th scope="col" className="px-6 py-3 text-start">
-                        <div className="flex items-center gap-x-2">
-                          <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                            Created
-                          </span>
-                        </div>
-                      </th>
-
-                      <th scope="col" className="px-6 py-3 text-end"></th>
-                    </tr>
-                  </thead>
-
-                  <tbody className="divide-y divide-gray-200 dark:divide-neutral-700">
-                    {allArticles.map((article: ArticleType) => {
-                      const publishedDate = new Date(article.createdAt);
-                      return (
-                        <tr key={article.slug}>
-                          <td className="size-px whitespace-nowrap">
-                            <div className="ps-6 py-3">
-                              <label
-                                htmlFor="hs-at-with-checkboxes-1"
-                                className="flex"
-                              >
-                                <input
-                                  type="checkbox"
-                                  className="shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                                  id="hs-at-with-checkboxes-1"
-                                />
-                                <span className="sr-only">Checkbox</span>
-                              </label>
-                            </div>
-                          </td>
-                          <td className="h-auto ">
-                            <div className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 w-100">
-                              <div className="flex items-center gap-x-3 ">
-                                <Link
-                                  href={`/articles/${article.slug}`}
-                                  className="flex items-center gap-4"
-                                >
-                                  <Image
-                                    className="inline-block size-10 rounded-md"
-                                    width={100}
-                                    height={100}
-                                    src={
-                                      article.featuredImageUrl ||
-                                      "/images/avatar.png"
-                                    }
-                                    alt="Avatar"
-                                  />
-                                  <div className="grow">
-                                    <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
-                                      {capitalizeSentences(
-                                        article.title.toLowerCase()
-                                      )}
-                                    </span>
-                                    {/* <span className="block text-sm text-gray-500 dark:text-neutral-500">
-                                christina@site.com
-                              </span> */}
-                                  </div>
-                                </Link>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="size-px  whitespace-nowrap">
-                            <div className="px-6 py-3">
-                              <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
-                                {article.category}
-                              </span>
-                              {/* <span className="block text-sm text-gray-500 dark:text-neutral-500">
-                            Human resources
-                          </span> */}
-                            </div>
-                          </td>
-                          <td className="size-px whitespace-nowrap">
-                            <div className="px-6 py-3">
-                              <span
-                                className={
-                                  article.status === "published"
-                                    ? "py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500"
-                                    : "py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-red-100 text-red-800 rounded-full dark:bg-red-500/10 dark:text-red-500"
-                                }
-                              >
-                                {article.status === "published" ? (
-                                  <IconCircleCheckFilled
-                                    className="h-4 w-4"
-                                    aria-hidden="true"
-                                  />
-                                ) : (
-                                  <IconCircleXFilled
-                                    className="h-4 w-4"
-                                    aria-hidden="true"
-                                  />
-                                )}
-                                <span>{article.status}</span>
-                              </span>
-                            </div>
-                          </td>
-                          <td className="size-px whitespace-nowrap">
-                            <div className="px-6 py-3">
-                              <div className="flex items-center gap-x-3">
-                                <span className="text-sm text-gray-800 dark:text-neutral-500">
-                                  {article.tags?.join(", ") || "no tags"}
-                                </span>
-                                {/* <div className="flex w-full h-1.5 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700">
-                              <div
-                                className="flex flex-col justify-center overflow-hidden bg-gray-800 dark:bg-neutral-200"
-                                role="progressbar"
-                                style={{ width: "25%" }}
-                                aria-valuenow={25}
-                                aria-valuemin={0}
-                                aria-valuemax={100}
-                              ></div>
-                            </div> */}
-                              </div>
-                            </div>
-                          </td>
-                          <td className="size-px whitespace-nowrap">
-                            <div className="px-6 py-3">
-                              <span className="text-sm text-gray-500 dark:text-neutral-500">
-                                {publishedDate.toDateString()}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="size-px whitespace-nowrap">
-                            <div className="px-6 py-1.5">
-                              <Link
-                                className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500"
-                                href={`/admin/articles/edit/${article.slug}`}
-                              >
-                                Edit
-                              </Link>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-                {/* End Table */}
-
-                {/* Footer */}
-                <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
-                  <div>
-                    <p className="text-sm text-gray-600 dark:text-neutral-400">
-                      <span className="font-semibold text-gray-800 dark:text-neutral-200">
-                        {allArticles.length}
-                      </span>{" "}
-                      results
-                    </p>
-                  </div>
-
-                  <div>
-                    <div className="inline-flex gap-x-2">
-                      <button
-                        type="button"
-                        className="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
-                      >
-                        <svg
-                          className="shrink-0 size-4"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="m15 18-6-6 6-6" />
-                        </svg>
-                        Prev
-                      </button>
-
-                      <button
-                        type="button"
-                        className="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
-                      >
-                        Next
-                        <svg
-                          className="shrink-0 size-4"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="m9 18 6-6-6-6" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                {/* End Footer */}
-              </div>
-            </div>
-          </div>
+    <div className="w-full space-y-4">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">Articles</h2>
+          <p className="text-gray-600">
+            Manage your articles ({articles.length} total)
+          </p>
         </div>
-        {/* End Card */}
+        <Link href="/admin/articles/new">
+          <Button className="cursor-pointer">Create Article</Button>
+        </Link>
       </div>
-      {/* End Table Section */}
-    </main>
+
+      {/* Search */}
+      <div className="flex items-center space-x-2">
+        <div className="relative flex-1 max-w-sm">
+          <IconSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Input
+            placeholder="Search articles..."
+            value={globalFilter ?? ""}
+            onChange={(e) => setGlobalFilter(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+      </div>
+
+      {/* Table */}
+      <div className="rounded-md border border-gray-200 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <th
+                      key={header.id}
+                      className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      {header.isPlaceholder ? null : (
+                        <div
+                          className={
+                            header.column.getCanSort()
+                              ? "cursor-pointer select-none flex items-center gap-2 hover:text-gray-700"
+                              : ""
+                          }
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                          {{
+                            asc: <IconSortAscending className="h-4 w-4" />,
+                            desc: <IconSortDescending className="h-4 w-4" />,
+                          }[header.column.getIsSorted() as string] ?? null}
+                        </div>
+                      )}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {table.getRowModel().rows.map((row) => (
+                <tr key={row.id} className="hover:bg-gray-50">
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id} className="px-4 py-4 whitespace-nowrap">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Enhanced Pagination */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <p className="text-sm text-gray-700">
+            Showing <span className="font-medium">{startRow}</span> to{" "}
+            <span className="font-medium">{endRow}</span> of{" "}
+            <span className="font-medium">{totalRows}</span> articles
+          </p>
+
+          {/* Page indicator */}
+          <p className="text-sm text-gray-500">
+            Page <span className="font-medium">{currentPage}</span> of{" "}
+            <span className="font-medium">{totalPages}</span>
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.setPageIndex(0)}
+            disabled={!table.getCanPreviousPage()}
+            className="flex items-center gap-1"
+          >
+            <IconChevronsLeft className="h-4 w-4" />
+            <span className="hidden sm:inline">First</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+            className="flex items-center gap-1"
+          >
+            <IconChevronLeft className="h-4 w-4" />
+            <span className="hidden sm:inline">Previous</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+            className="flex items-center gap-1"
+          >
+            <span className="hidden sm:inline">Next</span>
+            <IconChevronRight className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            disabled={!table.getCanNextPage()}
+            className="flex items-center gap-1"
+          >
+            <span className="hidden sm:inline">Last</span>
+            <IconChevronsRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+
+      {/* Delete Dialog */}
+      <DeleteArticleDialog
+        isOpen={deleteDialog.isOpen}
+        onClose={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+        article={deleteDialog.article}
+        isDeleting={isDeleting}
+      />
+    </div>
   );
 };
 

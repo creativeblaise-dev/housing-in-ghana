@@ -30,7 +30,11 @@ export const signUpUser = async ({
   password,
 }: AuthCredentials) => {
   const existingUser = await db
-    .select()
+    .select({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+    })
     .from(user)
     .where(eq(user.email, email))
     .limit(1);
@@ -40,7 +44,7 @@ export const signUpUser = async ({
   }
 
   try {
-    await auth.api.signUpEmail({
+    const newUser = await auth.api.signUpEmail({
       body: {
         name,
         email,
@@ -48,7 +52,11 @@ export const signUpUser = async ({
       },
     });
 
-    return { success: true, message: "Sign up successful" };
+    return {
+      success: true,
+      message: "Sign up successful",
+      userId: newUser.user.id,
+    };
   } catch (error) {
     const e = error as Error;
     return { success: false, error: e.message || "Sign up failed" };

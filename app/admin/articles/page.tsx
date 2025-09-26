@@ -22,7 +22,6 @@ const AdminPageArticles = async () => {
   });
   return (
     <main>
-      <h1 className="text-4xl font-bold">Manage Articles</h1>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <ArticlesList />
       </HydrationBoundary>

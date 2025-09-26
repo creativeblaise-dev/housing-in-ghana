@@ -21,9 +21,9 @@ const Articles = async () => {
   });
   return (
     <main>
-      <div className="relative isolate overflow-hidden bg-stone-900 py-8 sm:py-24 px-10 lg:px-20 pb-10 lg:py-20 ">
+      <div className="relative isolate overflow-hidden bg-stone-900 py-8 sm:py-24 px-10 lg:px-20 pb-10 lg:py-20 -mt-24 pt-28 ">
         <div className="mx-auto max-w-7xl">
-          <div className=" mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-2">
+          <div className=" mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-2 lg:items-center lg:pt-30">
             <div className="max-w-xl lg:max-w-lg">
               <h2 className="text-5xl font-semibold tracking-tight text-white mb-4">
                 Insights, Trends & Inspiration for Ghana’s Housing Industry
@@ -37,7 +37,7 @@ const Articles = async () => {
                 innovations.
               </p>
             </div>
-            <div className="flex lg:top-15 lg:absolute lg:right-15 items-center">
+            <div className="flex lg:top-40 lg:absolute lg:right-15 items-center">
               <Image
                 src="/images/15554.jpg"
                 width={600}
