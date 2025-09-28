@@ -58,13 +58,13 @@ const ElevateBrand = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-400">
           <Link
             href="/advertise"
-            className="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-[#141516] hover:scale-105 transition-all duration-200 hover:shadow-lg"
+            className="inline-flex items-center justify-center px-8 py-3 border-2 border-white text-white font-semibold rounded-full hover:bg-white hover:text-[#141516] hover:scale-105 transition-all duration-200 hover:shadow-lg"
           >
             Tell Me More
           </Link>
           <Link
             href="/contact-us"
-            className="inline-flex items-center justify-center px-8 py-4 bg-[#FF202B] text-white font-semibold rounded-lg hover:bg-red-700 hover:scale-105 transition-all duration-200 hover:shadow-lg hover:shadow-[#FF202B]/25"
+            className="inline-flex items-center justify-center px-8 py-3 bg-[#FF202B] text-white font-semibold rounded-full hover:bg-red-700 hover:scale-105 transition-all duration-200 hover:shadow-lg hover:shadow-[#FF202B]/25"
           >
             Contact Our Team
           </Link>

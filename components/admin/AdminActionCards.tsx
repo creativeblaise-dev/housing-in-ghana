@@ -9,6 +9,7 @@ import {
 } from "../ui/card";
 import Image from "next/image";
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 const AdminActionCards = () => {
   return (
@@ -17,7 +18,7 @@ const AdminActionCards = () => {
         <CardHeader>
           <CardTitle>
             <h1 className="block text-lg font-bold text-gray-800 sm:text-4xl lg:text-2xl lg:leading-tight dark:text-white">
-              Manage client ads
+              Manage clients
             </h1>
           </CardTitle>
           <CardContent className="px-0 py-2">
@@ -62,9 +63,11 @@ const AdminActionCards = () => {
           </CardDescription>
         </CardHeader>
         <CardFooter className="px-2">
-          <Button className=" text-sm font-medium rounded-lg border border-transparent bg-red-500 text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 cursor-pointer">
-            <span>Add photos</span>
-          </Button>
+          <Link href="/admin/mileage">
+            <Button className=" text-sm font-medium rounded-lg border border-transparent bg-red-500 text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 cursor-pointer">
+              <span>Add photos</span>
+            </Button>
+          </Link>
         </CardFooter>
       </Card>
       <Card className="bg-[#ff2727] ">

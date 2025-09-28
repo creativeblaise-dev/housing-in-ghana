@@ -11,9 +11,9 @@ import {
 } from "drizzle-orm/pg-core";
 
 export const STATUS_ENUM = pgEnum("status", [
-  "approved",
-  "pending",
-  "rejected",
+  "active",
+  "inactive",
+  "suspended",
 ]);
 
 export const ARTICLE_STATUS_ENUM = pgEnum("article_status", [
@@ -23,6 +23,7 @@ export const ARTICLE_STATUS_ENUM = pgEnum("article_status", [
 ]);
 
 export const ROLE_ENUM = pgEnum("role", [
+  "subscriber",
   "contributor",
   "admin",
   "super_admin",
@@ -35,8 +36,8 @@ export const user = pgTable("user", {
   emailVerified: boolean("email_verified")
     .$defaultFn(() => false)
     .notNull(),
-  status: STATUS_ENUM("status").notNull().default("pending"),
-  role: ROLE_ENUM("role").notNull().default("contributor"),
+  status: STATUS_ENUM("status").notNull().default("active"),
+  role: ROLE_ENUM("role").notNull().default("subscriber"),
   image: text("image"),
   createdAt: timestamp("created_at")
     .$defaultFn(() => /* @__PURE__ */ new Date())

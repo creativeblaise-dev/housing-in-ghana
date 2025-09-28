@@ -2,6 +2,8 @@
 import { motion } from "motion/react";
 import React from "react";
 import { ImagesSlider } from "./ui/images-slider";
+import Link from "next/link";
+import { Button } from "./ui/button";
 
 const MileageHeroDispaly = () => {
   const images = [
@@ -31,6 +33,11 @@ const MileageHeroDispaly = () => {
         <motion.h1 className="font-bold text-5xl lg:text-5xl text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 py-4">
           Mileage – Extending Your Reach <br /> Across Ghana
         </motion.h1>
+        <Link href="/mileage/gallery">
+          <Button className="bg-[#282828] text-zinc-300 text-md  hover:text-white hover:bg-[#232525] py-5 md:p-5 rounded-full w-auto cursor-pointer border-1 border-[#F6BB2A]">
+            Browse Gallery
+          </Button>
+        </Link>
       </motion.div>
     </ImagesSlider>
   );

@@ -33,7 +33,7 @@ import {
 import { ArticleType } from "@/types";
 import { capitalizeSentences, formatDate } from "@/lib/utils";
 import Loader from "@/components/Loader";
-import DeleteArticleDialog from "./DeleteArticleDialog";
+import DeleteArticleDialog from "./admin/DeleteArticleDialog";
 import { deleteArticle } from "@/server/actions/article";
 
 const columnHelper = createColumnHelper<ArticleType>();
@@ -287,7 +287,7 @@ const ArticlesList = () => {
             placeholder="Search articles..."
             value={globalFilter ?? ""}
             onChange={(e) => setGlobalFilter(e.target.value)}
-            className="pl-10"
+            className="pl-10 bg-zinc-100"
           />
         </div>
       </div>

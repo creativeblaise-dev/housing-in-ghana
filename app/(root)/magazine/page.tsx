@@ -66,7 +66,7 @@ const Magazine = async () => {
         />
         <div className="relative  z-10 flex gap-5 flex-col md:flex-row  mx-auto w-full max-w-7xl lg:pt-20 ">
           <div className="md:flex-3">
-            <h1 className="bg-opacity-50 bg-gradient-to-b from-white to-neutral-400 bg-clip-text text-left text-5xl font-bold text-transparent mb-4 pt-4">
+            <h1 className="bg-opacity-50 bg-gradient-to-b from-white to-neutral-400 bg-clip-text text-left text-5xl font-bold text-transparent mb-4 pt-2">
               Dive into the pages of <br /> Housing
               <span className="text-[#FF202B] text-shadow-cyan-100 ">
                 {" "}
@@ -77,32 +77,30 @@ const Magazine = async () => {
             <p className=" text-stone-300 text-md text-balance mb-4">
               Editions packed with market insights, legal guidance, design
               inspiration, and developer spotlights shaping the nation’s
-              property landscape. With nationwide distribution across hotels,
-              malls, bookshops, and events, our bi-annual publication connects
-              thousands of readers to opportunities, trends, and trusted voices
-              in Ghana’s real estate industry."
-            </p>
-            <p className=" text-stone-300 text-md text-balance ">
-              We cover a wide range of topics, including home staging, interior
+              property landscape. With nationwide distribution, our yearly
+              publication connects thousands of readers to opportunities,
+              trends, and trusted voices in Ghana’s real estate industry. We
+              cover a wide range of topics, including home staging, interior
               design, mortgage financing, property management, investment
               strategies, and much more.
             </p>
-            <div className="mt-8">
+
+            <div className="mt-6">
               <Link href="/magazine/edition/03">
-                <Button className="bg-[#FF202B] rounded-full text-white text-md font-bold hover:text-black hover:bg-[#e6d30a] py-5 md:p-5 font uppercase w-auto cursor-pointer border-1 border-[#ececec]">
+                <Button className="bg-[#FF202B] rounded-full text-white text-md hover:text-black hover:bg-[#e6d30a] py-5 md:p-5 font-semibold w-auto cursor-pointer ">
                   Get The Lastest Edition
                 </Button>
               </Link>
             </div>
           </div>
           <div className="md:flex-2">
-            <div className="flex justify-center md:pt-1">
+            <div className="flex justify-center md:pt-1 ">
               <Image
-                src="/images/3rd-EditionHIGMag.png"
+                src="/images/IMG_4354_2.jpg"
                 height={400}
                 width={290}
                 alt="magazine edition"
-                className="rotate-3"
+                className="rotate-3 rounded-lg"
               />
             </div>
           </div>
@@ -112,8 +110,8 @@ const Magazine = async () => {
       <section className="flex flex-col px-10 gap-4 md:px-20 pb-10 md:py-10  lg:flex-row">
         <div className="md:flex-1/2">
           <h1 className="text-4xl  font-bold text-[#141516]  pt-4 text-balance mb-4">
-            Explore each issue’s unique journey through innovation, insight, and
-            inspiration."
+            Explore each edition’s unique journey through innovation, insight,
+            and inspiration."
           </h1>
           <p className=" text-md  text-stone-800 mt-4 text-balance">
             Housing <span className="text-[#FF202B]"> In Ghana</span> Magazine

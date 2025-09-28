@@ -10,6 +10,7 @@ import { MagazineEdition } from "@/types";
 import { eq, desc } from "drizzle-orm";
 import Subscribe from "@/components/Subscribe";
 import ArticlesVariantCards from "@/components/ArticlesVariantCards";
+import { formatDate } from "@/lib/utils";
 
 const page = async ({
   params,
@@ -28,13 +29,13 @@ const page = async ({
   const backgroundCoverImage = magazine[0].backgroundImage;
 
   return (
-    <main className="">
+    <main className="-mt-24  b-12">
       <section className="flex flex-col lg:flex-row h-auto bg-stone-100 gap-7 ">
         <div className="h-full flex-2">
           <div className="min-h-screen  relative isolate overflow-hidden bg-[#313232] py-8 sm:py-24 px-10 lg:px-5 lg:py-2 flex flex-col items-center justify-center">
             <div className="mx-auto max-w-5xl">
               <div className=" mx-auto grid justify-center items-center max-w-2xl  lg:max-w-none ">
-                <div className="max-w-xl lg:max-w-lg text-center ">
+                <div className="flex max-w-xl lg:max-w-lg items-center justify-center pt-20">
                   <Image
                     src={magazine[0].coverImage}
                     alt="Edition Cover"
@@ -58,14 +59,16 @@ const page = async ({
         </div>
         <div className="flex-2 p-8">
           <div className="mb-4">
-            <h1 className="text-4xl font-bold text-[#141516] mb-4 pt-4 text-balance">
+            <h1 className="text-4xl font-bold text-[#141516] mb-4 pt-25 text-balance">
               Housing In Ghana Magazine - <br />
               Edition{" "}
               <span className="text-[#FF202B]">{`#0${magazine[0].editionNumber}`}</span>
             </h1>
             <p>
               Edition Release Date:{" "}
-              <span className="italic">{magazine[0].releasedAt}</span>
+              <span className="italic">
+                {formatDate(new Date(magazine[0].releasedAt))}
+              </span>
             </p>
           </div>
           <h2 className="text-2xl font-bold text-[#141516] mb-2">

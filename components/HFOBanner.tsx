@@ -6,7 +6,11 @@ const HFOBanner = () => {
   return (
     <section className="px-10 md:px-20 pb-10 md:py-10 ">
       <div className="flex justify-center">
-        <Link href="/">
+        <Link
+          href="https://housingfaironline.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <Image
             src="/images/housingfair-banner-scaled.webp"
             width={900}

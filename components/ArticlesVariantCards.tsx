@@ -23,6 +23,8 @@ const ArticlesVariantCards = ({ header }: { header: string }) => {
 
   if (isFetching) return <Loader />;
   if (isError) return <div>Error loading posts</div>;
+
+  const articlesArray = Array.isArray(allArticles) ? allArticles : [];
   return (
     <>
       <div className="relative flex pt-5 w-full overflow-hidden bg-[url('/images/prydumano-design-vIbxvHj9m9g-unsplash.jpg')] bg-center [background-size:cover] antialiased md:items-center md:justify-center px-10 md:px-20 pb-10 md:py-15 ">
@@ -46,7 +48,7 @@ const ArticlesVariantCards = ({ header }: { header: string }) => {
             <div className="grid lg:grid-cols-3 gap-6">
               {/* Card */}
 
-              {allArticles
+              {articlesArray
                 .filter(
                   (foundArticle: ArticleType, index: number) =>
                     foundArticle.status === "published" && index < 3

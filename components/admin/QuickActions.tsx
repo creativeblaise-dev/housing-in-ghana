@@ -15,7 +15,7 @@ type QuickActionsProps = {
 
 const actionCardList: QuickActionsProps[] = [
   {
-    route: "#",
+    route: "/admin/articles/new",
     title: "Add a New Article",
     description:
       "Create and publish articles to engage your audience and share valuable insights.",
@@ -24,7 +24,7 @@ const actionCardList: QuickActionsProps[] = [
     ),
   },
   {
-    route: "#",
+    route: "/admin/magazine/new",
     title: "Add Magazine Edition",
     description:
       "Create and publish articles to engage your audience and share valuable insights.",

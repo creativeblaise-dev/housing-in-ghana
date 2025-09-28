@@ -89,33 +89,29 @@ const Advertise = () => {
           </div>
         </div>
       </section>
-      <section className="flex md:gap-15 flex-col md:flex-row px-10 md:px-20 pb-10 md:py-5  bg-[#ffffff]">
+      <section className="flex md:gap-15 flex-col md:flex-row px-10 md:px-20 pb-10 md:py-10  bg-[#ffffff]">
         <div className=" md:flex-1">
           <div className="flex justify-center ">
             <ThreeDCard image="/images/IMG_4297_2.jpg" />
           </div>
         </div>
         <div className=" md:flex-3 ">
-          <h1 className="text-4xl font-bold text-[#141516] mb-4 pt-4">
-            The Mileage Advantage
+          <h1 className="text-4xl font-bold text-[#141516] mb-4 pt-8">
+            Why Advertise With Us?
           </h1>
           <p className="text-md mb-4">
-            When you advertise with Housing
-            <span className="text-[#FF202B]"> In Ghana </span>, you’re not just
-            placing an ad — you’re securing a space in a trusted platform that
-            educates, informs, and inspires. Our content-driven approach means
-            your brand is seen alongside valuable real estate advice, industry
-            insights, and captivating stories that keep readers engaged.
+            Build brand awareness, generate leads, and connect with Ghana's
+            thriving real estate community through targeted advertising in
+            Housing In Ghana magazine.
           </p>
           <p className="text-md">
-            Whether you’re launching a new development, promoting your services,
-            or building brand authority, Mileage helps you achieve the
-            visibility and recognition you deserve in Ghana’s competitive
-            housing market.
+            Our multi-channel approach ensures your message reaches the right
+            audience, driving measurable results and business growth. Join
+            brands that are shaping the future of real estate in Ghana.
           </p>
           <div className="flex mt-6">
             {/* Pop up  */}
-            <Link href="/advertise">
+            <Link href="/contact-us">
               <Button className="bg-[#343434] rounded-full text-white text-md  hover:text-white hover:bg-[#FF202B] py-5 md:p-5 font  w-auto cursor-pointer border-b-2  border-[#FF202B]">
                 Get Started
               </Button>

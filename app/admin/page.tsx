@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import AdminDashboardStats from "@/components/AdminDashboardStats";
+import AdminDashboardStats from "@/components/admin/AdminDashboardStats";
 import AdminActionCards from "@/components/admin/AdminActionCards";
 import QuickActions from "@/components/admin/QuickActions";
 

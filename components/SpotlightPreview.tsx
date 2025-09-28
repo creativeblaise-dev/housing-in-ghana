@@ -40,7 +40,7 @@ const SpotlightPreview = () => {
           </div>
           <div className="flex mt-4">
             <Link href="/">
-              <Button className="bg-[#FF202B] text-white text-md  py-7 md:p-7 font uppercase w-auto cursor-pointer border-1 border-[#FF202B]">
+              <Button className="bg-[#FF202B] text-white text-md  py-6 md:p-6 rounded-full font-medium w-auto cursor-pointer border-1 border-[#FF202B]">
                 View Brand Spotlight
               </Button>
             </Link>

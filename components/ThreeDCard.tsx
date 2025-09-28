@@ -11,13 +11,13 @@ type CardImage = {
 const ThreeDCard = ({ image }: CardImage) => {
   return (
     <CardContainer className="inter-var ">
-      <CardBody className="bg-gray-50 relative group/card  dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[30rem] h-auto rounded-xl  ">
+      <CardBody className="bg-gray-50 relative group/card  dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-full sm:w-[30rem] h-auto rounded-xl  ">
         <CardItem translateZ="100" className="w-full ">
           <Image
             src={image}
             height="1000"
             width="1000"
-            className="h-90 w-full object-cover shadow-stone-400 shadow-sm rounded-xl group-hover/card:shadow-lg"
+            className="lg:h-90 w-full object-cover shadow-stone-400 shadow-sm rounded-xl group-hover/card:shadow-lg"
             alt="magazine thumbnail"
           />
         </CardItem>

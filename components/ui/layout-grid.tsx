@@ -19,7 +19,7 @@ export const LayoutGrid = ({ cards }: { cards: LayoutImages[] }) => {
   };
 
   return (
-    <div className="w-full h-180 p-10 grid grid-cols-1 md:grid-cols-3  max-w-7xl mx-auto gap-4 relative">
+    <div className="w-full h-180 lg:p-10 grid pt-6 md:grid-cols-3 grid-cols-2 max-w-7xl mx-auto gap-4 relative">
       {cards.map((card, i) => (
         <div key={i} className={cn(card.className, "")}>
           <motion.div
@@ -69,7 +69,7 @@ const ImageComponent = ({ card }: { card: LayoutImages }) => {
 
 const SelectedCard = ({ selected }: { selected: LayoutImages | null }) => {
   return (
-    <div className="bg-transparent h-full w-full flex flex-col justify-end rounded-lg shadow-2xl relative z-[60]">
+    <div className="bg-transparent h-full w-full flex flex-col justify-end rounded-lg shadow-2xl relative z-[0]">
       <motion.div
         initial={{
           opacity: 0,

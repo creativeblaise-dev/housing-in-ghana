@@ -19,6 +19,6 @@ export const navigation: SiteNavigation[] = [
   { name: "Magazine", href: "/magazine" },
   { name: "Mileage", href: "/mileage" },
   { name: "Articles", href: "/articles" },
-  { name: "Contact", href: "/contact-us" },
+  { name: "Contact Us", href: "/contact-us" },
   { name: "Advertise With Us", href: "/advertise" },
 ];

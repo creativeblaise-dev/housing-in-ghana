@@ -16,7 +16,7 @@ const WhyHIG = () => {
         </p>
       </div>
       <div className=" md:flex-3">
-        <section className="flex flex-col lg:flex-row gap-4">
+        <section className="grid grid-cols-2 gap-4">
           <div className="justify-center ">
             <Image
               urlEndpoint="https://ik.imagekit.io/devBlaiseElolo"

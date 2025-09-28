@@ -3,19 +3,16 @@ import { ReactNode } from "react";
 import AdminHeader from "@/components/admin/AdminHeader";
 import AdminMainContent from "@/components/admin/AdminMainContent";
 import AdminSidebar from "@/components/admin/AdminSidebar";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { getServerSession } from "@/lib/auth-protection";
 import { redirect } from "next/navigation";
 import { db } from "@/database/drizzle";
 import { user } from "@/database/schema";
 import { eq } from "drizzle-orm";
 
 const Layout = async ({ children }: { children: ReactNode }) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await getServerSession();
 
-  console.log(session?.user?.email);
+  console.log(session);
 
   if (!session) {
     redirect("/sign-in");

@@ -3,8 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { MileagePost } from "@/types";
-import Image from "next/image";
-import Link from "next/link";
 import RelatedMileageGallery from "./RelatedMileageGallery";
 
 const SimpleCarousel = ({ slug }: { slug: string }) => {

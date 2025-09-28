@@ -37,7 +37,7 @@ const Articles = async () => {
                 innovations.
               </p>
             </div>
-            <div className="flex lg:top-40 lg:absolute lg:right-15 items-center">
+            <div className="flex lg:top-50 lg:absolute lg:right-15 items-center">
               <Image
                 src="/images/15554.jpg"
                 width={600}
@@ -63,7 +63,7 @@ const Articles = async () => {
       </div>
       <div>
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <BlogPreview header="Latest Articles" />
+          <BlogPreview header="Read our Latest Articles" />
         </HydrationBoundary>
       </div>
       <section className="md:px-20 md:mb-20">

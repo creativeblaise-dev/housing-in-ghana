@@ -4,7 +4,7 @@ import AccordionCard from "./AccordionCard";
 
 const Contribution = () => {
   return (
-    <section className="flex md:gap-15 flex-col md:flex-row px-10 md:px-20 pb-10 md:py-5  bg-[#ffffff]">
+    <section className="flex md:gap-15 flex-col md:flex-row px-10 py-10 md:px-20 pb-10 md:py-15  bg-[#ffffff]">
       <div className=" md:flex-1">
         <div className="flex justify-center ">
           <ThreeDCard image="/images/mileage-preview/2N6A5467_2.jpg" />

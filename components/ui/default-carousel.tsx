@@ -60,7 +60,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
   };
 
   const { coverImage, title, editionNumber } = slide;
-  const imageBg = `bg-[#232525] absolute top-0 left-0 w-full h-full  backdrop-blur-xl rounded-lg shadow-lg border-white/30 overflow-hidden transition-all duration-150 ease-out`;
+  const imageBg = `bg-[url('/images/banner-bg.png')] bg-cover absolute top-0 left-0 w-full h-full  backdrop-blur-xl rounded-lg shadow-lg border-white/30 overflow-hidden transition-all duration-150 ease-out`;
 
   return (
     <div className="[perspective:1200px] [transform-style:preserve-3d]">

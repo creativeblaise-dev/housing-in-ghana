@@ -31,7 +31,7 @@ const Home = async () => {
     <>
       {/* coming soon */}
       <section className="bg-[url(/images/mileage-preview/IMG_5626.jpg)] bg-[#131313] bg-cover bg-center bg-no-repeat min-h-screen -mt-24 pt-28 pb-12 relative">
-        <div className="absolute top-0 w-full h-full inset-0 bg-gradient-to-b from-stone-900 opacity-100"></div>
+        <div className="absolute top-0 w-full h-full inset-0 bg-gradient-to-br from-black/80 via-stone-900/50 to-black/50"></div>
         <div className="grid md:grid-cols-2 gap-4 px-10 md:px-20 relative z-10 mt-10">
           <IntroContent />
         </div>

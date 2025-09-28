@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { navigation } from "../constants/index";
 import { usePathname } from "next/navigation";
+import AnnouncementBanner from "./AnnouncementBanner";
 
 const Header = ({ userprofile }: { userprofile: ReactNode }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -14,6 +15,7 @@ const Header = ({ userprofile }: { userprofile: ReactNode }) => {
 
   return (
     <header className="bg-transparent backdrop-blur-md sticky top-0 z-50">
+      <AnnouncementBanner />
       <div className="  bg-[url(/images/hig-line.png)] bg-cover h-1.5 bg-no-repeat  "></div>
       <div className="mx-4 max-w-7xl px-4 sm:px-6 lg:px-8 shadow-md bg-[#ffffff]/90 my-2 rounded-full">
         <div className="flex items-center justify-between py-2 mx-2">
@@ -39,7 +41,7 @@ const Header = ({ userprofile }: { userprofile: ReactNode }) => {
                 pathname === item.href;
 
               const desktopMenuItemClasses: string =
-                " transition-colors py-2 md:py-2 font-bold tracking-wide text-sm hover:text-[#FF202B] cursor-pointer";
+                " transition-colors py-2 md:py-2 font-bold tracking-wide text-stone-700 text-sm hover:text-[#FF202B] cursor-pointer";
 
               const activeClasses = isActive ? " text-[#FF202B]" : "";
               return (

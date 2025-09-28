@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const MainFooter = () => {
   return (
@@ -36,10 +37,22 @@ const MainFooter = () => {
                   +233 (0) 599 663 344
                 </a>
               </p>
+              <p className="mt-6">
+                <span className="text-xs tracking-wide text-gray-300 uppercase dark:text-gray-400">
+                  Send us an email via
+                </span>
+
+                <a
+                  href="#"
+                  className="block lg:text-2xl font-medium text-stone-400 hover:opacity-75 sm:text-3xl dark:text-white"
+                >
+                  info@housinginghana.com
+                </a>
+              </p>
 
               <ul className="mt-8 space-y-1 text-sm text-gray-300 dark:text-gray-200">
-                <li>Monday to Friday: 10am - 5pm</li>
-                <li>Weekend: 10am - 3pm</li>
+                <li>Monday to Friday: 9am - 5pm</li>
+                <li>Weekend - Only on Saturday: 9am - 3pm</li>
               </ul>
 
               <ul className="mt-8 flex gap-6">
@@ -115,70 +128,74 @@ const MainFooter = () => {
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
-                <p className="font-bold text-gray-300  dark:text-gray-400">
-                  Platform
-                </p>
+                <p className="font-bold text-gray-400  ">The Company</p>
 
                 <ul className="mt-6 space-y-4 text-sm">
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      href="/about-us"
                       className="text-gray-300 transition hover:opacity-75 dark:text-gray-200"
                     >
-                      Mileage Gallery
-                    </a>
+                      About Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/magazine"
+                      className="text-gray-300 transition hover:opacity-75 dark:text-gray-200"
+                    >
+                      Magazine
+                    </Link>
                   </li>
 
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      href="/mileage/gallery"
                       className="text-gray-300 transition hover:opacity-75 dark:text-gray-200"
                     >
-                      FAQ's
-                    </a>
+                      Mileage Gallery
+                    </Link>
+                  </li>
+
+                  <li>
+                    <Link
+                      href="/contact-us"
+                      className="text-gray-300 transition hover:opacity-75 dark:text-gray-200"
+                    >
+                      Contact Us
+                    </Link>
                   </li>
                 </ul>
               </div>
 
               <div>
-                <p className="font-bold text-gray-300  dark:text-gray-400">
-                  Company
-                </p>
+                <p className="font-bold text-gray-400  ">Platform</p>
 
                 <ul className="mt-6 space-y-4 text-sm">
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      href="/advertise"
                       className="text-gray-300 transition hover:opacity-75 dark:text-gray-200"
                     >
-                      Meet the Team
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="text-gray-300 transition hover:opacity-75 dark:text-gray-200"
-                    >
-                      Partnership
-                    </a>
+                      Advertise With Us
+                    </Link>
                   </li>
 
                   <li>
-                    <a
+                    <Link
                       href="#"
                       className="text-gray-300 transition hover:opacity-75 dark:text-gray-200"
                     >
                       Clients
-                    </a>
+                    </Link>
                   </li>
-
                   <li>
-                    <a
+                    <Link
                       href="#"
                       className="text-gray-300 transition hover:opacity-75 dark:text-gray-200"
                     >
-                      Careers
-                    </a>
+                      Contributors
+                    </Link>
                   </li>
                 </ul>
               </div>

@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { eq } from "drizzle-orm";
 import { db } from "@/database/drizzle";
 import { user } from "@/database/schema";
+import { UserRoles, UserStatus } from "@/types";
 
 export const signIn = async (
   params: Pick<AuthCredentials, "email" | "password">
@@ -62,3 +63,31 @@ export const signUpUser = async ({
     return { success: false, error: e.message || "Sign up failed" };
   }
 };
+
+// server/actions/user.ts
+export async function updateUserRole(userId: string, role: UserRoles["role"]) {
+  // Implementation
+
+  await db.update(user).set({ role }).where(eq(user.id, userId)).execute();
+
+  return { success: true };
+}
+
+export async function toggleUserStatus(
+  userId: string,
+  status: UserStatus["status"]
+) {
+  // Implementation
+
+  await db.update(user).set({ status }).where(eq(user.id, userId)).execute();
+
+  return { success: true };
+}
+
+export async function deleteUser(userId: string) {
+  // Implementation
+
+  await db.delete(user).where(eq(user.id, userId)).execute();
+
+  return { success: true };
+}

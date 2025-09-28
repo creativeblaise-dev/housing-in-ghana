@@ -53,6 +53,42 @@ const Mileage = () => {
   return (
     <main className="flex min-h-screen flex-1 flex-col xs:px-1 ">
       <MileageHeroDispaly />
+      <section className="flex md:gap-15 flex-col md:flex-row px-10 md:px-20 pb-10 md:py-5  bg-[#ffffff]">
+        <div className=" md:flex-3 ">
+          <h1 className="text-4xl font-bold text-[#141516] mb-4 pt-4 lg:pt-6 ">
+            The Mileage Advantage
+          </h1>
+          <p className="text-md mb-4">
+            When you advertise with Housing
+            <span className="text-[#FF202B]"> In Ghana </span>, you’re not just
+            placing an ad — you’re securing a space in a trusted platform that
+            educates, informs, and inspires. Our content-driven approach means
+            your brand is seen alongside valuable real estate advice, industry
+            insights, and captivating stories that keep readers engaged.
+          </p>
+          <p className="text-md mb-4">
+            Whether you’re launching a new development, promoting your services,
+            or building brand authority, Mileage helps you achieve the
+            visibility and recognition you deserve in Ghana’s competitive
+            housing market.
+          </p>
+          <p className="text-md">
+            Interested in learning more about how Mileage can elevate your
+            brand?
+            <span className="text-[#FF202B]">
+              {" "}
+              <Link href="/contact-us">Contact us today</Link>
+            </span>{" "}
+            to explore our advertising options and discover the difference that
+            Mileage can make for your brand.
+          </p>
+        </div>
+        <div className=" md:flex-1">
+          <div className="flex justify-center ">
+            <ThreeDCard image="/images/IMG_4297_2.jpg" />
+          </div>
+        </div>
+      </section>
       <section className="flex gap-10 flex-col md:flex-row px-10 md:px-20 pb-10 lg:py-10  bg-[#ffffff]">
         <div className=" md:flex-3">
           <section className="flex gap-4">
@@ -86,41 +122,8 @@ const Mileage = () => {
           </section>
         </div>
       </section>
-      <section className="flex md:gap-15 flex-col md:flex-row px-10 md:px-20 pb-10 md:py-5  bg-[#ffffff]">
-        <div className=" md:flex-3 ">
-          <h1 className="text-4xl font-bold text-[#141516] mb-4 pt-4">
-            The Mileage Advantage
-          </h1>
-          <p className="text-md mb-4">
-            When you advertise with Housing
-            <span className="text-[#FF202B]"> In Ghana </span>, you’re not just
-            placing an ad — you’re securing a space in a trusted platform that
-            educates, informs, and inspires. Our content-driven approach means
-            your brand is seen alongside valuable real estate advice, industry
-            insights, and captivating stories that keep readers engaged.
-          </p>
-          <p className="text-md">
-            Whether you’re launching a new development, promoting your services,
-            or building brand authority, Mileage helps you achieve the
-            visibility and recognition you deserve in Ghana’s competitive
-            housing market.
-          </p>
-          <div className="flex mt-6">
-            <Link href="/advertise">
-              <Button className="bg-[#343434] rounded-full text-white text-md  hover:text-white hover:bg-[#FF202B] py-5 md:p-5 font  w-auto cursor-pointer border-b-2  border-[#FF202B]">
-                Get Started
-              </Button>
-            </Link>
-          </div>
-        </div>
-        <div className=" md:flex-1">
-          <div className="flex justify-center ">
-            <ThreeDCard image="/images/IMG_4297_2.jpg" />
-          </div>
-        </div>
-      </section>
 
-      <section className="py-4">
+      <section className="py-4 px-10 bg-zinc-200">
         <div className="flex flex-col justify-center pt-5">
           <h1 className="text-4xl text-center font-bold text-[#141516]  pt-4 text-balance">
             At Housing <span className="text-[#FF202B]"> In Ghana </span>,
@@ -134,7 +137,7 @@ const Mileage = () => {
           </p>
         </div>
         <InfoCards />
-        <div className="px-20">
+        <div className="px-0 lg:px-20">
           <div className="flex flex-col justify-center pt-5">
             <h1 className="text-4xl  font-bold text-[#141516]  pt-4 text-balance">
               Mileage Gallery - From brand features in Housing
@@ -152,9 +155,9 @@ const Mileage = () => {
           <LayoutGridFeature images={cards} />
         </div>
 
-        <div className="flex mt-1 justify-center">
+        <div className="flex justify-center my-6">
           <Link href="/mileage/gallery">
-            <Button className="bg-[#FF202B] text-white text-md  hover:text-white hover:bg-[#232525] py-5 md:p-5 font uppercase w-auto cursor-pointer border-1 border-[#F6BB2A]">
+            <Button className="bg-[#282828] text-zinc-300 text-md  hover:text-white hover:bg-[#232525] py-5 md:p-5 rounded-full w-auto cursor-pointer border-1 border-[#F6BB2A]">
               Browse Gallery
             </Button>
           </Link>

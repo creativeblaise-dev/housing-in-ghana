@@ -5,10 +5,11 @@ import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
 import { ArticleType } from "@/types";
-import { capitalizeSentences } from "@/lib/utils";
+import { capitalizeSentences, formatDate } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@react-email/components";
 import { IconCircleArrowRightFilled } from "@tabler/icons-react";
+import Loader from "./Loader";
 
 const BlogPreview = ({ header }: { header: string }) => {
   const {
@@ -21,13 +22,13 @@ const BlogPreview = ({ header }: { header: string }) => {
     // Data is already available from server prefetch
   });
 
-  if (isFetching) return <div>Loading...</div>;
+  if (isFetching) return <Loader />;
   if (isError) return <div>Error loading posts</div>;
 
   return (
-    <section className="px-10 lg:px-20 pb-10 lg:py-10 bg-[#fefee2]">
+    <section className="px-10 lg:px-20 pb-10 lg:py-10 bg-zinc-200">
       <div className="flex flex-row  md:w-2/3 ">
-        <h1 className="text-4xl font-bold text-[#141516] mb-4 pt-0">
+        <h1 className="text-4xl font-bold text-[#212121] mb-1 pt-0">
           {header}
         </h1>
       </div>
@@ -57,7 +58,7 @@ const BlogPreview = ({ header }: { header: string }) => {
                 </Link>
                 <CardHeader className="py-2 px-0.1">
                   <small className=" text-stone-600">
-                    {createdAtDate.toDateString()}
+                    {formatDate(createdAtDate)}
                   </small>
                   <CardTitle className="text-lg font-bold text-[#1f2020] leading-tight">
                     {allArticles && capitalizeSentences(title.toLowerCase())}

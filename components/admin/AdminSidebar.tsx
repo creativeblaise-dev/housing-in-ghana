@@ -8,7 +8,7 @@ import {
   IconHome2,
   IconLogout,
   IconNews,
-  IconPhoto,
+  IconUser,
 } from "@tabler/icons-react";
 import { AdminSidebarMenuTypes } from "@/types";
 import SignOutButton from "../SignOutButton";
@@ -43,6 +43,11 @@ const adminSidebarMenu: AdminSidebarMenuTypes[] = [
         href: "/admin/mileage",
         icon: <IconBus className="h-4 w-4 " />,
       },
+      {
+        name: "Users",
+        href: "/admin/users",
+        icon: <IconUser className="h-4 w-4 " />,
+      },
     ],
   },
   {
@@ -50,17 +55,7 @@ const adminSidebarMenu: AdminSidebarMenuTypes[] = [
     items: [
       {
         name: "Advertisers List",
-        href: "/admin/advertisers-list",
-        icon: <IconHome2 className="h-4 w-4" />,
-      },
-      {
-        name: "Draft",
-        href: "/admin/draft",
-        icon: <IconHome2 className="h-4 w-4" />,
-      },
-      {
-        name: "Published",
-        href: "/admin/published",
+        href: "/admin/clients",
         icon: <IconHome2 className="h-4 w-4" />,
       },
     ],

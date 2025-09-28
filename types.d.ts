@@ -78,6 +78,29 @@ export type AuthCredentials = {
   password: string;
 };
 
+export type UserRoles = {
+  role: "subscriber" | "contributor" | "admin" | "super_admin";
+};
+
+export type UserStatus = {
+  status: "active" | "inactive" | "suspended";
+};
+
+export type UserType = {
+  id: string;
+  email: string;
+  name: string;
+  image?: string;
+  role: UserRoles["role"];
+  status: UserStatus["status"];
+  createdAt: string;
+  updatedAt: string;
+  lastLogin?: string;
+  _count?: {
+    articles: number;
+  };
+};
+
 export type AdminSidebarMenuTypes = {
   group: string;
   items: {

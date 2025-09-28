@@ -21,7 +21,7 @@ type PerformanceDataTypes = {
 const performanceData: PerformanceDataTypes[] = [
   {
     title: "Total Website Visits",
-    value: "$1,250.00",
+    value: "1,250.00",
     change: "+12.5%",
     trend: "up",
     remarks: "Good growth in traffic",

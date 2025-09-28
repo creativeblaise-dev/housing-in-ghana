@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/database/drizzle";
+import { requireAdmin } from "@/lib/auth-protection";
 import { user } from "@/database/schema";
 import { eq } from "drizzle-orm";
 
@@ -7,6 +8,12 @@ export async function GET(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
+  // Check authentication
+  const sessionOrError = await requireAdmin(request);
+  if (sessionOrError instanceof NextResponse) {
+    return sessionOrError; // Return error if not authenticated/authorized
+  }
+
   try {
     const { id } = await context.params;
 

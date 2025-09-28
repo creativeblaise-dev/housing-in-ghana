@@ -59,7 +59,7 @@ const AdminHeader = () => {
 
               <h2 className="w-full flex items-center gap-x-2 py-2 ps-2.5 pe-8 text-sm text-gray-800 truncate rounded-lg hover:bg-gray-100/70 focus:outline-hidden focus:bg-gray-100/70 dark:hover:bg-neutral-700/50 dark:focus:bg-neutral-700/50 dark:text-neutral-200">
                 <span className="truncate font-bold text-xl lg:pl-15">
-                  Hi, Admin
+                  Hi there, Admin!
                 </span>
                 <p className="text-md italic">Explore your dashboard!</p>
               </h2>
@@ -67,44 +67,7 @@ const AdminHeader = () => {
           </ul>
 
           <ul className="flex flex-row items-center gap-x-3 ms-auto">
-            <li className="hidden lg:inline-flex items-center gap-1.5 relative text-gray-500 pe-3 last:pe-0 last:after:hidden after:absolute after:top-1/2 after:end-0 after:inline-block after:w-px after:h-3.5 after:bg-gray-300 after:rounded-full after:-translate-y-1/2 after:rotate-12">
-              <a
-                className="flex items-center gap-x-1.5 py-1.5 px-2 text-sm text-gray-800 rounded-lg hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200"
-                href="#"
-              >
-                Docs
-              </a>
-
-              <a
-                className="flex items-center gap-x-1.5 py-1.5 px-2 text-sm text-gray-800 rounded-lg hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200"
-                href="#"
-              >
-                API
-              </a>
-            </li>
-
             <li className="inline-flex items-center gap-1.5 relative text-gray-500 pe-3 last:pe-0 last:after:hidden after:absolute after:top-1/2 after:end-0 after:inline-block after:w-px after:h-3.5 after:bg-gray-300 after:rounded-full after:-translate-y-1/2 after:rotate-12">
-              <button
-                type="button"
-                className="relative hidden lg:flex justify-center items-center gap-x-1.5 size-8 text-sm bg-gray-100 text-gray-500 rounded-full hover:bg-gray-200 hover:text-gray-800 focus:outline-hidden focus:bg-gray-200 focus:text-gray-800"
-              >
-                <svg
-                  className="shrink-0 size-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M12 7v14" />
-                  <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" />
-                </svg>
-                <span className="sr-only">Knowledge Base</span>
-              </button>
               <UserProfileDropdown />
             </li>
           </ul>

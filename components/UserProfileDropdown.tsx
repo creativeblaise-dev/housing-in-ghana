@@ -5,7 +5,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { getInitials } from "@/lib/utils";
 import { Button } from "./ui/button";
-import { IconSettings, IconUser } from "@tabler/icons-react";
+import { IconUser } from "@tabler/icons-react";
 
 type User = {
   id: string;
@@ -38,6 +38,7 @@ const UserProfileDropdown = () => {
 
           // Fetch user role
           const roleResponse = await fetch(`/api/user/${userData.id}/role`);
+
           if (roleResponse.ok) {
             const roleData = await roleResponse.json();
             setIsAdmin(roleData.isAdmin);
@@ -148,21 +149,13 @@ const UserProfileDropdown = () => {
                   <IconUser className="h-4 w-4 flex-shrink-0" />
                   <span>{isAdmin ? "Admin Dashboard" : "Profile"}</span>
                 </Link>
-                <Link
-                  className="flex items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-600 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition-colors w-full"
-                  href="/account-settings"
-                  onClick={() => setIsDropdownOpen(false)}
-                >
-                  <IconSettings className="h-4 w-4 flex-shrink-0" />
-                  <span>Account Settings</span>
-                </Link>
               </div>
             </div>
           )}
         </div>
       ) : (
         <Link href="/sign-in">
-          <Button className="bg-transparent shadow-none text-stone-700 text-sm font-bold  cursor-pointer">
+          <Button className="bg-transparent shadow-none hover:bg-white text-stone-700 text-sm font-bold  cursor-pointer">
             Sign In
             <span className="text-[#FF202B]">
               <IconUser className="h-4 w-4" />

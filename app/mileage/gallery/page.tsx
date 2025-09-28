@@ -1,12 +1,12 @@
 import React from "react";
 import Image from "next/image";
-import MileagePostList from "@/components/MileagePostList";
 import {
   HydrationBoundary,
   QueryClient,
   dehydrate,
 } from "@tanstack/react-query";
 import { MileagePost } from "@/types";
+import GalleryList from "@/components/admin/GalleryList";
 
 const getMileagePosts = async () => {
   const response = await fetch("/api/mileage");
@@ -28,8 +28,8 @@ const Gallery = async () => {
         <div className="mx-auto max-w-7xl lg:pt-20">
           <div className=" mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-2">
             <div className="max-w-xl lg:max-w-lg">
-              <h2 className="text-5xl font-semibold tracking-tight text-white ">
-                Mileage Gallery — Showcasing Ghana, Showcasing Your Brand.
+              <h2 className="text-5xl font-semibold tracking-tight text-white mb-4">
+                Mileage Gallery. Showcasing Ghana, Showcasing Your Brand.
               </h2>
               <p className=" text-stone-300 text-md text-balance ">
                 The Mileage Gallery is more than a travel diary — it’s proof of
@@ -63,21 +63,13 @@ const Gallery = async () => {
           />
         </div>
       </div>
-      <section className="py-4 bg-[#fcf5d6]">
-        <div className="flex flex-col justify-center ">
-          <h1 className="text-4xl text-center font-bold text-[#141516]  pt-4 text-balance">
-            Mileage is designed to connect two worlds <br /> — the beauty of
-            Ghana’s destinations and <br /> the marketing power of the Housing
-            <span className="text-[#FF202B]"> In Ghana </span>
-            magazine.
-          </h1>
-          <p className="text-center text-md text-stone-800 mt-4 ">
-            Every journey means more exposure for our advertisers, <br /> and
-            every image shared inspires both travel and trust.
-          </p>
-        </div>
+      <section className="py-0">
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <MileagePostList />
+          <GalleryList
+            header="Explore Ghana's Beauty"
+            showSearch={true}
+            itemsPerPage={12}
+          />
         </HydrationBoundary>
       </section>
     </>
