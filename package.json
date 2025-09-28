@@ -84,6 +84,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/dotenv": "^6.1.1",
     "@types/jquery": "^3.5.32",
     "@types/lodash": "^4.17.20",
     "@types/lodash.throttle": "^4.1.9",
