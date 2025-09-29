@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Spotlight } from "@/components/ui/spotlight";
-import Image from "next/image";
+import { getImageUrl } from "@/lib/image-utils";
 import { Button } from "@/components/ui/button";
 import LayoutGridFeature from "@/components/LayoutGridFeature";
 import EditionCarousel from "@/components/EditionCarousel";
@@ -10,7 +10,7 @@ import Link from "next/link";
 import { LayoutImages } from "@/types";
 import { db } from "@/database/drizzle";
 import { magazineEditions } from "@/database/schema";
-import { desc } from "drizzle-orm";
+import { OptimizedImage } from "@/components/OptimizedImage";
 
 const cards: LayoutImages[] = [
   {
@@ -51,9 +51,14 @@ const Magazine = async () => {
     .from(magazineEditions)
     .orderBy(magazineEditions.releasedAt);
 
+  const backgroundImageUrl = getImageUrl("/images/modern-home.jpg");
+
   return (
     <main>
-      <div className="relative flex w-full overflow-hidden bg-[url('/images/modern-home.jpg')] bg-center [background-size:cover] antialiased md:items-center md:justify-center -mt-24 pt-28 pb-12 px-10 md:px-20 md:py-15 ">
+      <div
+        style={{ backgroundImage: `url(${backgroundImageUrl})` }}
+        className="relative flex w-full overflow-hidden  bg-center [background-size:cover] antialiased md:items-center md:justify-center -mt-24 pt-28 pb-12 px-10 md:px-20 md:py-15 "
+      >
         <div
           className={cn(
             "pointer-events-none absolute inset-0 bg-[#111111d9]  select-none"
@@ -87,7 +92,7 @@ const Magazine = async () => {
 
             <div className="mt-6">
               <Link href="/magazine/edition/03">
-                <Button className="bg-[#FF202B] rounded-full text-white text-md hover:text-black hover:bg-[#e6d30a] py-5 md:p-5 font-semibold w-auto cursor-pointer ">
+                <Button className="bg-[#FF202B] rounded-full text-white text-md hover:text-zinc-200 hover:bg-[#252525] py-5 md:p-5 font-semibold w-auto cursor-pointer ">
                   Get The Lastest Edition
                 </Button>
               </Link>
@@ -95,7 +100,7 @@ const Magazine = async () => {
           </div>
           <div className="md:flex-2">
             <div className="flex justify-center md:pt-1 ">
-              <Image
+              <OptimizedImage
                 src="/images/IMG_4354_2.jpg"
                 height={400}
                 width={290}

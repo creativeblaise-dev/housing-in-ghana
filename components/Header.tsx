@@ -3,25 +3,32 @@
 import { ReactNode, useState } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3CenterLeftIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
+
 import Link from "next/link";
+import { getImageUrl } from "@/lib/image-utils";
 import { navigation } from "../constants/index";
 import { usePathname } from "next/navigation";
 import AnnouncementBanner from "./AnnouncementBanner";
+import { OptimizedImage } from "./OptimizedImage";
 
 const Header = ({ userprofile }: { userprofile: ReactNode }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
+  const backgroundImageUrl = getImageUrl("/images/hig-line.png");
+
   return (
     <header className="bg-transparent backdrop-blur-md sticky top-0 z-50">
       <AnnouncementBanner />
-      <div className="  bg-[url(/images/hig-line.png)] bg-cover h-1.5 bg-no-repeat  "></div>
+      <div
+        className="bg-cover h-1.5 bg-no-repeat"
+        style={{ backgroundImage: `url(${backgroundImageUrl})` }}
+      ></div>
       <div className="mx-4 max-w-7xl px-4 sm:px-6 lg:px-8 shadow-md bg-[#ffffff]/90 my-2 rounded-full">
         <div className="flex items-center justify-between py-2 mx-2">
           <div className="flex items-center">
             <Link href="/">
-              <Image
+              <OptimizedImage
                 src="/images/housing-in-ghana-logo.png"
                 alt="logo"
                 width={130}
@@ -85,7 +92,7 @@ const Header = ({ userprofile }: { userprofile: ReactNode }) => {
         <DialogPanel className="fixed top-0 right-0 w-3/4 max-w-sm h-full bg-white shadow-lg z-50 p-6">
           <div className="flex items-center justify-between">
             <span className="text-xl font-bold text-[#FF202B]">
-              <Image
+              <OptimizedImage
                 src="/images/housing-in-ghana-logo.png"
                 alt="logo"
                 width={130}

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -182,7 +182,7 @@ const GalleryList: React.FC<MileageGalleriesProps> = ({
                     href={`/mileage/gallery/${gallery.id}`}
                   >
                     <div className="shrink-0 relative rounded-xl overflow-hidden w-full h-67.5 before:absolute before:inset-x-0 before:z-1 before:size-full before:bg-linear-to-t before:from-stone-900/90 border-2 border-[#FFFFFF]/50">
-                      <Image
+                      <OptimizedImage
                         className="size-full absolute top-0 start-0 object-cover group-hover:scale-105 transition-transform duration-300"
                         src={coverPhoto}
                         width={1000}

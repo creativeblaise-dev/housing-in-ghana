@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Spotlight } from "./ui/spotlight";
-import Image from "next/image";
+import { OptimizedImage } from "./OptimizedImage";
 
 const Mission = () => {
   return (
@@ -43,7 +43,7 @@ const Mission = () => {
         </div>
         <div className="md:flex-2">
           <div className="flex justify-center md:pt-15">
-            <Image
+            <OptimizedImage
               src="/images/magazine-page_2.png"
               height={1000}
               width={1000}

@@ -2,6 +2,7 @@
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "motion/react";
 import React, { useEffect, useState } from "react";
+import { getImageUrl } from "@/lib/image-utils";
 
 export const ImagesSlider = ({
   images,
@@ -168,7 +169,7 @@ export const ImagesSlider = ({
         <AnimatePresence>
           <motion.img
             key={currentIndex}
-            src={loadedImages[currentIndex]}
+            src={getImageUrl(images[currentIndex])}
             initial="initial"
             animate="visible"
             exit={direction === "up" ? "upExit" : "downExit"}

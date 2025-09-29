@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import Image from "next/image";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import Link from "next/link";
 
 const layout = async ({ children }: { children: ReactNode }) => {
@@ -7,7 +7,7 @@ const layout = async ({ children }: { children: ReactNode }) => {
     <>
       <main className="relative flex flex-col text-light-100 sm:flex-row">
         <section className="sticky h-40 w-full sm:top-0 sm:h-screen sm:flex-1">
-          <Image
+          <OptimizedImage
             src="/images/MG_4818-scaled.jpg"
             width={1000}
             height={1000}
@@ -19,7 +19,7 @@ const layout = async ({ children }: { children: ReactNode }) => {
           <div className="mx-auto flex max-w-xl flex-col gap-6 rounded-lg ">
             <div className=" mx-auto flex max-w-xl flex-col gap-6 rounded-lg p-5">
               <Link href="/" className="flex items-center gap-2">
-                <Image
+                <OptimizedImage
                   src="/images/housing-in-ghana-logo.png"
                   width={150}
                   height={100}

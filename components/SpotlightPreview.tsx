@@ -3,15 +3,18 @@ import { cn } from "@/lib/utils";
 import { Spotlight } from "./ui/spotlight";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import Image from "next/image";
+import { OptimizedImage } from "./OptimizedImage";
+import { getImageUrl } from "@/lib/image-utils";
+
+const backgroundImageUrl = getImageUrl("/images/devtraco-pelican.jpg");
 
 const SpotlightPreview = () => {
   return (
     <div className="relative flex h-[30rem] md:h-[40rem] w-full overflow-hidden bg-black/[0.96] antialiased md:items-center md:justify-center">
       <div
+        style={{ backgroundImage: `url(${backgroundImageUrl})` }}
         className={cn(
-          "pointer-events-none absolute inset-0 [background-size:cover] [background-position:center] select-none",
-          "[background-image:url('/images/devtraco-pelican.jpg')]"
+          "pointer-events-none absolute inset-0 [background-size:cover] [background-position:center] select-none"
         )}
       />
       <div className="absolute top-0 w-full h-full inset-0 bg-gradient-to-b from-black to-stone-800 opacity-80 flex items-end justify-center "></div>
@@ -31,7 +34,7 @@ const SpotlightPreview = () => {
 
         <div className="grid grid-col justify-center mt-6">
           <div className="flex justify-center py-6 ">
-            <Image
+            <OptimizedImage
               src="/images/DG-light.svg"
               width={150}
               height={100}

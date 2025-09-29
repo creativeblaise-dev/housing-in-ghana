@@ -1,8 +1,10 @@
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
 import ThreeDCard from "@/components/ThreeDCard";
 import { Button } from "@/components/ui/button";
+import { getImageUrl } from "@/lib/image-utils";
+
+const backgroundImageUrl = getImageUrl("/images/IMG_0880.jpg");
 
 const Advertise = () => {
   const benefits = [
@@ -35,7 +37,10 @@ const Advertise = () => {
   return (
     <main>
       {/* Hero Section */}
-      <section className="bg-[url(/images/IMG_0880.jpg)] bg-[#131313] bg-cover bg-center bg-no-repeat min-h-screen -mt-24 pt-28 pb-12 relative">
+      <section
+        style={{ backgroundImage: `url(${backgroundImageUrl})` }}
+        className=" bg-cover bg-center bg-no-repeat min-h-screen -mt-24 pt-28 pb-12 relative"
+      >
         {/* Full gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-black/85 via-stone-900/70 to-black/60"></div>
 

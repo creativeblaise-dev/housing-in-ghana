@@ -3,14 +3,14 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { IconArrowRight } from "@tabler/icons-react";
-import FeaturedArticles from "@/components/FeaturedArticles";
 import { db } from "@/database/drizzle";
 import { magazineEditions } from "@/database/schema";
 import { MagazineEdition } from "@/types";
-import { eq, desc } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import Subscribe from "@/components/Subscribe";
-import ArticlesVariantCards from "@/components/ArticlesVariantCards";
 import { formatDate } from "@/lib/utils";
+import { OptimizedImage } from "@/components/OptimizedImage";
+import { getImageUrl } from "@/lib/image-utils";
 
 const page = async ({
   params,
@@ -26,7 +26,7 @@ const page = async ({
     .limit(1);
 
   const magazine = edition as MagazineEdition[];
-  const backgroundCoverImage = magazine[0].backgroundImage;
+  const backgroundCoverImage = getImageUrl(magazine[0].backgroundImage);
 
   return (
     <main className="-mt-24  b-12">
@@ -36,7 +36,7 @@ const page = async ({
             <div className="mx-auto max-w-5xl">
               <div className=" mx-auto grid justify-center items-center max-w-2xl  lg:max-w-none ">
                 <div className="flex max-w-xl lg:max-w-lg items-center justify-center pt-20">
-                  <Image
+                  <OptimizedImage
                     src={magazine[0].coverImage}
                     alt="Edition Cover"
                     width={300}

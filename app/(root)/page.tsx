@@ -12,6 +12,7 @@ import { QueryClient, dehydrate } from "@tanstack/react-query";
 import { ArticleType } from "@/types";
 import InfiniteCards from "@/components/InfiniteCards";
 import ElevateBrand from "@/components/ElevateBrand";
+import { getImageUrl } from "@/lib/image-utils";
 
 const getArticles = async () => {
   const response = await fetch("/api/articles");
@@ -27,10 +28,17 @@ const Home = async () => {
     queryFn: getArticles,
   });
 
+  const backgroundImageUrl = getImageUrl(
+    "/images/mileage-preview/IMG_5626.jpg"
+  );
+
   return (
     <>
       {/* coming soon */}
-      <section className="bg-[url(/images/mileage-preview/IMG_5626.jpg)] bg-[#131313] bg-cover bg-center bg-no-repeat min-h-screen -mt-24 pt-28 pb-12 relative">
+      <section
+        style={{ backgroundImage: `url(${backgroundImageUrl})` }}
+        className={` bg-[#131313] bg-cover bg-center bg-no-repeat min-h-screen -mt-24 pt-28 pb-12 relative`}
+      >
         <div className="absolute top-0 w-full h-full inset-0 bg-gradient-to-br from-black/80 via-stone-900/50 to-black/50"></div>
         <div className="grid md:grid-cols-2 gap-4 px-10 md:px-20 relative z-10 mt-10">
           <IntroContent />

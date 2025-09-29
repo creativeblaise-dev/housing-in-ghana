@@ -2,9 +2,10 @@
 import { motion } from "motion/react";
 import React from "react";
 import { ImagesSlider } from "./ui/images-slider";
+import { getImageUrl } from "@/lib/image-utils";
 
 const ContactUsHeader = () => {
-  const images = ["/images/3220.jpg"];
+  const images = [getImageUrl("/images/3220.jpg")];
   return (
     <ImagesSlider
       className="h-[23rem] -mt-24 pt-28 pb-12 px-10"

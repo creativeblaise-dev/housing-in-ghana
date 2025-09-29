@@ -2,7 +2,7 @@
 
 import React from "react";
 import MileageHeroDispaly from "@/components/MileageHeroDisplay";
-import Image from "next/image";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import Link from "next/link";
 import ThreeDCard from "@/components/ThreeDCard";
 import { Button } from "@/components/ui/button";
@@ -93,7 +93,7 @@ const Mileage = () => {
         <div className=" md:flex-3">
           <section className="flex gap-4">
             <div className="flex justify-center ">
-              <Image
+              <OptimizedImage
                 src="/images/mileage-preview/IMG_1242.jpg"
                 width={400}
                 height={200}
@@ -102,7 +102,7 @@ const Mileage = () => {
               />
             </div>
             <div className="flex justify-center ">
-              <Image
+              <OptimizedImage
                 src="/images/mileage-preview/IMG_3596.jpg"
                 width={400}
                 height={600}
@@ -111,7 +111,7 @@ const Mileage = () => {
               />
             </div>
             <div className="flex justify-center ">
-              <Image
+              <OptimizedImage
                 src="/images/mileage-preview/IMG_2845.jpg"
                 width={400}
                 height={600}

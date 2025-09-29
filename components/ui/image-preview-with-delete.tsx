@@ -15,6 +15,7 @@ import {
 import { X, Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { OptimizedImage } from "@/components/OptimizedImage";
 
 export function ImagePreviewWithDelete({
   src,
@@ -82,9 +83,11 @@ export function ImagePreviewWithDelete({
 
   return (
     <div className={cn("relative group", className)}>
-      <img
+      <OptimizedImage
         src={src}
         alt={alt}
+        width={1000}
+        height={10000}
         className="w-full h-50 object-cover rounded-lg"
       />
 

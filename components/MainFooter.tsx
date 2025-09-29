@@ -1,5 +1,5 @@
 import React from "react";
-import Image from "next/image";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import Link from "next/link";
 
 const MainFooter = () => {
@@ -7,7 +7,7 @@ const MainFooter = () => {
     <>
       <footer className="bg-[#232525] lg:grid lg:grid-cols-5 dark:bg-gray-900 mt-0">
         <div className="relative block h-32 lg:col-span-2 lg:h-full">
-          <Image
+          <OptimizedImage
             src="/images/IMG_0478.jpg"
             alt=""
             width={1000}

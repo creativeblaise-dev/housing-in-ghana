@@ -1,5 +1,5 @@
 import React from "react";
-import Image from "next/image";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import {
   HydrationBoundary,
   QueryClient,
@@ -40,7 +40,7 @@ const Gallery = async () => {
               </p>
             </div>
             <div className="flex lg:top-20 lg:absolute lg:right-10 items-center">
-              <Image
+              <OptimizedImage
                 src="/images/m-collage.png"
                 width={600}
                 height={600}

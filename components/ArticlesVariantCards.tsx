@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
+import { OptimizedImage } from "./OptimizedImage";
 import Link from "next/link";
 import { ArticleType } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { Spotlight } from "@/components/ui/spotlight";
 import { capitalizeSentences, cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import Loader from "@/components/Loader";
+import { getImageUrl } from "@/lib/image-utils";
 
 const ArticlesVariantCards = ({ header }: { header: string }) => {
   const {
@@ -25,9 +26,16 @@ const ArticlesVariantCards = ({ header }: { header: string }) => {
   if (isError) return <div>Error loading posts</div>;
 
   const articlesArray = Array.isArray(allArticles) ? allArticles : [];
+
+  const backgroundImageUrl = getImageUrl(
+    "/images/prydumano-design-vIbxvHj9m9g-unsplash.jpg"
+  );
   return (
     <>
-      <div className="relative flex pt-5 w-full overflow-hidden bg-[url('/images/prydumano-design-vIbxvHj9m9g-unsplash.jpg')] bg-center [background-size:cover] antialiased md:items-center md:justify-center px-10 md:px-20 pb-10 md:py-15 ">
+      <div
+        style={{ backgroundImage: `url(${backgroundImageUrl})` }}
+        className="relative flex pt-5 w-full overflow-hidden  bg-center [background-size:cover] antialiased md:items-center md:justify-center px-10 md:px-20 pb-10 md:py-15 "
+      >
         <div
           className={cn(
             "pointer-events-none absolute inset-0 bg-[#000000c3]  select-none"
@@ -69,7 +77,7 @@ const ArticlesVariantCards = ({ header }: { header: string }) => {
                         href={`/articles/${slug}`}
                       >
                         <div className="shrink-0 relative rounded-xl overflow-hidden w-full h-67.5 before:absolute before:inset-x-0 before:z-1 before:size-full before:bg-linear-to-t before:from-stone-900/90 border-2 border-[#dfdfdf96]">
-                          <Image
+                          <OptimizedImage
                             className="size-full absolute top-0 start-0 object-cover"
                             src={featuredImageUrl}
                             width={1000}

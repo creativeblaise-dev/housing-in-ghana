@@ -33,7 +33,6 @@ import { createEdition } from "@/server/actions/edition";
 import { Loader2 } from "lucide-react";
 import FileUpload from "@/components/ui/file-upload";
 import { Textarea } from "@/components/ui/textarea";
-import { magazineEditions } from "@/database/schema";
 
 interface Props {
   type: "CREATE_EDITION" | "EDIT_EDITION";

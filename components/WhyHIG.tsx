@@ -1,6 +1,5 @@
 import React from "react";
-// import Image from "next/image";
-import { Image } from "@imagekit/next";
+import { OptimizedImage } from "./OptimizedImage";
 
 const WhyHIG = () => {
   return (
@@ -18,9 +17,8 @@ const WhyHIG = () => {
       <div className=" md:flex-3">
         <section className="grid grid-cols-2 gap-4">
           <div className="justify-center ">
-            <Image
-              urlEndpoint="https://ik.imagekit.io/devBlaiseElolo"
-              src="http://localhost:3000/images/IMG_0602.jpg"
+            <OptimizedImage
+              src="/images/IMG_0602.jpg"
               width={300}
               height={200}
               alt="two ladies reading the housing in ghana magazine"
@@ -29,9 +27,8 @@ const WhyHIG = () => {
             />
           </div>
           <div className="justify-center ">
-            <Image
-              urlEndpoint="https://ik.imagekit.io/devBlaiseElolo"
-              src="http://localhost:3000/images/IMG_5660.jpg"
+            <OptimizedImage
+              src="/images/IMG_5660.jpg"
               width={300}
               height={200}
               alt="hig"

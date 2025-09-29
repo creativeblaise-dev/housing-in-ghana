@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { MileagePost } from "@/types";
 import RelatedMileageGallery from "./RelatedMileageGallery";
+import Loader from "./Loader";
 
 const SimpleCarousel = ({ slug }: { slug: string }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -31,7 +32,7 @@ const SimpleCarousel = ({ slug }: { slug: string }) => {
     }
   }, [mileagePosts, isFetching]);
 
-  if (isFetching) return <div>Loading...</div>;
+  if (isFetching) return <Loader />;
   if (isError) return <div>Error loading posts</div>;
 
   if (!selectedGallery) return <div>No gallery found</div>;

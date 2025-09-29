@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import Image from "next/image";
+import { OptimizedImage } from "../OptimizedImage";
 import React, { useEffect, useState } from "react";
 
 export const InfiniteMovingCards = ({
@@ -91,7 +91,7 @@ export const InfiniteMovingCards = ({
               className="relative w-[150px] max-w-full shrink-0 rounded-2xl border border-b-0 border-zinc-200 bg-[#232323] px-8 py-6 md:w-[150px] dark:border-zinc-700 dark:bg-[linear-gradient(180deg,#27272a,#18181b)]"
               key={idx}
             >
-              <Image
+              <OptimizedImage
                 src={item.clientLogo}
                 alt="Client 1"
                 width={100}

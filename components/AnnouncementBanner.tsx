@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { getImageUrl } from "@/lib/image-utils";
 
 type Variants = {
   hidden: { [key: string]: any };
@@ -55,9 +56,14 @@ const AnnouncementBanner = () => {
     },
   };
 
+  const backgroundImageUrl = getImageUrl("/images/banner-bg-2.png");
+
   return (
     <div className="max-w-[100%] px-0 sm:px-6 lg:px-0 mx-auto">
-      <div className="bg-stone-600 bg-[url('/images/banner-bg-2.png')] bg-no-repeat bg-cover bg-center p-4 rounded-none text-center overflow-hidden">
+      <div
+        style={{ backgroundImage: `url(${backgroundImageUrl})` }}
+        className="bg-stone-600  bg-no-repeat bg-cover bg-center p-4 rounded-none text-center overflow-hidden"
+      >
         <motion.div
           className="flex flex-wrap justify-center items-center gap-2"
           variants={containerVariants}

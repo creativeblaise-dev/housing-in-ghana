@@ -1,12 +1,17 @@
 import React from "react";
 import Mission from "@/components/Mission";
 import Contribution from "@/components/Contribution";
-import Image from "next/image";
+import { getImageUrl } from "@/lib/image-utils";
+
+const backgroundImageUrl = getImageUrl("/images/IMG_0602.jpg");
 
 const About = () => {
   return (
     <main>
-      <section className="bg-[url(/images/IMG_0602.jpg)] bg-[#131313] bg-cover bg-center bg-no-repeat min-h-screen -mt-24 pt-28 pb-12 relative">
+      <section
+        style={{ backgroundImage: `url(${backgroundImageUrl})` }}
+        className=" bg-[#131313] bg-cover bg-center bg-no-repeat min-h-screen -mt-24 pt-28 pb-12 relative"
+      >
         {/* Full gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-black/90 via-stone-900/80 to-black/70"></div>
 

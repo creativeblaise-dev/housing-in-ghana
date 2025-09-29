@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { OptimizedImage } from "./OptimizedImage";
 
 const Subscribe = () => {
   return (
@@ -45,7 +45,7 @@ const Subscribe = () => {
           {/* Image Section */}
           <div className="relative order-1 lg:order-2 flex justify-center lg:justify-end">
             <div className="relative w-full max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-xl">
-              <Image
+              <OptimizedImage
                 src="/images/editions-hig-magazine.png"
                 width={600}
                 height={600}

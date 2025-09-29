@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { LayoutImages } from "@/types";
+import { getImageUrl } from "@/lib/image-utils";
 
 export const LayoutGrid = ({ cards }: { cards: LayoutImages[] }) => {
   const [selected, setSelected] = useState<LayoutImages | null>(null);
@@ -56,7 +57,7 @@ const ImageComponent = ({ card }: { card: LayoutImages }) => {
   return (
     <motion.img
       layoutId={`image-${card.id}-image`}
-      src={card.thumbnail}
+      src={getImageUrl(card.thumbnail)}
       height="500"
       width="500"
       className={cn(

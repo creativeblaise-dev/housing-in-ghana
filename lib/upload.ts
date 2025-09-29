@@ -15,8 +15,6 @@ export async function uploadToSpaces(
 ): Promise<UploadResult> {
   const fileExtension = path.extname(file.name);
   const fileName = `${uuidv4()}${fileExtension}`;
-  // const key = `${folder}/${fileName}`;
-
   const key = `${folder}/${fileName}`;
 
   const buffer = await file.arrayBuffer();
@@ -37,7 +35,7 @@ export async function uploadToSpaces(
     let url: string;
 
     if (process.env.DO_SPACES_CDN_ENDPOINT) {
-      url = `${process.env.DO_SPACES_CDN_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${key}`;
+      url = `${process.env.DO_SPACES_CDN_ENDPOINT}/${key}`;
     } else {
       url = `${process.env.DO_SPACES_ENDPOINT}/${process.env.DO_SPACES_BUCKET}/${key}`;
     }

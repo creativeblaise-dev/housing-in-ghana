@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { OptimizedImage } from "./OptimizedImage";
 
 const HFOBanner = () => {
   return (
@@ -11,7 +11,7 @@ const HFOBanner = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Image
+          <OptimizedImage
             src="/images/housingfair-banner-scaled.webp"
             width={900}
             height={200}

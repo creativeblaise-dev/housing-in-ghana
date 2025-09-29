@@ -1,8 +1,7 @@
 "use client";
 import { IconArrowNarrowRight } from "@tabler/icons-react";
-import Image from "next/image";
-import Link from "next/link";
 import { useState, useRef, useId, useEffect } from "react";
+import { OptimizedImage } from "../OptimizedImage";
 
 interface SlideData {
   title?: string;
@@ -92,7 +91,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
                 : "none",
           }}
         >
-          <Image
+          <OptimizedImage
             className="absolute inset-0 w-[120%] h-[110%] object-cover opacity-100 transition-opacity duration-600 ease-in-out"
             style={{
               opacity: current === index ? 1 : 0.5,
