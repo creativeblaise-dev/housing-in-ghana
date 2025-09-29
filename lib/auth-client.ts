@@ -1,9 +1,7 @@
 import { createAuthClient } from "better-auth/react";
 
 export const authClient = createAuthClient({
-  baseURL:
-    process.env.NEXT_PUBLIC_API_ENDPOINT ||
-    process.env.NEXT_PUBLIC_PROD_API_ENDPOINT,
+  baseURL: process.env.NEXT_PUBLIC_PROD_API_ENDPOINT,
 });
 
 export type Session = typeof authClient.$Infer.Session.user;
