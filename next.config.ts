@@ -7,6 +7,12 @@ const nextConfig: NextConfig = {
     "*.local-origin.dev",
     "http:localhost:3000",
   ],
+  serverActions: {
+    allowedOrigins: [
+      "https://housing-in-ghana.vercel.app",
+      "*.https://housing-in-ghana.vercel.app",
+    ],
+  },
   images: {
     remotePatterns: [
       {
