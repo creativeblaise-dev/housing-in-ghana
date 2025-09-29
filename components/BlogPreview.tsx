@@ -6,24 +6,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArticleType } from "@/types";
 import { capitalizeSentences, formatDate } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
-import { Button } from "@react-email/components";
 import { IconCircleArrowRightFilled } from "@tabler/icons-react";
 import Loader from "./Loader";
 
-const BlogPreview = ({ header }: { header: string }) => {
-  const {
-    data: allArticles,
-    isFetching,
-    isError,
-  } = useQuery({
-    queryKey: ["articles"],
-    queryFn: () => fetch("/api/articles").then((res) => res.json()),
-    // Data is already available from server prefetch
-  });
-
-  if (isFetching) return <Loader />;
-  if (isError) return <div>Error loading posts</div>;
+const BlogPreview = ({
+  header,
+  initialData,
+}: {
+  header: string;
+  initialData: ArticleType[];
+}) => {
+  // if (isFetching) return <Loader />;
+  // if (isError) return <div>Error loading posts</div>;
 
   return (
     <section className="px-10 lg:px-20 pb-10 lg:py-10 bg-zinc-200">
@@ -33,7 +27,7 @@ const BlogPreview = ({ header }: { header: string }) => {
         </h1>
       </div>
       <div className="grid lg:grid-cols-4 grid-cols-1 lg:grid-row gap-4 py-4">
-        {allArticles
+        {initialData
           .filter(
             (foundArticle: ArticleType) => foundArticle.status === "published"
           )
@@ -61,7 +55,7 @@ const BlogPreview = ({ header }: { header: string }) => {
                     {formatDate(createdAtDate)}
                   </small>
                   <CardTitle className="text-lg font-bold text-[#1f2020] leading-tight">
-                    {allArticles && capitalizeSentences(title.toLowerCase())}
+                    {initialData && capitalizeSentences(title.toLowerCase())}
                   </CardTitle>
                 </CardHeader>
                 <CardFooter className="px-0.1 pt-2 flex items-center ">

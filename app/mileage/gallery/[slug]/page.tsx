@@ -8,16 +8,16 @@ import {
 
 import SimpleCarousel from "@/components/SimpleCarousel";
 
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
+
 const getMileagePosts = async () => {
   const response = await fetch("/api/mileage");
   return response.json() as Promise<MileagePost[]>;
 };
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ slug: MileagePost["id"] }>;
-}) {
+export default async function Page({ params }: PageProps) {
   const { slug } = await params;
 
   const queryClient = new QueryClient();

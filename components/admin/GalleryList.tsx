@@ -24,26 +24,30 @@ interface MileageGalleriesProps {
   header?: string;
   showSearch?: boolean;
   itemsPerPage?: number;
+  initialData: MileagePost[];
 }
 
 const GalleryList: React.FC<MileageGalleriesProps> = ({
   header = "Mileage Galleries",
   showSearch = true,
   itemsPerPage = 9,
+  initialData,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
+  const galleries = initialData;
+
   // Fetch mileage galleries
-  const {
-    data: galleries = [],
-    isFetching,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["mileage-galleries"],
-    queryFn: () => fetch("/api/mileage").then((res) => res.json()),
-  });
+  // const {
+  //   data: galleries = [],
+  //   isFetching,
+  //   isError,
+  //   error,
+  // } = useQuery({
+  //   queryKey: ["mileage-galleries"],
+  //   queryFn: () => fetch("/api/mileage").then((res) => res.json()),
+  // });
 
   // Ensure galleries is an array to prevent filter errors
   const galleriesArray = Array.isArray(galleries) ? galleries : [];
@@ -103,17 +107,17 @@ const GalleryList: React.FC<MileageGalleriesProps> = ({
     return rangeWithDots;
   };
 
-  if (isFetching) return <Loader />;
+  // if (isFetching) return <Loader />;
 
-  if (isError) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-red-600">
-          Error loading galleries: {error?.message}
-        </p>
-      </div>
-    );
-  }
+  // if (isError) {
+  //   return (
+  //     <div className="text-center py-12">
+  //       <p className="text-red-600">
+  //         Error loading galleries: {error?.message}
+  //       </p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="relative flex pt-5 w-full overflow-hidden bg-[url('/images/prydumano-design-vIbxvHj9m9g-unsplash.jpg')] bg-center [background-size:cover] antialiased md:items-center md:justify-center px-10 md:px-20 pb-10 md:py-15">

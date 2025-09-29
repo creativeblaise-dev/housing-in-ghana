@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MileagePost } from "@/types";
-import Image from "next/image";
+import { OptimizedImage } from "./OptimizedImage";
 import Link from "next/link";
 
 const RelatedMileageGallery = ({
@@ -50,7 +50,7 @@ const RelatedMileageGallery = ({
                     href={`/mileage/gallery/${id}`}
                   >
                     <div className="shrink-0 relative rounded-xl overflow-hidden w-full h-50 before:absolute before:inset-x-0 before:z-1 before:size-full before:bg-linear-to-t before:from-gray-900/70 border-2 border-[#dfdfdf96]">
-                      <Image
+                      <OptimizedImage
                         className="size-full absolute top-0 start-0 object-cover"
                         src={photos[0]}
                         width={1000}

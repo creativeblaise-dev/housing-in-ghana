@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback } from "./ui/avatar";
 import { getInitials } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { IconUser } from "@tabler/icons-react";
+import { authClient } from "@/lib/auth-client";
 
 type User = {
   id: string;
@@ -21,38 +22,67 @@ const UserProfileDropdown = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchSession = async () => {
       try {
-        // Fetch user session
-        const sessionResponse = await fetch("/api/auth/session");
-        if (!sessionResponse.ok) {
+        const newSession = await authClient.getSession();
+
+        if (!newSession) {
           setIsLoading(false);
           return;
         }
 
-        const sessionData = await sessionResponse.json();
-        const userData = sessionData?.user;
+        setUser(newSession?.data?.user || null);
 
-        if (userData) {
-          setUser(userData);
+        const roleResponse = await fetch(
+          `/api/user/${newSession?.data?.user?.id}/role`
+        );
 
-          // Fetch user role
-          const roleResponse = await fetch(`/api/user/${userData.id}/role`);
-
-          if (roleResponse.ok) {
-            const roleData = await roleResponse.json();
-            setIsAdmin(roleData.isAdmin);
-          }
+        if (roleResponse.ok) {
+          const roleData = await roleResponse.json();
+          setIsAdmin(roleData.isAdmin);
         }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.log(error);
       } finally {
         setIsLoading(false);
       }
     };
-
-    fetchUserData();
+    fetchSession();
   }, []);
+
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     try {
+  //       // Fetch user session
+  //       const sessionResponse = useSession();
+  //       if (!sessionResponse) {
+  //         setIsLoading(false);
+  //         return;
+  //       }
+
+  //       const sessionData = sessionResponse?.data;
+  //       const userData = sessionData?.user;
+
+  //       if (userData) {
+  //         setUser(userData);
+
+  //         // Fetch user role
+  //         const roleResponse = await fetch(`/api/user/${userData.id}/role`);
+
+  //         if (roleResponse.ok) {
+  //           const roleData = await roleResponse.json();
+  //           setIsAdmin(roleData.isAdmin);
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching user data:", error);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   fetchUserData();
+  // }, []);
 
   // Handle dropdown toggle
   const handleDropdownToggle = (e: React.MouseEvent) => {

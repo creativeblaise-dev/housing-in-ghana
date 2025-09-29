@@ -23,7 +23,6 @@ const ArticlesVariantCards = ({ header }: { header: string }) => {
   });
 
   if (isFetching) return <Loader />;
-  if (isError) return <div>Error loading posts</div>;
 
   const articlesArray = Array.isArray(allArticles) ? allArticles : [];
 
@@ -55,68 +54,68 @@ const ArticlesVariantCards = ({ header }: { header: string }) => {
             {/* Grid */}
             <div className="grid lg:grid-cols-3 gap-6">
               {/* Card */}
-
-              {articlesArray
-                .filter(
-                  (foundArticle: ArticleType, index: number) =>
-                    foundArticle.status === "published" && index < 3
-                )
-                .map(
-                  ({
-                    title,
-                    createdAt,
-                    featuredImageUrl,
-                    slug,
-                    category,
-                  }: ArticleType) => {
-                    const createdAtDate = new Date(createdAt);
-                    return (
-                      <Link
-                        key={slug}
-                        className="group relative block rounded-xl focus:outline-hidden"
-                        href={`/articles/${slug}`}
-                      >
-                        <div className="shrink-0 relative rounded-xl overflow-hidden w-full h-67.5 before:absolute before:inset-x-0 before:z-1 before:size-full before:bg-linear-to-t before:from-stone-900/90 border-2 border-[#dfdfdf96]">
-                          <OptimizedImage
-                            className="size-full absolute top-0 start-0 object-cover"
-                            src={featuredImageUrl}
-                            width={1000}
-                            height={1000}
-                            alt={title}
-                          />
-                        </div>
-
-                        <div className="absolute top-0 inset-x-0 z-10">
-                          <div className="p-4 flex flex-col h-full sm:p-6">
-                            <div className="flex items-center">
-                              <div className="ms-2.5 sm:ms-4">
-                                <h4 className=" text-white text-xs leading-relaxed px-3 py-1.5 bg-[#ff202bb9] rounded-full inline-block  ">
-                                  {category}
-                                </h4>
-                              </div>
-                            </div>
-                            {/* End Avatar */}
+              {articlesArray &&
+                articlesArray
+                  .filter(
+                    (foundArticle: ArticleType, index: number) =>
+                      foundArticle.status === "published" && index < 3
+                  )
+                  .map(
+                    ({
+                      title,
+                      createdAt,
+                      featuredImageUrl,
+                      slug,
+                      category,
+                    }: ArticleType) => {
+                      const createdAtDate = new Date(createdAt);
+                      return (
+                        <Link
+                          key={slug}
+                          className="group relative block rounded-xl focus:outline-hidden"
+                          href={`/articles/${slug}`}
+                        >
+                          <div className="shrink-0 relative rounded-xl overflow-hidden w-full h-67.5 before:absolute before:inset-x-0 before:z-1 before:size-full before:bg-linear-to-t before:from-stone-900/90 border-2 border-[#dfdfdf96]">
+                            <OptimizedImage
+                              className="size-full absolute top-0 start-0 object-cover"
+                              src={featuredImageUrl}
+                              width={1000}
+                              height={1000}
+                              alt={title}
+                            />
                           </div>
-                        </div>
 
-                        <div className="absolute bottom-0 inset-x-0 z-10">
-                          <div className="flex flex-col h-full p-4 sm:p-6">
-                            <h3 className="text-xl lg:text-1xl font-semibold leading-tight text-white group-hover:text-white/80 group-focus:text-white/80">
-                              {capitalizeSentences(title.toLowerCase())}
-                            </h3>
-                            <p className="text-xs text-white/80 mt-3">
-                              {" "}
-                              {createdAtDate.toDateString()}
-                            </p>
-                            {/* <p className="mt-2 text-white/80">
+                          <div className="absolute top-0 inset-x-0 z-10">
+                            <div className="p-4 flex flex-col h-full sm:p-6">
+                              <div className="flex items-center">
+                                <div className="ms-2.5 sm:ms-4">
+                                  <h4 className=" text-white text-xs leading-relaxed px-3 py-1.5 bg-[#ff202bb9] rounded-full inline-block  ">
+                                    {category}
+                                  </h4>
+                                </div>
+                              </div>
+                              {/* End Avatar */}
+                            </div>
+                          </div>
+
+                          <div className="absolute bottom-0 inset-x-0 z-10">
+                            <div className="flex flex-col h-full p-4 sm:p-6">
+                              <h3 className="text-xl lg:text-1xl font-semibold leading-tight text-white group-hover:text-white/80 group-focus:text-white/80">
+                                {capitalizeSentences(title.toLowerCase())}
+                              </h3>
+                              <p className="text-xs text-white/80 mt-3">
+                                {" "}
+                                {createdAtDate.toDateString()}
+                              </p>
+                              {/* <p className="mt-2 text-white/80">
                               {content.substring(0, 100)}...
                             </p> */}
+                            </div>
                           </div>
-                        </div>
-                      </Link>
-                    );
-                  }
-                )}
+                        </Link>
+                      );
+                    }
+                  )}
               {/* End Card */}
             </div>
             {/* End Grid */}

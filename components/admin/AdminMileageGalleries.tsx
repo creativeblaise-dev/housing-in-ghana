@@ -21,11 +21,14 @@ import {
 import { capitalizeSentences } from "@/lib/utils";
 import Loader from "@/components/Loader";
 import { MileagePost } from "@/types";
+import { getImageUrl } from "@/lib/image-utils";
 
 const AdminMileageGalleries = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9; // 3x3 grid
+
+  const placeholderImage = getImageUrl("/images/default-gallery-cover.jpg");
 
   // Fetch mileage galleries
   const {
@@ -164,8 +167,7 @@ const AdminMileageGalleries = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {paginatedGalleries.map((gallery: MileagePost) => {
-            const coverPhoto =
-              gallery.photos[0] || "/images/default-gallery-cover.jpg";
+            const coverPhoto = gallery.photos[0] || `${placeholderImage}`;
 
             return (
               <div

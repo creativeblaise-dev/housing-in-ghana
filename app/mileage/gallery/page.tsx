@@ -7,20 +7,26 @@ import {
 } from "@tanstack/react-query";
 import { MileagePost } from "@/types";
 import GalleryList from "@/components/admin/GalleryList";
+import { db } from "@/database/drizzle";
+import { mileagePosts } from "@/database/schema";
 
-const getMileagePosts = async () => {
-  const response = await fetch("/api/mileage");
-  return response.json() as Promise<MileagePost[]>;
-};
+// const getMileagePosts = async () => {
+//   const response = await fetch("/api/mileage");
+//   return response.json() as Promise<MileagePost[]>;
+// };
 
 const Gallery = async () => {
-  const queryClient = new QueryClient();
+  // const queryClient = new QueryClient();
 
   // Prefetch on server
-  await queryClient.prefetchQuery({
-    queryKey: ["mileage"],
-    queryFn: getMileagePosts,
-  });
+  // await queryClient.prefetchQuery({
+  //   queryKey: ["mileage"],
+  //   queryFn: getMileagePosts,
+  // });
+
+  const mileage = await db.select().from(mileagePosts);
+
+  const mileageGallery = mileage as MileagePost[];
 
   return (
     <>
@@ -64,13 +70,12 @@ const Gallery = async () => {
         </div>
       </div>
       <section className="py-0">
-        <HydrationBoundary state={dehydrate(queryClient)}>
-          <GalleryList
-            header="Explore Ghana's Beauty"
-            showSearch={true}
-            itemsPerPage={12}
-          />
-        </HydrationBoundary>
+        <GalleryList
+          initialData={mileageGallery}
+          header="Explore Ghana's Beauty"
+          showSearch={true}
+          itemsPerPage={12}
+        />
       </section>
     </>
   );

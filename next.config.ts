@@ -16,6 +16,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({

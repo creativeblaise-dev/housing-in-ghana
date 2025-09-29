@@ -12,11 +12,13 @@ import { formatDate } from "@/lib/utils";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { getImageUrl } from "@/lib/image-utils";
 
-const page = async ({
-  params,
-}: {
-  params: { id: string }; // id will be a string, convert to number
-}) => {
+// Fix the type definition for Next.js 15
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+const page = async ({ params }: PageProps) => {
+  // Await the params in Next.js 15
   const { id } = await params;
 
   const edition = await db
@@ -26,33 +28,53 @@ const page = async ({
     .limit(1);
 
   const magazine = edition as MagazineEdition[];
+
+  // Add error handling for when magazine is not found
+  if (!magazine || magazine.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-red-600 mb-4">
+            Magazine Edition Not Found
+          </h1>
+          <p className="text-gray-600 mb-4">
+            The requested edition #{id} could not be found.
+          </p>
+          <Link href="/magazine">
+            <Button>Back to Magazine</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   const backgroundCoverImage = getImageUrl(magazine[0].backgroundImage);
 
   return (
-    <main className="-mt-24  b-12">
-      <section className="flex flex-col lg:flex-row h-auto bg-stone-100 gap-7 ">
+    <main className="-mt-24 b-12">
+      <section className="flex flex-col lg:flex-row h-auto bg-stone-100 gap-7">
         <div className="h-full flex-2">
-          <div className="min-h-screen  relative isolate overflow-hidden bg-[#313232] py-8 sm:py-24 px-10 lg:px-5 lg:py-2 flex flex-col items-center justify-center">
+          <div className="min-h-screen relative isolate overflow-hidden bg-[#313232] py-8 sm:py-24 px-10 lg:px-5 lg:py-2 flex flex-col items-center justify-center">
             <div className="mx-auto max-w-5xl">
-              <div className=" mx-auto grid justify-center items-center max-w-2xl  lg:max-w-none ">
+              <div className="mx-auto grid justify-center items-center max-w-2xl lg:max-w-none">
                 <div className="flex max-w-xl lg:max-w-lg items-center justify-center pt-20">
                   <OptimizedImage
                     src={magazine[0].coverImage}
                     alt="Edition Cover"
                     width={300}
                     height={600}
-                    className="object-cover object-position-center -rotate-z-10 "
+                    className="object-cover object-position-center -rotate-z-10"
                   />
                 </div>
               </div>
             </div>
             <div
               aria-hidden="true"
-              className="absolute top-0 left-1/2 -z-10 -translate-x-1/2 blur-xs  xl:-top-20"
+              className="absolute top-0 left-1/2 -z-10 -translate-x-1/2 blur-xs xl:-top-20"
             >
               <div
                 style={{ backgroundImage: `url(${backgroundCoverImage})` }}
-                className={`aspect-1155/678 w-288.75 bg-linear-to-tr from-[#ffffff] to-[#ff3b3b] opacity-90 bg-cover bg-top`}
+                className="aspect-1155/678 w-288.75 bg-linear-to-tr from-[#ffffff] to-[#ff3b3b] opacity-90 bg-cover bg-top"
               />
             </div>
           </div>
@@ -81,9 +103,6 @@ const page = async ({
                 Read Online
               </Button>
             </Link>
-            <Button className="bg-stone-600 cursor-pointer">
-              Download PDF
-            </Button>
             <Link href="/contact-us" target="_blank">
               <Button className="bg-stone-400 cursor-pointer">
                 Get a Printed Copy
@@ -93,17 +112,17 @@ const page = async ({
         </div>
       </section>
       <section className="flex flex-col lg:flex-row px-10 py-10 lg:px-10 pb-20 lg:py-10 bg-[#8b1c21]">
-        <div className="flex-2 bg-white ">
-          <div className=" lg:hidden flex justify-center h-60 w-full  sm:top-0 sm:h-screen">
-            <Image
+        <div className="flex-2 bg-white">
+          <div className="lg:hidden flex justify-center h-60 w-full sm:top-0 sm:h-screen">
+            <OptimizedImage
               src={magazine[0].backgroundImage}
               alt="editorial background image"
               width={600}
               height={400}
-              className="object-cover object-center "
+              className="object-cover object-center"
             />
           </div>
-          <div className="p-8 border-r-1 border-stone-200 ">
+          <div className="p-8 border-r-1 border-stone-200">
             <h1 className="text-4xl font-bold text-[#141516] mb-4 pt-4 text-balance">
               Editorial Note
             </h1>
@@ -121,17 +140,17 @@ const page = async ({
               Want to Read More? Get the edition{" "}
               <span>
                 <Link href={magazine[0].readOnlineButtonLink} target="_blank">
-                  <IconArrowRight className="inline-block size-8 " />
+                  <IconArrowRight className="inline-block size-8" />
                 </Link>
               </span>
             </p>
           </div>
         </div>
-        <div className="lg:relative flex-2 items-center  bg-[#FF202B]">
-          <Image
+        <div className="lg:relative flex-2 items-center bg-[#FF202B]">
+          <OptimizedImage
             src={magazine[0].backgroundImage}
             alt="editorial background image"
-            layout="fill"
+            fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover hidden lg:block"
           />

@@ -3,6 +3,14 @@
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
 
+declare global {
+  interface Window {
+    HSCarousel?: {
+      autoInit: () => void;
+    };
+  }
+}
+
 const PrelineScript = dynamic(() => import("./PrelineScript"), {
   ssr: false,
 });

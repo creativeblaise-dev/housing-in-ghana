@@ -1,24 +1,34 @@
 import React from "react";
-import Image from "next/image";
 import BlogPreview from "@/components/BlogPreview";
 import Subscribe from "@/components/Subscribe";
 import { ArticleType } from "@/types";
-import { HydrationBoundary } from "@tanstack/react-query";
-import { QueryClient, dehydrate } from "@tanstack/react-query";
+import { OptimizedImage } from "@/components/OptimizedImage";
+import { db } from "@/database/drizzle";
+import { article } from "@/database/schema";
+import { eq, desc } from "drizzle-orm";
 
-const getArticles = async () => {
-  const response = await fetch("/api/articles");
-  return response.json() as Promise<ArticleType[]>;
-};
+// const getArticles = async () => {
+//   const response = await fetch("/api/articles");
+//   return response.json() as Promise<ArticleType[]>;
+// };
 
 const Articles = async () => {
-  const queryClient = new QueryClient();
+  // const queryClient = new QueryClient();
 
   // Prefetch on server
-  await queryClient.prefetchQuery({
-    queryKey: ["articles"],
-    queryFn: getArticles,
-  });
+  // await queryClient.prefetchQuery({
+  //   queryKey: ["articles"],
+  //   queryFn: getArticles,
+  // });
+
+  const articles = await db
+    .select()
+    .from(article)
+    .where(eq(article.status, "published"))
+    .orderBy(desc(article.createdAt));
+
+  const allArticles = articles as ArticleType[];
+
   return (
     <main>
       <div className="relative isolate overflow-hidden bg-stone-900 py-8 sm:py-24 px-10 lg:px-20 pb-10 lg:py-20 -mt-24 pt-28 ">
@@ -38,7 +48,7 @@ const Articles = async () => {
               </p>
             </div>
             <div className="flex lg:top-50 lg:absolute lg:right-15 items-center">
-              <Image
+              <OptimizedImage
                 src="/images/15554.jpg"
                 width={600}
                 height={600}
@@ -62,9 +72,10 @@ const Articles = async () => {
         </div>
       </div>
       <div>
-        <HydrationBoundary state={dehydrate(queryClient)}>
-          <BlogPreview header="Read our Latest Articles" />
-        </HydrationBoundary>
+        <BlogPreview
+          header="Read our Latest Articles"
+          initialData={allArticles}
+        />
       </div>
       <section className="md:px-20 md:mb-20">
         <Subscribe />
