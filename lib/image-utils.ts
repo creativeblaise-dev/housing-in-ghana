@@ -1,5 +1,3 @@
-import { type StaticImageData } from "next/image";
-
 // Import the static mapping - handle the case where it might not exist yet
 let staticImageMapping: Record<string, string> = {};
 

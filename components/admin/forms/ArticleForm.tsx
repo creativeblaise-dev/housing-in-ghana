@@ -128,7 +128,6 @@ const ArticleForm = ({ type, ...article }: Props) => {
     try {
       if (type === "EDIT_ARTICLE") {
         // For edit mode, use the server action to remove from article, database, and DO Spaces
-        console.log("🗑️ Removing featured image from article:", article?.id);
 
         const result = await editFeaturedImage({ articleId: article?.id });
 
@@ -136,26 +135,17 @@ const ArticleForm = ({ type, ...article }: Props) => {
           throw new Error(result?.message || "Failed to remove featured image");
         }
 
-        console.log("✅ Featured image removed from article:", result);
         toast.success("Featured image has been removed successfully.");
       } else {
         // For create mode, the ImagePreviewWithDelete component handles the actual deletion
         // We just need to clear the UI state here
-        console.log("🗑️ CREATE mode: ImagePreviewWithDelete component will handle file deletion");
-        console.log("🗑️ Clearing UI state for featured image:", {
-          id: featuredImage.id,
-          url: featuredImage.url,
-          originalName: featuredImage.originalName
-        });
 
-        // Don't make API call here - let ImagePreviewWithDelete handle it
-        // Just clear the UI state
+        toast.success("Featured image has been removed.");
       }
 
       // Clear featured image state and form value for successful operations
       setFeaturedImage(null);
       form.setValue("featuredImageUrl", "");
-
     } catch (error) {
       console.error("❌ Featured image delete failed:", error);
 
@@ -171,16 +161,12 @@ const ArticleForm = ({ type, ...article }: Props) => {
     }
   };
 
-
-
   const handleImageUploadError = (error: string) => {
     toast.error(error);
   };
 
   // Handle editor content changes
   const handleContentChange = (content: JSONContent[]) => {
-    console.log("Editor content changed:", content);
-    console.log("Content length:", content.length);
     form.setValue("content", content, {
       shouldValidate: true,
       shouldDirty: true,
@@ -191,15 +177,12 @@ const ArticleForm = ({ type, ...article }: Props) => {
     try {
       // Get the latest content directly from the editor before submitting
       const latestContent = editorRef.current?.getContent() || [];
-      console.log("Latest content from editor:", latestContent);
 
       // Update the data with the latest editor content
       const submitData = {
         ...data,
         content: latestContent,
       };
-
-      console.log("Submit data with editor content:", submitData);
 
       const now = new Date();
 
@@ -212,7 +195,6 @@ const ArticleForm = ({ type, ...article }: Props) => {
         });
 
         if (result.success) {
-          console.log("Updating article:", article?.slug, result.data);
           toast.success("Article updated successfully!");
           form.reset();
           router.push(`/admin/articles`);
@@ -244,9 +226,6 @@ const ArticleForm = ({ type, ...article }: Props) => {
       toast.error("Message: " + errorMessage);
     }
   };
-
-  console.log("Form validation errors:", form.formState.errors);
-  console.log("Form values:", form.getValues());
 
   return (
     <Form {...form}>

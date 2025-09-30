@@ -4,7 +4,6 @@ import React from "react";
 import AuthForm from "@/components/AuthForm";
 import { signUpSchema } from "@/lib/validations";
 import { AuthCredentials } from "@/types";
-import { signUpUser } from "@/server/actions/users";
 
 const SignUp = () => (
   <AuthForm
@@ -14,7 +13,6 @@ const SignUp = () => (
       name: "",
       email: "",
       password: "",
-      // businessCertificate: "",
     }}
   />
 );

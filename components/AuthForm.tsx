@@ -67,7 +67,7 @@ const AuthForm = ({ type, formSchema, defaultValues, onSubmit }: Props) => {
           // Force a router refresh to update auth state immediately
           router.refresh();
 
-          toast.success("Successfully signed in! Redirecting...", {
+          toast.success("Successfully signed in!", {
             id: loadingToast,
           });
 
@@ -88,7 +88,7 @@ const AuthForm = ({ type, formSchema, defaultValues, onSubmit }: Props) => {
         } else {
           result = { success: true };
 
-          toast.success("Account created successfully! Redirecting...", {
+          toast.success("Account created successfully!", {
             id: loadingToast,
           });
 
@@ -114,8 +114,8 @@ const AuthForm = ({ type, formSchema, defaultValues, onSubmit }: Props) => {
       if (result?.success) {
         toast.success(
           isSignIn
-            ? "Successfully signed in! Redirecting..."
-            : "Account created successfully! Redirecting...",
+            ? "Successfully signed in!"
+            : "Account created successfully!",
           { id: loadingToast }
         );
 

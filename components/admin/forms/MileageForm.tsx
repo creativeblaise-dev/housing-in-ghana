@@ -94,15 +94,11 @@ const MileageForm = ({ type, post }: Props) => {
   // Handle photo deletion
   const handlePhotoDelete = async (photoId: string) => {
     setIsDeletingPhoto(photoId);
-    console.log("Deleting photo with ID:", photoId);
 
     try {
       const response = await fetch(`/api/upload/${photoId}`, {
         method: "DELETE",
       });
-
-      console.log("Delete response status:", response.status);
-      console.log("Delete response:", response);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -112,7 +108,6 @@ const MileageForm = ({ type, post }: Props) => {
       setUploadedPhotos((prev) => prev.filter((photo) => photo.id !== photoId));
       toast.success("Photo deleted successfully!");
     } catch (error) {
-      console.error("❌ Photo delete failed:", error);
       const errorMessage =
         error instanceof Error ? error.message : "Delete failed";
       toast.error(errorMessage);
@@ -144,8 +139,6 @@ const MileageForm = ({ type, post }: Props) => {
         photos: uploadedPhotos.map((photo) => photo.url),
       };
 
-      console.log("Submitting mileage post:", submissionData);
-
       const response = await createMileagePost(submissionData);
 
       if (!response.success) {
@@ -159,7 +152,6 @@ const MileageForm = ({ type, post }: Props) => {
       setUploadedPhotos([]);
       router.push("/mileage/gallery");
     } catch (error) {
-      console.error("❌ Mileage post submission failed:", error);
       const errorMessage =
         error instanceof Error ? error.message : "Failed to save mileage post";
       toast.error(errorMessage);
@@ -167,8 +159,6 @@ const MileageForm = ({ type, post }: Props) => {
       setIsSubmitting(false);
     }
   };
-
-  console.log(form.formState.errors);
 
   return (
     <div className="max-w-4xl mx-auto p-6">

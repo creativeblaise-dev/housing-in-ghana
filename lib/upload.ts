@@ -48,7 +48,6 @@ export async function uploadToSpaces(
       mimeType: file.type,
     };
   } catch (error) {
-    console.error("Upload failed:", error);
     throw new Error("Failed to upload file to DigitalOcean Spaces");
   }
 }
@@ -62,7 +61,6 @@ export async function deleteFromSpaces(key: string): Promise<void> {
   try {
     await spacesClient.send(new DeleteObjectCommand(deleteParams));
   } catch (error) {
-    console.error("Delete failed:", error);
     throw new Error("Failed to delete file from DigitalOcean Spaces");
   }
 }
@@ -75,7 +73,6 @@ export function extractKeyFromUrl(url: string): string | null {
     // Remove leading slash
     return pathname.startsWith("/") ? pathname.substring(1) : pathname;
   } catch {
-    console.log("Could not extract key from url");
     return null;
   }
 }

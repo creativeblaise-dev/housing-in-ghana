@@ -121,8 +121,6 @@ const EditionForm = ({ edition }: Props) => {
     setIsDeletingImage(true);
 
     try {
-      console.log("🗑️ Deleting cover image:", coverImage);
-
       const response = await fetch(`/api/upload/${coverImage.id}`, {
         method: "DELETE",
       });
@@ -132,16 +130,13 @@ const EditionForm = ({ edition }: Props) => {
         throw new Error(errorData.error || "Delete failed!");
       }
 
-      const result = await response.json();
-      console.log("✅ Cover image deleted:", result);
+      await response.json();
 
       setCoverImage(null);
       form.setValue("coverImage", "");
 
       toast.success("Cover image has been removed successfully.");
     } catch (error) {
-      console.error("❌ Cover image delete failed:", error);
-
       const errorMessage =
         error instanceof Error ? error.message : "Delete failed";
       toast.error(errorMessage);
@@ -156,8 +151,6 @@ const EditionForm = ({ edition }: Props) => {
     setIsDeletingBgImage(true);
 
     try {
-      console.log("🗑️ Deleting background image:", backgroundImage);
-
       const response = await fetch(`/api/upload/${backgroundImage.id}`, {
         method: "DELETE",
       });
@@ -167,16 +160,13 @@ const EditionForm = ({ edition }: Props) => {
         throw new Error(errorData.error || "Delete failed!");
       }
 
-      const result = await response.json();
-      console.log("✅ Background image deleted:", result);
+      await response.json();
 
       setBackgroundImage(null);
       form.setValue("backgroundImage", "");
 
       toast.success("Background image has been removed successfully.");
     } catch (error) {
-      console.error("❌ Background image delete failed:", error);
-
       const errorMessage =
         error instanceof Error ? error.message : "Delete failed";
       toast.error(errorMessage);
@@ -213,13 +203,10 @@ const EditionForm = ({ edition }: Props) => {
         form.reset();
         setCoverImage(null);
         setBackgroundImage(null);
-        console.log("🚀 Edition created:", result.data);
       } else {
-        console.error("❌ Edition creation failed:", result);
         toast.error(result?.error || "Failed to create edition.");
       }
     } catch (error) {
-      console.error("❌ Edition creation failed:", error);
       const errorMessage =
         error instanceof Error ? error.message : "Failed to create edition.";
       toast.error(errorMessage);
