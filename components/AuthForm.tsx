@@ -115,7 +115,7 @@ const AuthForm = ({ type, formSchema, defaultValues, onSubmit }: Props) => {
         toast.success(
           isSignIn
             ? "Successfully signed in!"
-            : "Check your email for verification a link!",
+            : "Check your email for a verification link!",
           { id: loadingToast }
         );
 
