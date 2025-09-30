@@ -3,7 +3,6 @@
 import React from "react";
 import AuthForm from "@/components/AuthForm";
 import { signUpSchema } from "@/lib/validations";
-import { AuthCredentials } from "@/types";
 
 const SignUp = () => (
   <AuthForm

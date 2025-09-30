@@ -88,7 +88,7 @@ const AuthForm = ({ type, formSchema, defaultValues, onSubmit }: Props) => {
         } else {
           result = { success: true };
 
-          toast.success("Account created successfully!", {
+          toast.success("Account created! Check your email for verification.", {
             id: loadingToast,
           });
 
