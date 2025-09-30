@@ -20,7 +20,7 @@ export const auth = betterAuth({
     sendVerificationEmail: async ({ url, user }) => {
       await resend.emails.send({
         from: "Acme <onboarding@resend.dev>",
-        to: ["delivered@resend.dev"],
+        to: user.email,
         subject: "Verify Email",
         react: EmailVerification({
           userEmail: user.email,
