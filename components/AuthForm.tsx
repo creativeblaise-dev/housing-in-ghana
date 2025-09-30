@@ -88,7 +88,7 @@ const AuthForm = ({ type, formSchema, defaultValues, onSubmit }: Props) => {
         } else {
           result = { success: true };
 
-          toast.success("Account created! Check your email for verification.", {
+          toast.success("Account created successfully!", {
             id: loadingToast,
           });
 
@@ -115,7 +115,7 @@ const AuthForm = ({ type, formSchema, defaultValues, onSubmit }: Props) => {
         toast.success(
           isSignIn
             ? "Successfully signed in!"
-            : "Account created successfully!",
+            : "Check your email for verification a link!",
           { id: loadingToast }
         );
 
