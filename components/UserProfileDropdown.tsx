@@ -252,7 +252,7 @@ const UserProfileDropdown = () => {
       ) : (
         <Link href="/sign-in">
           <Button className="bg-transparent shadow-none hover:bg-gray-100 text-stone-700 text-sm font-bold cursor-pointer transition-all duration-200 transform hover:scale-105 border border-gray-200 hover:border-[#FF202B]/30">
-            <span className="mr-2">Sign In</span>
+            <span className="mr-2 hidden lg:inline">Sign In</span>
             <IconUser className="h-4 w-4 text-[#FF202B]" />
           </Button>
         </Link>
