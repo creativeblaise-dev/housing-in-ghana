@@ -71,7 +71,7 @@ const Magazine = async () => {
         />
         <div className="relative  z-10 flex gap-5 flex-col md:flex-row  mx-auto w-full max-w-7xl lg:pt-20 ">
           <div className="md:flex-3">
-            <h1 className="bg-opacity-50 bg-gradient-to-b from-white to-neutral-400 bg-clip-text text-left text-5xl font-bold text-transparent mb-4 pt-2">
+            <h1 className="bg-opacity-50 bg-gradient-to-b from-white to-neutral-400 bg-clip-text text-left text-3xl lg:text-5xl font-bold text-transparent mb-4 pt-2">
               Dive into the pages of <br /> Housing
               <span className="text-[#FF202B] text-shadow-cyan-100 ">
                 {" "}

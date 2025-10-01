@@ -15,9 +15,9 @@ const About = () => {
         {/* Full gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-black/90 via-stone-900/80 to-black/70"></div>
 
-        <div className="grid md:grid-cols-2 gap-4 px-10 md:px-20 relative z-10 mt-20">
+        <div className="grid md:grid-cols-2 gap-4 px-10 md:px-20 relative z-10 mt-5 lg:mt-20">
           <div className=" pt-5 md:col-start-1 md:col-end-2 md:w-190  md:h-120  ">
-            <h1 className=" mb-6 font-bold text-5xl lh-lg text-slate-100 ">
+            <h1 className=" mb-6 font-bold text-3xl lg:text-5xl lh-lg text-slate-100 ">
               About Housing
               <span className="text-[#FF202B]"> In Ghana</span>
             </h1>

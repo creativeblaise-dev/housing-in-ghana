@@ -10,7 +10,7 @@ const Contact = () => {
       </section>
       <section className="flex flex-col lg:flex-row gap-4 px-10 lg:px-50 pb-20 lg:py-10 bg-zinc-100 lg:h-120 ">
         <div className="lg:flex-2">
-          <h1 className="text-4xl font-bold text-[#141516]  pt-4 text-balance">
+          <h1 className="text-2xl lg:text-4xl font-bold text-[#141516]  pt-4 text-balance">
             Let's get talking
           </h1>
           <p className=" text-md text-stone-800 mt-4 text-balance">

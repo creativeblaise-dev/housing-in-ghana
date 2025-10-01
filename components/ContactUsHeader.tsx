@@ -25,7 +25,7 @@ const ContactUsHeader = () => {
         }}
         className="z-50 flex flex-col justify-center lg:px-20 items-center"
       >
-        <motion.h1 className="font-bold text-5xl lg:text-5xl bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 py-4">
+        <motion.h1 className="font-bold text-3xl lg:text-5xl bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 py-4">
           Contact Us
         </motion.h1>
         <motion.p className="text-stone-400 text-balance text-center">

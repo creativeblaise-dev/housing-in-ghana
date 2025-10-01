@@ -33,8 +33,8 @@ const Gallery = async () => {
       <div className="relative isolate overflow-hidden bg-amber-900 py-8 sm:py-24  lg:px-20 lg:py-20 -mt-24 pt-28 pb-12 px-10 ">
         <div className="mx-auto max-w-7xl lg:pt-20">
           <div className=" mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-2">
-            <div className="max-w-xl lg:max-w-lg">
-              <h2 className="text-5xl font-semibold tracking-tight text-white mb-4">
+            <div className="max-w-xl pt-10 lg:pt-2 lg:max-w-lg">
+              <h2 className="text-3xl lg:text-5xl font-semibold tracking-tight text-white mb-4">
                 Mileage Gallery. Showcasing Ghana, Showcasing Your Brand.
               </h2>
               <p className=" text-stone-300 text-md text-balance ">

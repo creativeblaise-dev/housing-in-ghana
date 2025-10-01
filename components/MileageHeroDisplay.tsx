@@ -30,7 +30,7 @@ const MileageHeroDispaly = () => {
         }}
         className="z-50 flex flex-col justify-center lg:px-20 items-center "
       >
-        <motion.h1 className="font-bold text-5xl lg:text-5xl text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 py-4">
+        <motion.h1 className="font-bold text-3xl lg:text-5xl text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 py-4">
           Mileage – Extending Your Reach <br /> Across Ghana
         </motion.h1>
         <Link href="/mileage/gallery">
