@@ -149,7 +149,7 @@ const Magazine = async () => {
             and opportunities in every edition."
           </p>
         </div>
-        <div className="px-20">
+        <div className="px-4 lg:px-20">
           <LayoutGridFeature images={cards} />
         </div>
       </section>
