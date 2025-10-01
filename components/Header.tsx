@@ -3,7 +3,6 @@
 import { ReactNode, useState } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3CenterLeftIcon, XMarkIcon } from "@heroicons/react/24/outline";
-
 import Link from "next/link";
 import { getImageUrl } from "@/lib/image-utils";
 import { navigation } from "../constants/index";
@@ -69,11 +68,16 @@ const Header = ({ userprofile }: { userprofile: ReactNode }) => {
             {userprofile}
           </nav>
 
-          {/* Mobile Menu Button */}
-          <div className="lg:hidden">
+          {/* Mobile Menu - User Profile + Hamburger */}
+          <div className="lg:hidden flex items-center gap-3">
+            {/* Show user profile in mobile */}
+            <div className="flex items-center">{userprofile}</div>
+
+            {/* Hamburger Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="text-gray-700 hover:text-[#FF202B]"
+              className="text-gray-700 hover:text-[#FF202B] p-2 rounded-md transition-colors duration-200 hover:bg-gray-100"
+              aria-label="Open mobile menu"
             >
               <Bars3CenterLeftIcon className="h-6 w-6" />
             </button>
@@ -81,45 +85,128 @@ const Header = ({ userprofile }: { userprofile: ReactNode }) => {
         </div>
       </div>
 
-      {/* Mobile Menu Dialog */}
+      {/* Enhanced Mobile Menu Dialog */}
       <Dialog
         as="div"
         className="lg:hidden"
         open={mobileMenuOpen}
         onClose={setMobileMenuOpen}
       >
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-25" />
-        <DialogPanel className="fixed top-0 right-0 w-3/4 max-w-sm h-full bg-white shadow-lg z-50 p-6">
-          <div className="flex items-center justify-between">
-            <span className="text-xl font-bold text-[#FF202B]">
-              <OptimizedImage
-                src="/images/housing-in-ghana-logo.png"
-                alt="logo"
-                width={130}
-                height={60}
-              />
-            </span>
+        {/* Backdrop with animation */}
+        <div
+          className={`fixed inset-0 z-40 bg-black transition-opacity duration-300 ${
+            mobileMenuOpen ? "bg-opacity-50" : "bg-opacity-0"
+          }`}
+          onClick={() => setMobileMenuOpen(false)}
+        />
+
+        {/* Slide-in Panel */}
+        <DialogPanel
+          className={`fixed top-0 right-0 w-80 max-w-[85vw] h-full bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
+            mobileMenuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between p-6 border-b border-gray-100">
+            <OptimizedImage
+              src="/images/housing-in-ghana-logo.png"
+              alt="logo"
+              width={120}
+              height={55}
+              className="w-auto h-auto"
+            />
             <button
               onClick={() => setMobileMenuOpen(false)}
-              className="text-gray-700 hover:text-red-600"
+              className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-md transition-colors duration-200"
+              aria-label="Close mobile menu"
             >
               <XMarkIcon className="h-6 w-6" />
             </button>
           </div>
 
-          <div className="mt-6 space-y-4">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="block text-gray-700 hover:text-[#FF202B] transition-colors text-lg"
-              >
-                {item.name}
-              </Link>
-            ))}
+          {/* Navigation Items */}
+          <div className="flex-1 py-6 px-4 space-y-2">
+            {navigation.map((item, index) => {
+              const isActive =
+                (item.href !== "/" &&
+                  pathname.includes(item.href) &&
+                  item.href.length > 1) ||
+                pathname === item.href;
+
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`
+                    group flex items-center px-4 py-3 text-base font-medium rounded-lg transition-all duration-200 transform hover:scale-[0.98]
+                    ${
+                      isActive
+                        ? "bg-[#FF202B] text-white shadow-md"
+                        : item.name === "Advertise With Us"
+                          ? "bg-gradient-to-r from-[#FF202B] to-[#ff4757] text-white shadow-md hover:shadow-lg"
+                          : "text-gray-700 hover:bg-gray-50 hover:text-[#FF202B]"
+                    }
+                  `}
+                  style={{
+                    animationDelay: `${index * 50}ms`,
+                    animation: mobileMenuOpen
+                      ? `slideInRight 0.3s ease-out forwards`
+                      : "none",
+                  }}
+                >
+                  <span className="flex-1">{item.name}</span>
+
+                  {/* Active indicator */}
+                  {isActive && (
+                    <div className="w-2 h-2 bg-white rounded-full opacity-80" />
+                  )}
+
+                  {/* Hover arrow */}
+                  <svg
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      isActive
+                        ? "opacity-80"
+                        : "opacity-0 group-hover:opacity-60 group-hover:translate-x-1"
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Footer - User Profile Section */}
+          <div className="border-t border-gray-100 p-4">
+            <div className="flex items-center justify-center">
+              {userprofile}
+            </div>
           </div>
         </DialogPanel>
       </Dialog>
+
+      {/* Add custom animations */}
+      <style jsx>{`
+        @keyframes slideInRight {
+          from {
+            opacity: 0;
+            transform: translateX(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+      `}</style>
     </header>
   );
 };

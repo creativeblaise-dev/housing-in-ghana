@@ -57,7 +57,6 @@ export const requireAdmin = async (request: NextRequest) => {
 
     return { ...session, user: { ...session.user, role: userRole } };
   } catch (error) {
-    console.error("Database error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

@@ -57,9 +57,9 @@ const AdminHeader = () => {
                 <span className="sr-only">Sidebar Toggle</span>
               </button>
 
-              <h2 className="w-full flex items-center gap-x-2 py-2 ps-2.5 pe-8 text-sm text-gray-800 truncate rounded-lg hover:bg-gray-100/70 focus:outline-hidden focus:bg-gray-100/70 dark:hover:bg-neutral-700/50 dark:focus:bg-neutral-700/50 dark:text-neutral-200">
-                <span className="truncate font-bold text-xl lg:pl-15">
-                  Hi there, Admin!
+              <h2 className="w-full d-none md:flex lg:flex items-center gap-x-2 py-2 ps-2.5 pe-8 text-sm text-gray-800 truncate rounded-lg hover:bg-gray-100/70 focus:outline-hidden focus:bg-gray-100/70 dark:hover:bg-neutral-700/50 dark:focus:bg-neutral-700/50 dark:text-neutral-200">
+                <span className="truncate font-bold text-lg lg:text-xl  lg:pl-15">
+                  Welcome Back, Admin! 👋
                 </span>
                 <p className="text-md italic">Explore your dashboard!</p>
               </h2>

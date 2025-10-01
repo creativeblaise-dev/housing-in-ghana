@@ -9,7 +9,7 @@ const AdminMainContent = ({ children }: { children: ReactNode }) => {
           <div className="flex-1 flex flex-col lg:flex-row">
             <div className="flex-1 min-w-0 flex flex-col border-e border-gray-200">
               <div className="flex-1 min-h-0 overflow-y-auto">
-                <div className="p-4 lg:p-6">{children}</div>
+                <div className="px-4 py-10 lg:p-6">{children}</div>
               </div>
             </div>
           </div>

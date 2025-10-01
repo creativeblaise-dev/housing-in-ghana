@@ -22,7 +22,7 @@ const BlogPreview = ({
   return (
     <section className="px-10 lg:px-20 pb-10 lg:py-10 bg-zinc-200">
       <div className="flex flex-row  md:w-2/3 ">
-        <h1 className="text-4xl font-bold text-[#212121] mb-1 pt-0">
+        <h1 className="text-4xl font-bold text-[#212121] mb-1 pt-10">
           {header}
         </h1>
       </div>
