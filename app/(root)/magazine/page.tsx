@@ -137,7 +137,7 @@ const Magazine = async () => {
           <EditionCarousel magazine={editions} />
         </div>
       </section>
-      <section className="py-4">
+      <section className="pb-4">
         <div className="flex flex-col justify-center">
           <h1 className="text-4xl text-center font-bold text-[#141516]  pt-4 text-balance">
             From cozy cafés to bustling offices, people everywhere are diving
