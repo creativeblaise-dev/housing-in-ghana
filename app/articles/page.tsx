@@ -1,7 +1,5 @@
-export const revalidate = 60; // revalidate every 60 seconds
-
 import React from "react";
-import BlogPreview from "@/components/BlogPreview";
+import ArticlesClient from "@/components/ArticlesClient";
 import Subscribe from "@/components/Subscribe";
 import { ArticleType } from "@/types";
 import { OptimizedImage } from "@/components/OptimizedImage";
@@ -9,20 +7,9 @@ import { db } from "@/database/drizzle";
 import { article } from "@/database/schema";
 import { eq, desc } from "drizzle-orm";
 
-// const getArticles = async () => {
-//   const response = await fetch("/api/articles");
-//   return response.json() as Promise<ArticleType[]>;
-// };
+export const revalidate = 60; // revalidate every 60 seconds
 
 const Articles = async () => {
-  // const queryClient = new QueryClient();
-
-  // Prefetch on server
-  // await queryClient.prefetchQuery({
-  //   queryKey: ["articles"],
-  //   queryFn: getArticles,
-  // });
-
   const articles = await db
     .select()
     .from(article)
@@ -74,10 +61,7 @@ const Articles = async () => {
         </div>
       </div>
       <div>
-        <BlogPreview
-          header="Read our Latest Articles"
-          initialData={allArticles}
-        />
+        <ArticlesClient initialData={allArticles} />
       </div>
       <section className="md:px-20 md:mb-20">
         <Subscribe />

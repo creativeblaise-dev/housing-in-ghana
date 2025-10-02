@@ -7,7 +7,6 @@ import Link from "next/link";
 import { ArticleType } from "@/types";
 import { capitalizeSentences, formatDate } from "@/lib/utils";
 import { IconCircleArrowRightFilled } from "@tabler/icons-react";
-import Loader from "./Loader";
 
 const BlogPreview = ({
   header,
@@ -16,9 +15,6 @@ const BlogPreview = ({
   header: string;
   initialData: ArticleType[];
 }) => {
-  // if (isFetching) return <Loader />;
-  // if (isError) return <div>Error loading posts</div>;
-
   return (
     <section className="px-10 lg:px-20 pb-10 lg:py-10 bg-zinc-200">
       <div className="flex flex-row  md:w-2/3 ">
