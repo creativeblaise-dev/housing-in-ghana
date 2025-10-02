@@ -1,3 +1,5 @@
+export const revalidate = 60; // revalidate every 60 seconds
+
 import React from "react";
 import BlogPreview from "@/components/BlogPreview";
 import Subscribe from "@/components/Subscribe";
