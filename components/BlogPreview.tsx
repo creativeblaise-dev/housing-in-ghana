@@ -27,45 +27,49 @@ const BlogPreview = ({
         </h1>
       </div>
       <div className="grid lg:grid-cols-4 grid-cols-1 lg:grid-row gap-4 py-4">
-        {initialData
-          .filter(
-            (foundArticle: ArticleType) => foundArticle.status === "published"
-          )
-          .map(({ title, createdAt, featuredImageUrl, slug }: ArticleType) => {
-            const createdAtDate = new Date(createdAt);
+        {initialData &&
+          initialData
+            .filter(
+              (foundArticle: ArticleType) => foundArticle.status === "published"
+            )
+            .map(
+              ({ title, createdAt, featuredImageUrl, slug }: ArticleType) => {
+                const createdAtDate = new Date(createdAt);
 
-            return (
-              <Card
-                className=" w-full max-w-sm px-2.5 gap-2 pb-2 bg-transparent shadow-none border-none"
-                key={slug}
-              >
-                <Link href={`/articles/${slug}`}>
-                  <figure className=" pb-0 relative h-60 lg:h-40 ">
-                    <Image
-                      src={featuredImageUrl}
-                      alt={title}
-                      layout="fill"
-                      objectFit="cover"
-                      className="rounded-lg shadow"
-                    />
-                  </figure>
-                </Link>
-                <CardHeader className="py-2 px-0.1">
-                  <small className=" text-stone-600">
-                    {formatDate(createdAtDate)}
-                  </small>
-                  <CardTitle className="text-lg font-bold text-[#1f2020] leading-tight">
-                    {initialData && capitalizeSentences(title.toLowerCase())}
-                  </CardTitle>
-                </CardHeader>
-                <CardFooter className="px-0.1 pt-2 flex items-center ">
-                  <Link href={`/articles/${slug}`}>
-                    <IconCircleArrowRightFilled className="h-6 w-6 hover:text-red-500" />
-                  </Link>
-                </CardFooter>
-              </Card>
-            );
-          })}
+                return (
+                  <Card
+                    className=" w-full max-w-sm px-2.5 gap-2 pb-2 bg-transparent shadow-none border-none"
+                    key={slug}
+                  >
+                    <Link href={`/articles/${slug}`}>
+                      <figure className=" pb-0 relative h-60 lg:h-40 ">
+                        <Image
+                          src={featuredImageUrl}
+                          alt={title}
+                          layout="fill"
+                          objectFit="cover"
+                          className="rounded-lg shadow"
+                        />
+                      </figure>
+                    </Link>
+                    <CardHeader className="py-2 px-0.1">
+                      <small className=" text-stone-600">
+                        {formatDate(createdAtDate)}
+                      </small>
+                      <CardTitle className="text-lg font-bold text-[#1f2020] leading-tight">
+                        {initialData &&
+                          capitalizeSentences(title.toLowerCase())}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardFooter className="px-0.1 pt-2 flex items-center ">
+                      <Link href={`/articles/${slug}`}>
+                        <IconCircleArrowRightFilled className="h-6 w-6 hover:text-red-500" />
+                      </Link>
+                    </CardFooter>
+                  </Card>
+                );
+              }
+            )}
       </div>
     </section>
   );
