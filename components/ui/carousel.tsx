@@ -98,8 +98,8 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
             }}
             alt={`mileage-${index}`}
             src={src}
-            width={400}
-            height={600}
+            width={1000}
+            height={1000}
             onLoad={imageLoaded}
             loading="eager"
             decoding="sync"
