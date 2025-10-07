@@ -3,8 +3,6 @@
 import React from "react";
 import AuthForm from "@/components/AuthForm";
 import { signInSchema } from "@/lib/validations";
-import { AuthCredentials } from "@/types";
-import { signIn } from "@/server/actions/users";
 
 const SignIn = () => (
   <AuthForm

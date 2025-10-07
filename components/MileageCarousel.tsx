@@ -23,7 +23,7 @@ const MileageCarousel = () => {
     { src: "/images/mileage-preview/IMG_4655.jpg" },
     { src: "/images/mileage-preview/IMG_4677.jpg" },
     { src: "/images/mileage-preview/IMG_2901.jpg" },
-    { src: "/images/mileage-preview/IMG_9572.jpg" },
+    { src: "/images/IMG_0543.jpg" },
     { src: "/images/mileage-preview/IMG_3070.jpg" },
     { src: "/images/mileage-preview/IMG_0730.jpg" },
     { src: "/images/mileage-preview/IMG_3456.jpg" },

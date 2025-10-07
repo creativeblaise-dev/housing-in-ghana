@@ -24,7 +24,7 @@ export default function ArticlesClient({
     queryKey: ["articles"],
     queryFn: fetchArticles,
     initialData, // comes from Drizzle server query
-    staleTime: 60_000, // consider fresh for 1 minute
+    staleTime: 60000, // consider fresh for 1 minute
     refetchOnWindowFocus: false,
   });
 

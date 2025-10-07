@@ -30,8 +30,8 @@ const Header = ({ userprofile }: { userprofile: ReactNode }) => {
               <OptimizedImage
                 src="/images/housing-in-ghana-logo.png"
                 alt="logo"
-                width={130}
-                height={60}
+                width={100}
+                height={40}
                 className="w-auto h-auto"
               />
             </Link>
