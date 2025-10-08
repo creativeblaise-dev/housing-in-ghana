@@ -26,13 +26,13 @@ const MainFooter = () => {
 
                 <a
                   href="#"
-                  className="block lg:text-2xl font-medium text-stone-400 hover:opacity-75 sm:text-3xl dark:text-white"
+                  className="block lg:text-[20px] font-medium text-stone-400 hover:opacity-75 sm:text-3xl dark:text-white"
                 >
                   +233 (0) 555 444 665
                 </a>
                 <a
                   href="#"
-                  className="block lg:text-2xl font-medium text-stone-400 hover:opacity-75 sm:text-3xl dark:text-white"
+                  className="block lg:text-[20px] font-medium text-stone-400 hover:opacity-75 sm:text-3xl dark:text-white"
                 >
                   +233 (0) 599 663 344
                 </a>
@@ -44,9 +44,15 @@ const MainFooter = () => {
 
                 <a
                   href="#"
-                  className="block lg:text-2xl font-medium text-stone-400 hover:opacity-75 sm:text-3xl dark:text-white"
+                  className="block lg:text-[20px] font-medium text-stone-400 hover:opacity-75 sm:text-3xl dark:text-white"
                 >
                   info@housinginghana.com
+                </a>
+                <a
+                  href="#"
+                  className="block lg:text-[20px] font-medium text-stone-400 hover:opacity-75 sm:text-3xl dark:text-white"
+                >
+                  office@housinginghana.com
                 </a>
               </p>
 

@@ -12,27 +12,27 @@ type Stats = {
 const stats: Stats[] = [
   {
     id: 1,
-    name: "Monthly readers across web and print",
+    name: "Monthly readers across web and print.",
     value: "10,000+",
     numValue: 10000,
   },
   {
     id: 2,
-    name: "Nationwide distribution points including hotels, malls, bookshops, gas stations",
+    name: "Nationwide distribution points including hotels, malls, bookshops, gas stations, pharmacies and more.",
     value: "80+",
     numValue: 80,
   },
   {
     id: 3,
-    name: "Biannual magazines published and distributed nationwide",
+    name: "Annual magazine published and distributed nationwide.",
     value: "3 Editions",
     numValue: 3,
   },
   {
     id: 4,
-    name: "Featured real estate professionals, projects, and brands",
-    value: "200+",
-    numValue: 200,
+    name: "Featured real estate professionals, projects, and brands.",
+    value: "500+",
+    numValue: 500,
   },
 ];
 

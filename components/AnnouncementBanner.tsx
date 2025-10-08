@@ -56,7 +56,7 @@ const AnnouncementBanner = () => {
     },
   };
 
-  const backgroundImageUrl = getImageUrl("/images/banner-bg-2.png");
+  const backgroundImageUrl = getImageUrl("/images/cb-announcement.jpg");
 
   return (
     <div className="max-w-[100%] px-0 sm:px-6 lg:px-0 mx-auto">

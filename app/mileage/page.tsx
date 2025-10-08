@@ -123,7 +123,7 @@ const Mileage = () => {
         </div>
       </section>
 
-      <section className="py-4 px-10 bg-zinc-200">
+      <section className="py-4 px-10 bg-zinc-100">
         <div className="flex flex-col justify-center pt-5">
           <h1 className="text-4xl text-center font-bold text-[#141516]  pt-4 text-balance">
             At Housing <span className="text-[#FF202B]"> In Ghana </span>,

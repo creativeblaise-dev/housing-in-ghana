@@ -10,7 +10,7 @@ const WhyHIG = () => {
         </h1>
         <p className="text-md">
           Housing In Ghana specializes in nurturing Ghana’s evolving real estate
-          ecosystem. We publish a bi‑annual magazine tailored to developers,
+          ecosystem. We publish an annual magazine tailored to developers,
           agents, service providers, and lifestyle brands.
         </p>
       </div>

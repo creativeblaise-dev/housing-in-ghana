@@ -23,8 +23,8 @@ const About = () => {
             </h1>
             <p className="mb-6 text-zinc-200 text-md text-balance">
               We are dedicated to fostering Ghana's thriving real estate
-              ecosystem. Our flagship product, Housing in Ghana magazine, is a
-              bi-annual publication targeting key industry players: developers,
+              ecosystem. Our flagship product, Housing in Ghana magazine, is an
+              annual publication targeting key industry players: developers,
               suppliers, professionals, lifestyle brands, and hotels.
             </p>
             <p className="mb-6 text-zinc-200 text-md text-balance">
