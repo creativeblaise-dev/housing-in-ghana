@@ -13,63 +13,55 @@ const InfiniteCards = () => {
 
 const clients = [
   {
-    clientLogo: "/images/DG-light.svg",
+    clientLogo: "/images/clients/devtracoplus_logo_298_x_125_-01.png",
+    name: "Crown Lusso",
+  },
+  {
+    clientLogo: "/images/clients/header-logo_lrg.png",
+    name: "FBN",
+  },
+  {
+    clientLogo: "/images/clients/WHITEWALL-LOGO-copy-removebg-preview.png",
     name: "Devtraco Group",
   },
   {
-    clientLogo: "/images/DG-light.svg",
+    clientLogo: "/images/clients/Logo-01.png",
     name: "Devtraco Group",
   },
   {
-    clientLogo: "/images/DG-light.svg",
+    clientLogo: "/images/clients/cropped-logo11-01-1110x399.png",
     name: "Devtraco Group",
   },
   {
-    clientLogo: "/images/DG-light.svg",
+    clientLogo: "/images/clients/1-780x456_prev_ui.png",
     name: "Devtraco Group",
   },
   {
-    clientLogo: "/images/DG-light.svg",
+    clientLogo: "/images/clients/springtime-logo-colorful@3x-1.png",
     name: "Devtraco Group",
   },
   {
-    clientLogo: "/images/DG-light.svg",
+    clientLogo: "/images/clients/Alzu-Shops-removebg-preview.png",
     name: "Devtraco Group",
   },
   {
-    clientLogo: "/images/DG-light.svg",
+    clientLogo: "/images/clients/cropped-logo11-01-1110x399.png",
     name: "Devtraco Group",
   },
   {
-    clientLogo: "/images/DG-light.svg",
+    clientLogo: "/images/clients/trellidor-logo-2-1.png",
     name: "Devtraco Group",
   },
   {
-    clientLogo: "/images/DG-light.svg",
+    clientLogo: "/images/clients/indigohomes-logo.png",
     name: "Devtraco Group",
   },
   {
-    clientLogo: "/images/DG-light.svg",
+    clientLogo: "/images/clients/logo.png",
     name: "Devtraco Group",
   },
   {
-    clientLogo: "/images/DG-light.svg",
-    name: "Devtraco Group",
-  },
-  {
-    clientLogo: "/images/DG-light.svg",
-    name: "Devtraco Group",
-  },
-  {
-    clientLogo: "/images/DG-light.svg",
-    name: "Devtraco Group",
-  },
-  {
-    clientLogo: "/images/DG-light.svg",
-    name: "Devtraco Group",
-  },
-  {
-    clientLogo: "/images/DG-light.svg",
+    clientLogo: "/images/clients/RMK_New_logo_240_realtor.png",
     name: "Devtraco Group",
   },
 ];

@@ -44,7 +44,8 @@ const Mission = () => {
         <div className="md:flex-2">
           <div className="flex justify-center md:pt-15">
             <OptimizedImage
-              src="/images/magazine-page_2.png"
+              src="/images/2N6A4671.jpg"
+              className="rounded-md"
               height={1000}
               width={1000}
               alt="magazine page"

@@ -88,15 +88,14 @@ export const InfiniteMovingCards = ({
         >
           {items.map((item, idx) => (
             <li
-              className="relative w-[150px] max-w-full shrink-0 rounded-2xl border border-b-0 border-zinc-200 bg-[#232323] px-8 py-6 md:w-[150px] dark:border-zinc-700 dark:bg-[linear-gradient(180deg,#27272a,#18181b)]"
+              className="relative lg:h-10 w-[150px] max-w-full shrink-0 px-8 py-6 lg:w-[200px] "
               key={idx}
             >
               <OptimizedImage
                 src={item.clientLogo}
-                alt="Client 1"
-                width={100}
-                height={100}
-                className="object-contain"
+                alt="client logo"
+                fill
+                className="object-contain h-full grayscale hover:grayscale-0 transition-all duration-300"
               />
             </li>
           ))}

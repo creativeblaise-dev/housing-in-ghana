@@ -48,7 +48,7 @@ const Home = async () => {
       <MagazineCard />
       <Spotlighter />
       <SpotlightPreview />
-      <section>
+      <section className="py-10">
         <div className="sm:w-1/2 xl:w-2/3 mx-auto text-center pt-10">
           <h1 className="text-4xl font-bold text-[#141516] mb-4 pt-4">
             A Platform Companies Trust
