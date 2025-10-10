@@ -8,6 +8,10 @@ import { uploadSchema } from "@/lib/validations";
 import { fileUploads } from "@/database/schema";
 import { db } from "@/database/drizzle";
 
+// Configure runtime for Vercel
+export const runtime = "nodejs";
+export const maxDuration = 60; // 60 seconds timeout
+
 export async function POST(request: NextRequest) {
   try {
     // Check if required environment variables are present
@@ -42,6 +46,17 @@ export async function POST(request: NextRequest) {
 
     if (!files || files.length === 0) {
       return NextResponse.json({ error: "No files provided" }, { status: 400 });
+    }
+
+    // Limit batch size to prevent timeouts (client should handle batching)
+    if (files.length > 10) {
+      return NextResponse.json(
+        {
+          error:
+            "Too many files in single request. Maximum 10 files allowed per batch.",
+        },
+        { status: 400 }
+      );
     }
 
     const uploadResults = [];

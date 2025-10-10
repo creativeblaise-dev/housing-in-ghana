@@ -21,6 +21,10 @@ const MultiFileUpload = ({
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [uploadProgress, setUploadProgress] = useState<{
+    current: number;
+    total: number;
+  } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,39 +42,96 @@ const MultiFileUpload = ({
     setIsUploading(true);
 
     try {
-      const formData = new FormData();
-      formData.append("type", uploadType);
-      formData.append("folder", folder);
+      const BATCH_SIZE = 5; // Upload 5 files at a time
+      const allResults = [];
+      const allErrors = [];
+      const totalBatches = Math.ceil(selectedFiles.length / BATCH_SIZE);
 
-      selectedFiles.forEach((file) => {
-        formData.append("files", file);
-      });
+      // Split files into batches
+      for (let i = 0; i < selectedFiles.length; i += BATCH_SIZE) {
+        const currentBatch = Math.floor(i / BATCH_SIZE) + 1;
+        setUploadProgress({ current: currentBatch, total: totalBatches });
+        const batch = selectedFiles.slice(i, i + BATCH_SIZE);
 
-      const response = await fetch("/api/upload/gallery", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        let errorMessage = "Upload failed";
         try {
-          const errorData = await response.json();
-          errorMessage = errorData.error || errorMessage;
-        } catch (parseError) {
-          // If we can't parse JSON, it might be an HTML error page
-          const textResponse = await response.text();
-          errorMessage = `Server error (${response.status}): ${response.statusText}`;
+          const formData = new FormData();
+          formData.append("type", uploadType);
+          formData.append("folder", folder);
+
+          batch.forEach((file) => {
+            formData.append("files", file);
+          });
+
+          const response = await fetch("/api/upload/gallery", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!response.ok) {
+            let errorMessage = "Upload failed";
+            try {
+              // Clone the response so we can read it multiple times if needed
+              const responseClone = response.clone();
+              const errorData = await responseClone.json();
+              errorMessage = errorData.error || errorMessage;
+            } catch (parseError) {
+              // If JSON parsing fails, try to read as text from the original response
+              try {
+                const textResponse = await response.text();
+                errorMessage = textResponse || `Server error (${response.status}): ${response.statusText}`;
+              } catch (textError) {
+                errorMessage = `Server error (${response.status}): ${response.statusText}`;
+              }
+            }
+            throw new Error(errorMessage);
+          }
+
+          let result;
+          try {
+            result = await response.json();
+          } catch (parseError) {
+            throw new Error("Invalid response format from server");
+          }
+
+          if (result.data) {
+            allResults.push(...result.data);
+          }
+          if (result.errors) {
+            allErrors.push(...result.errors);
+          }
+
+          // Small delay between batches to prevent overwhelming the server
+          if (i + BATCH_SIZE < selectedFiles.length) {
+            await new Promise(resolve => setTimeout(resolve, 500));
+          }
+
+        } catch (batchError) {
+          // If a batch fails, add all files in that batch to errors
+          batch.forEach(file => {
+            allErrors.push({
+              file: file.name,
+              error: batchError instanceof Error ? batchError.message : "Upload failed"
+            });
+          });
         }
-        throw new Error(errorMessage);
       }
 
-      const result = await response.json();
-      onUploadComplete(result.data);
+      // Report results
+      if (allResults.length > 0) {
+        onUploadComplete(allResults);
+      }
+
+      if (allErrors.length > 0) {
+        const errorMessage = `${allErrors.length} file(s) failed to upload. Check console for details.`;
+        onUploadError?.(errorMessage);
+      }
+
       setSelectedFiles([]);
     } catch (error) {
       onUploadError?.(error instanceof Error ? error.message : "Upload failed");
     } finally {
       setIsUploading(false);
+      setUploadProgress(null);
     }
   };
 
@@ -176,7 +237,9 @@ const MultiFileUpload = ({
             className="w-full"
           >
             {isUploading
-              ? "Uploading..."
+              ? uploadProgress
+                ? `Uploading batch ${uploadProgress.current} of ${uploadProgress.total}...`
+                : "Uploading in batches..."
               : `Upload ${selectedFiles.length} file${selectedFiles.length > 1 ? "s" : ""}`}
           </Button>
         )}
