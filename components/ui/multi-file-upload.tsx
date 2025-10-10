@@ -59,7 +59,6 @@ const MultiFileUpload = ({
         } catch (parseError) {
           // If we can't parse JSON, it might be an HTML error page
           const textResponse = await response.text();
-          console.error("Non-JSON response:", textResponse);
           errorMessage = `Server error (${response.status}): ${response.statusText}`;
         }
         throw new Error(errorMessage);
@@ -69,7 +68,6 @@ const MultiFileUpload = ({
       onUploadComplete(result.data);
       setSelectedFiles([]);
     } catch (error) {
-      console.error("Upload error:", error);
       onUploadError?.(error instanceof Error ? error.message : "Upload failed");
     } finally {
       setIsUploading(false);

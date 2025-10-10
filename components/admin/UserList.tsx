@@ -78,7 +78,17 @@ const UsersList = () => {
     error,
   } = useQuery({
     queryKey: ["admin-users"],
-    queryFn: () => fetch("/api/admin/users").then((res) => res.json()),
+    queryFn: async () => {
+      const response = await fetch("/api/admin/users");
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || result.error || 'Failed to fetch users');
+      }
+
+      // Return the data array from the API response
+      return result.success ? result.data : [];
+    },
   });
 
   // Handle role change
@@ -294,16 +304,15 @@ const UsersList = () => {
               className="h-8 px-3"
             >
               <Badge
-                variant={status === "ACTIVE" ? "default" : "secondary"}
-                className={`cursor-pointer ${
-                  status === "ACTIVE"
-                    ? "bg-green-100 text-green-800 hover:bg-green-200"
-                    : status === "INACTIVE"
-                      ? "bg-gray-100 text-gray-800 hover:bg-gray-200"
-                      : "bg-red-100 text-red-800 hover:bg-red-200"
-                }`}
+                variant={status === "active" ? "default" : "secondary"}
+                className={`cursor-pointer ${status === "active"
+                  ? "bg-green-100 text-green-800 hover:bg-green-200"
+                  : status === "inactive"
+                    ? "bg-gray-100 text-gray-800 hover:bg-gray-200"
+                    : "bg-red-100 text-red-800 hover:bg-red-200"
+                  }`}
               >
-                {isUpdating ? "..." : capitalizeSentences(status.toLowerCase())}
+                {isUpdating ? "...updating" : capitalizeSentences(status || "unknown")}
               </Badge>
             </Button>
           );
@@ -363,11 +372,10 @@ const UsersList = () => {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className={`h-8 w-8 p-0 ${
-                      user.status === "active"
-                        ? "hover:bg-yellow-100"
-                        : "hover:bg-green-100"
-                    }`}
+                    className={`h-8 w-8 p-0 ${user.status === "active"
+                      ? "hover:bg-yellow-100"
+                      : "hover:bg-green-100"
+                      }`}
                     onClick={() => handleStatusToggle(user.id, user.status)}
                     disabled={updatingStatus.has(user.id)}
                   >
@@ -400,7 +408,7 @@ const UsersList = () => {
 
   // Initialize table
   const table = useReactTable({
-    data: users,
+    data: Array.isArray(users) ? users : [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -444,16 +452,16 @@ const UsersList = () => {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Users</h2>
           <p className="text-gray-600">
-            Manage user accounts and permissions ({users.length} total)
+            Manage user accounts and permissions ({Array.isArray(users) ? users.length : 0} total)
           </p>
         </div>
         <div className="flex gap-2">
           <Badge variant="outline" className="text-green-700 border-green-300">
-            {users.filter((user: UserType) => user.status === "active").length}{" "}
+            {Array.isArray(users) ? users.filter((user: UserType) => user.status === "active").length : 0}{" "}
             Active
           </Badge>
           <Badge variant="outline" className="text-red-700 border-red-300">
-            {users.filter((user: UserType) => user.role === "admin").length}{" "}
+            {Array.isArray(users) ? users.filter((user: UserType) => user.role === "admin").length : 0}{" "}
             admins
           </Badge>
         </div>

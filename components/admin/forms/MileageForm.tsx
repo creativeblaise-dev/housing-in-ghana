@@ -25,8 +25,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import FileUpload from "@/components/ui/file-upload";
-import { Loader2, MapPin, X, Calendar, Route } from "lucide-react";
+
+import { Loader2, X, GripVertical } from "lucide-react";
 import { FeaturedImageData, MileageFormData } from "@/types";
 import { createMileagePostSchema } from "@/lib/validations";
 import MultiFileUpload from "@/components/ui/multi-file-upload";
@@ -42,6 +42,8 @@ const MileageForm = ({ type, post }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadedPhotos, setUploadedPhotos] = useState<FeaturedImageData[]>([]);
   const [isDeletingPhoto, setIsDeletingPhoto] = useState<string | null>(null);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   const regions = [
     "Greater Accra",
@@ -119,6 +121,62 @@ const MileageForm = ({ type, post }: Props) => {
   // Handle photo upload error
   const handlePhotoUploadError = (error: string) => {
     toast.error(error);
+  };
+
+  // Handle drag start
+  const handleDragStart = (e: React.DragEvent, index: number) => {
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/html", "");
+  };
+
+  // Handle drag over
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    setDragOverIndex(index);
+  };
+
+  // Handle drag leave
+  const handleDragLeave = () => {
+    setDragOverIndex(null);
+  };
+
+  // Handle drop
+  const handleDrop = (e: React.DragEvent, dropIndex: number) => {
+    e.preventDefault();
+
+    if (draggedIndex === null || draggedIndex === dropIndex) {
+      setDraggedIndex(null);
+      setDragOverIndex(null);
+      return;
+    }
+
+    const newPhotos = [...uploadedPhotos];
+    const draggedPhoto = newPhotos[draggedIndex];
+
+    // Remove the dragged photo from its original position
+    newPhotos.splice(draggedIndex, 1);
+
+    // Insert it at the new position
+    newPhotos.splice(dropIndex, 0, draggedPhoto);
+
+    // Update sort order
+    const updatedPhotos = newPhotos.map((photo, index) => ({
+      ...photo,
+      sortOrder: index,
+    }));
+
+    setUploadedPhotos(updatedPhotos);
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+    toast.success("Photo order updated!");
+  };
+
+  // Handle drag end
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
+    setDragOverIndex(null);
   };
 
   // Submit form
@@ -269,50 +327,90 @@ const MileageForm = ({ type, post }: Props) => {
 
             {/* Uploaded Photos Preview */}
             {uploadedPhotos.length > 0 && (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
-                {uploadedPhotos.map((photo, index) => (
-                  <div key={photo.id} className="relative group">
-                    <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
-                      <img
-                        src={photo.url || photo.url}
-                        alt={photo.originalName}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+              <div>
+                <p className="text-sm text-gray-600 mb-4">
+                  Drag and drop photos to reorder them. The first photo will be the cover image.
+                </p>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+                  {uploadedPhotos.map((photo, index) => (
+                    <div
+                      key={photo.id}
+                      className={`relative group cursor-move transition-all duration-200 ${draggedIndex === index ? "opacity-50 scale-95" : ""
+                        } ${dragOverIndex === index ? "ring-2 ring-blue-500 ring-offset-2" : ""
+                        }`}
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, index)}
+                      onDragOver={(e) => handleDragOver(e, index)}
+                      onDragLeave={handleDragLeave}
+                      onDrop={(e) => handleDrop(e, index)}
+                      onDragEnd={handleDragEnd}
+                    >
+                      {/* Image container */}
+                      <div className="aspect-square rounded-lg overflow-hidden bg-gray-200 border-2 border-transparent hover:border-gray-300 transition-colors relative">
+                        <img
+                          src={photo.url}
+                          alt={photo.originalName || `Image ${index + 1}`}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            const target = e.currentTarget;
+                            target.style.display = 'none';
+                            // Show error placeholder
+                            const parent = target.parentElement;
+                            if (parent) {
+                              parent.innerHTML = `<div class="w-full h-full flex items-center justify-center text-gray-500 text-sm">Failed to load image</div>`;
+                            }
+                          }}
+                        />
 
-                    {/* Photo overlay */}
-                    <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 rounded-lg flex items-center justify-center">
-                      <Button
-                        type="button"
-                        variant="destructive"
-                        size="sm"
-                        className="opacity-0 group-hover:opacity-100 transition-opacity"
-                        onClick={() => handlePhotoDelete(photo.id)}
-                        disabled={isDeletingPhoto === photo.id}
-                      >
-                        {isDeletingPhoto === photo.id ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : (
-                          <X className="w-4 h-4" />
-                        )}
-                      </Button>
-                    </div>
-
-                    {/* Photo info */}
-                    {photo.originalName && (
-                      <div className="absolute bottom-2 left-2 right-2">
-                        <div className="bg-stone-800 bg-opacity-75 text-white text-xs p-1 rounded truncate">
-                          {photo.originalName}
+                        {/* Hover overlay for delete button */}
+                        <div className="absolute inset-0 bg-stone-700 bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handlePhotoDelete(photo.id);
+                            }}
+                            disabled={isDeletingPhoto === photo.id}
+                          >
+                            {isDeletingPhoto === photo.id ? (
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                              <X className="w-4 h-4" />
+                            )}
+                          </Button>
                         </div>
                       </div>
-                    )}
 
-                    {/* Display order badge */}
-                    <div className="absolute top-2 left-2 bg-red-600 text-white text-xs w-6 h-6 rounded-full flex items-center justify-center">
-                      {index + 1}
+                      {/* Drag handle */}
+                      <div className="absolute top-2 right-2 bg-white bg-opacity-90 text-gray-700 p-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                        <GripVertical className="w-4 h-4" />
+                      </div>
+
+                      {/* Display order badge */}
+                      <div className="absolute top-2 left-2 bg-blue-600 text-white text-xs w-6 h-6 rounded-full flex items-center justify-center font-medium z-10">
+                        {index + 1}
+                      </div>
+
+                      {/* Cover image indicator */}
+                      {index === 0 && (
+                        <div className="absolute bottom-2 right-2 bg-green-600 text-white text-xs px-2 py-1 rounded z-10">
+                          Cover
+                        </div>
+                      )}
+
+                      {/* Photo info */}
+                      {photo.originalName && (
+                        <div className="absolute bottom-2 left-2 right-2 z-10">
+                          <div className="bg-black bg-opacity-75 text-white text-xs p-1 rounded truncate">
+                            {photo.originalName}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             )}
           </div>

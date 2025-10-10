@@ -59,11 +59,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Upload to Spaces
-        console.log(
-          `Uploading file: ${file.name}, size: ${file.size}, type: ${file.type}`
-        );
         const uploadResult = await uploadToSpaces(file, validatedData.folder);
-        console.log(`Upload successful for ${file.name}:`, uploadResult.url);
 
         // Save to database
         const [fileRecord] = await db
