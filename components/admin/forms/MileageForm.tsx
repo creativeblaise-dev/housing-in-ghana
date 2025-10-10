@@ -34,7 +34,7 @@ import { createMileagePost } from "@/server/actions/mileage";
 
 type Props = {
   type: "CREATE_MILEAGE_POST" | "EDIT_MILEAGE_POST";
-  post?: MileageFormData; // Replace with your MileagePost type
+  post?: MileageFormData;
 };
 
 const MileageForm = ({ type, post }: Props) => {

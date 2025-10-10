@@ -10,6 +10,28 @@ import { db } from "@/database/drizzle";
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if required environment variables are present
+    const requiredEnvVars = [
+      "DO_SPACES_KEY",
+      "DO_SPACES_SECRET",
+      "DO_SPACES_ENDPOINT",
+      "DO_SPACES_REGION",
+      "DO_SPACES_BUCKET",
+    ];
+
+    const missingEnvVars = requiredEnvVars.filter(
+      (envVar) => !process.env[envVar]
+    );
+    if (missingEnvVars.length > 0) {
+      console.error("Missing environment variables:", missingEnvVars);
+      return NextResponse.json(
+        {
+          error: `Missing environment variables: ${missingEnvVars.join(", ")}`,
+        },
+        { status: 500 }
+      );
+    }
+
     const formData = await request.formData();
     const files = formData.getAll("files") as File[];
     const type = (formData.get("type") as string) || "image";
@@ -37,7 +59,11 @@ export async function POST(request: NextRequest) {
         }
 
         // Upload to Spaces
+        console.log(
+          `Uploading file: ${file.name}, size: ${file.size}, type: ${file.type}`
+        );
         const uploadResult = await uploadToSpaces(file, validatedData.folder);
+        console.log(`Upload successful for ${file.name}:`, uploadResult.url);
 
         // Save to database
         const [fileRecord] = await db
@@ -66,7 +92,9 @@ export async function POST(request: NextRequest) {
         });
       } catch (error) {
         console.error(`Error uploading ${file.name}:`, error);
-        errors.push({ file: file.name, error: "Upload failed" });
+        const errorMessage =
+          error instanceof Error ? error.message : "Upload failed";
+        errors.push({ file: file.name, error: errorMessage });
       }
     }
 

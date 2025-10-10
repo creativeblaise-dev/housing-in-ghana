@@ -28,7 +28,7 @@ const ContactUsHeader = () => {
         <motion.h1 className="font-bold text-3xl lg:text-5xl bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 py-4">
           Contact Us
         </motion.h1>
-        <motion.p className="text-stone-400 text-balance text-center">
+        <motion.p className="text-stone-300 text-balance text-center">
           At Housing In Ghana, we value open communication and believe great
           connections <br /> start with a conversation. Reach out — we’d love to
           hear from you.

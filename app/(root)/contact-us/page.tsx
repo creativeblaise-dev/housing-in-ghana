@@ -21,21 +21,25 @@ const Contact = () => {
           </p>
           <div className="grid grid-cols-2 gap-6 mt-10">
             <div className="">
-              <div className="mb-6">
-                <h1 className="text-lg font-bold">Call Center</h1>
-                <p>+233 (0) 555 444 665</p>
-                <p>+233 (0) 599 663 344</p>
-              </div>
-              <div>
-                <h1 className="text-lg font-bold">Email Us Via</h1>
-                <p>info@housinginghana.com</p>
-              </div>
-            </div>
-            <div className="">
-              <h1 className="text-lg font-bold">Our Location</h1>
+              <h1 className="text-lg font-bold italic">Our Location</h1>
               <p>
                 Comzane Plaza, <br /> Tema Community 6. <br /> Accra - Ghana
               </p>
+            </div>
+            <div className="">
+              <div className="mb-6">
+                <h1 className="text-lg italic font-bold">Call us on</h1>
+                <p>+233 (0) 555 444 665</p>
+                <p>+233 (0) 599 663 344</p>
+              </div>
+
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-6 mt-5">
+            <div>
+              <h1 className="text-lg italic font-bold">Email Us Via</h1>
+              <p>info@housinginghana.com</p>
+              <p>office@housinginghana.com</p>
             </div>
           </div>
         </div>
